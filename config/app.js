@@ -5,9 +5,9 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const db = require('./db');
 
-db.authenticate()
-  .then(() => console.log('Database connected...'))
-  .catch((err) => console.log(`Error: ${err}`));
+db.connect()
+  .then(() => { console.log('Database connected!'); })
+  .catch((err) => { console.log(err); });
 
 const app = express();
 
@@ -19,5 +19,7 @@ app.use(express.json({ extended: false }));
 app.get('/api', (req, res) => {
   res.send({ msg: 'Hello World! 👋' });
 });
+
+app.use('/users', require('../routes/users'));
 
 module.exports = app;

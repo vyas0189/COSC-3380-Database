@@ -12,47 +12,23 @@ Backend Development: Alex, Michael, & Vyas
 1) Finalize conceptual schema
 2) Start designing DB
 
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
 ### Prerequisites
 
-What things you need to install the software and how to install them
+* [NodeJS](https://nodejs.org/en/download/)
+* [Postgres](https://www.postgresql.org/download/)
+  
+## Installations
+* Install the node dependencies for the server:
+  - In the root folder:
+    - `npm install`
+  - Install the dependencies the client folder:
+    - `cd client && npm install`
+* Configure .env file:
+  - Rename the file `.env.local` to `.env`
+  - Fill in the required information in the `.env` 
 
-```
-Give examples
-```
+### Getting Started
 
-### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
 
 ### And coding style tests
 
@@ -89,9 +65,3 @@ See also the list of [contributors](https://github.com/your/project/contributors
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
