@@ -20,6 +20,6 @@ app.get('/api', (req, res) => {
   res.send({ msg: 'Hello World! 👋' });
 });
 
-app.use('/users', require('../routes/users'));
+app.use('/api/users', require('../routes/users'));
 
 module.exports = app;
