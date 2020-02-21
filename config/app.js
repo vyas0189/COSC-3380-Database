@@ -3,22 +3,75 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const compression = require('compression');
+const { join } = require('path');
+const rateLimit = require('express-rate-limit');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const pgSession = require('connect-pg-simple')(session);
 const db = require('./db');
 
 db.connect()
   .then(() => { console.log('Database connected!'); })
-  .catch((err) => { console.log(err); });
+  .catch(async (err) => {
+    console.log(err);
+    await db.end();
+  });
 
 const app = express();
 
+const limiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 15,
+  message:
+    { message: 'Too many accounts created from this IP, please try again after an hour' },
+});
+
+app.use(compression());
 app.use(helmet());
+app.use(cookieParser());
 app.use(morgan('common'));
-app.use(cors());
+app.use(limiter);
+app.use(session(
+  {
+    store: new pgSession({
+      pool: db,
+      tableName: 'session',
+    }),
+    secret: 'test',
+    resave: true,
+    cookie: { secure: false, maxAge: 30 * 24 * 60 * 60 * 1000 },
+    saveUninitialized: true,
+  },
+));
+
+const isProduction = process.env.NODE_ENV === 'production';
+const origin = {
+  origin: isProduction ? 'https://www.example.com' : '*',
+};
+
+app.use(cors(origin));
 app.use(express.json({ extended: false }));
 
-app.get('/api', (req, res) => {
-  res.send({ msg: 'Hello World! 👋' });
+app.get('/', (req, res) => {
+  res.redirect('/api');
 });
+
+app.get('/test', (req, res, next) => {
+  res.send(req.session);
+  console.log(req.session);
+});
+app.get('/api', (req, res) => {
+  res.status(200).json({ msg: 'Welcome to the Medical Clinic API!' });
+});
+
+
+if (isProduction) {
+  app.use(express.static(join(__dirname, '../client/build')));
+  app.get('*', (req, res) => {
+    res.sendFile(join(__dirname, '../client/build', 'index.html'));
+  });
+}
 
 app.use('/api/users', require('../routes/users'));
 
