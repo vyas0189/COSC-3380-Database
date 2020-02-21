@@ -1,30 +1,11 @@
-const { Client } = require('pg');
+const { Pool } = require('pg');
 
-// const config = {
-//   host: process.env.PGHOST,
-//   dialect: 'postgres',
-//   operatorsAliases: false,
-//   pool: {
-//     max: 5,
-//     min: 0,
-//     acquire: 30000,
-//     idle: 10000,
-//   },
-// };
+const isProduction = process.env.NODE_ENV === 'production';
+const connectionString = `postgresql://${process.env.PGUSER}:${process.env.PGPASSWORD}@${process.env.PGHOST}:${process.env.PGPORT}/${process.env.PGDATABASE}`;
 
-// module.exports = new Sequelize(
-//   process.env.PGDATABASE,
-//   process.env.PGUSER,
-//   process.env.PGPASSWORD,
-//   config,
-// );
-
-const db = new Client({
-  user: process.env.PGUSER,
-  host: process.env.PGHOST,
-  database: process.env.PGDATABASE,
-  password: process.env.PGPASSWORD,
-  port: 5432,
+const db = new Pool({
+  connectionString: isProduction ? process.env.DATABASE_URL : connectionString,
+  ssl: isProduction,
 });
 
 module.exports = db;
