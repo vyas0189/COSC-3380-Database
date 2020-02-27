@@ -10,7 +10,8 @@ Backend Development: Alex, Michael, & Vyas
 ## To-do
 
 1) Finalize conceptual schema
-2) Start designing DB
+2) Finish building database in PostgreSQL
+3) Finish building Frontend in React & Backend in Node.js
 
 ### Prerequisites
 
@@ -21,7 +22,7 @@ Backend Development: Alex, Michael, & Vyas
 * Install the node dependencies for the server:
   - In the root folder:
     - `npm install`
-  - Install the dependencies the client folder:
+  - Install the dependencies in the client folder:
     - `cd client && npm install`
 * Configure .env file:
   - Rename the file `.env.local` to `.env`
