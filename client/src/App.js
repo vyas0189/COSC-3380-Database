@@ -34,6 +34,7 @@ function App() {
   const handleChange = (e) => {
     setidInput(e.target.value)
   }
+
   return (
     <div className="App">
       <h1>Length of the Data: {data.length}</h1>
