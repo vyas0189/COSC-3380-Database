@@ -6,7 +6,6 @@ CREATE TABLE IF NOT EXISTS patient
     patient_email        TEXT UNIQUE        NOT NULL,
     patient_address      TEXT               NOT NULL,
     patient_phone_number TEXT               NOT NULL,
-    patient_age          INT                NOT NULL,
     patient_gender       varchar(7)         NOT NULL,
     patient_dob          date               NOT NULL
 );
