@@ -28,40 +28,16 @@ Backend Development: Alex, Michael, & Vyas
   - Rename the file `.env.local` to `.env`
   - Fill in the required information in the `.env` 
 
-### Getting Started
+## Getting Started
 
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+* Vyas Ramnakulangara - [vyas0189](https://github.com/vyas0189)
+* Michael Patrick Austin - [mpaustin1993](https://github.com/mpaustin1993)
+* Justin West - [Justin-WR-West](https://github.com/Justin-WR-West)
+* Tony Nguyen - [aqnguy30](https://github.com/aqnguy30)
+* Alexander Tran - [altub](https://github.com/altub)
 
 ## License
 
