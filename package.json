@@ -25,9 +25,9 @@
   "scripts": {
     "client": "cd client && yarn start",
     "start": "node server.js",
-    "server": "set NODE_ENV=development && nodemon server.js",
+    "server": "nodemon server.js",
     "build": "cd client && yarn i && yarn run build",
-    "dev": "set NODE_ENV=development && concurrently --kill-others-on-fail \"yarn run server\" \"yarn run client\"",
+    "dev": "concurrently --kill-others-on-fail \"yarn run server\" \"yarn run client\"",
     "prod": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
     "eslint": "eslint ./config/ && eslint server.js",
     "eslint-fix": "eslint ./config/ --fix && eslint server.js --fix"
