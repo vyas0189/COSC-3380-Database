@@ -51,11 +51,6 @@ CREATE TABLE IF NOT EXISTS office
     office_specialty    TEXT               NOT NULL
 );
 
-CREATE TYPE availability AS
-(
-    available_time TSTZRANGE,
-    taken          BOOLEAN
-);
 CREATE TABLE IF NOT EXISTS doctor
 (
     doctor_id           SERIAL PRIMARY KEY NOT NULL,
