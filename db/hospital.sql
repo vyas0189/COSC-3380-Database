@@ -1,3 +1,9 @@
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
+GRANT ALL ON SCHEMA public TO vyas0;
+GRANT ALL ON SCHEMA public TO public;
+COMMENT ON SCHEMA public IS 'standard public schema';
+
 CREATE TABLE db_user
 (
     user_id  SERIAL       NOT NULL PRIMARY KEY,
@@ -5,8 +11,10 @@ CREATE TABLE db_user
     password VARCHAR(200) NOT NULL,
     role     VARCHAR(50)  NOT NULL CHECK (role IN ('admin', 'doctor', 'patient')) DEFAULT 'patient'
 );
-INSERT INTO db_user
+
+INSERT INTO db_user(username, password, role)
 VALUES ('admin', 'admin1234', 'admin');
+
 CREATE TABLE IF NOT EXISTS patient
 (
     patient_id             SERIAL PRIMARY KEY NOT NULL,
@@ -15,24 +23,24 @@ CREATE TABLE IF NOT EXISTS patient
     patient_email          TEXT UNIQUE        NOT NULL,
     patient_address        TEXT               NOT NULL,
     patient_phone_number   TEXT               NOT NULL,
-    patient_age            INT                NOT NULL,
     patient_gender         VARCHAR(7)         NOT NULL,
     patient_dob            DATE               NOT NULL,
     patient_user           SERIAL             NOT NULL REFERENCES db_user (user_id) ON UPDATE CASCADE ON DELETE CASCADE,
-    patient_diagnosis      SERIAL             NOT NULL,
-    patient_primary_doctor SERIAL             NOT NULL;
+    patient_diagnosis      INT,
+    patient_primary_doctor INT
 );
-
--- make table that ties doctor, patient, & appointment
 
 CREATE TABLE IF NOT EXISTS appointment
 (
     appt_id      SERIAL PRIMARY KEY,
     appt_patient SERIAL    NOT NULL,
     appt_doctor  SERIAL    NOT NULL,
-    appt_date    TIMESTAMP NOT NULL DEFAULT NOW(),
-    appt_reason  TEXT      NOT NULL
+    appt_start   TIMESTAMP NOT NULL,
+    appt_end     TIMESTAMP NOT NULL,
+    appt_reason  TEXT      NOT NULL,
+    appt_office  SERIAL    NOT NULL
 );
+
 CREATE TABLE IF NOT EXISTS office
 (
     office_id           SERIAL PRIMARY KEY NOT NULL,
@@ -43,36 +51,46 @@ CREATE TABLE IF NOT EXISTS office
     office_specialty    TEXT               NOT NULL
 );
 
+CREATE TYPE availability AS
+(
+    available_time TSTZRANGE,
+    taken          BOOLEAN
+);
 CREATE TABLE IF NOT EXISTS doctor
 (
     doctor_id           SERIAL PRIMARY KEY NOT NULL,
+    doctor_primary      BOOLEAN DEFAULT FALSE,
     doctor_address      TEXT               NOT NULL,
     doctor_first_name   varchar(100)       NOT NULL,
     doctor_last_name    varchar(100)       NOT NULL,
     doctor_phone_number TEXT               NOT NULL,
     doctor_office       INT                NOT NULL REFERENCES office (office_id),
     doctor_spec         TEXT               NOT NULL,
-    doctor_availability TSTZRANGE[]        NOT NULL,
+    doctor_availability JSON[],
     doctor_user         SERIAL             NOT NULL REFERENCES db_user (user_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    doctor_diagnosis    INT,
+    doctor_test         INT
 );
 
 CREATE TABLE IF NOT EXISTS test
 (
-    test_id        SERIAL PRIMARY KEY NOT NULL,
-    test_date      TIMESTAMP          NOT NULL DEFAULT NOW(),
-    test_scan      BOOLEAN            NOT NULL,
-    test_physical  BOOLEAN            NOT NULL,
-    test_blood     BOOLEAN            NOT NULL,
-    test_equipment TEXT               NOT NULL,
-    test_office    SERIAL             NOT NULL REFERENCES office (office_id),
-    test_doctor    SERIAL             NOT NULL REFERENCES doctor (doctor_id),
-    test_patient   SERIAL             NOT NULL REFERENCES patient (patient_id)
+    test_id        SERIAL PRIMARY KEY,
+    test_date      TIMESTAMP NOT NULL DEFAULT NOW(),
+    test_scan      BOOLEAN   NOT NULL DEFAULT FALSE,
+    test_physical  BOOLEAN   NOT NULL DEFAULT FALSE,
+    test_blood     BOOLEAN   NOT NULL DEFAULT FALSE,
+    test_equipment TEXT      NOT NULL,
+    test_office    SERIAL    NOT NULL REFERENCES office (office_id),
+    test_doctor    SERIAL    NOT NULL REFERENCES doctor (doctor_id),
+    test_patient   SERIAL    NOT NULL REFERENCES patient (patient_id),
+    test_diagnosis INT
 );
+
 CREATE TABLE IF NOT EXISTS diagnosis
 (
-    diag_id        SERIAL PRIMARY KEY NOT NULL,
-    diag_symptoms  TEXT               NOT NULL,
-    diag_condition TEXT               NOT NULL
+    diag_id        SERIAL PRIMARY KEY,
+    diag_symptoms  TEXT NOT NULL,
+    diag_condition TEXT NOT NULL
 );
 CREATE TABLE "session"
 (
@@ -92,15 +110,18 @@ ALTER TABLE patient
 
 ALTER TABLE patient
     ADD
-        CONSTRAINT fk_patient_diagnosis FOREIGN KEY (patient_diagnosis) REFERENCES diagnosis (diagnosis_id);
+        CONSTRAINT fk_patient_diagnosis FOREIGN KEY (patient_diagnosis) REFERENCES diagnosis (diag_id);
 
 ALTER TABLE doctor
     ADD
-        CONSTRAINT fk_doctor_diagnosis FOREIGN KEY (doctor_diagnosis) REFERENCES diagnosis (diagnosis_id);
+        CONSTRAINT fk_doctor_diagnosis FOREIGN KEY (doctor_diagnosis) REFERENCES diagnosis (diag_id);
+
+ALTER TABLE doctor
+    ADD CONSTRAINT fk_doctor_test FOREIGN KEY (doctor_test) REFERENCES test (test_id);
 
 ALTER TABLE test
     ADD
-        CONSTRAINT fk_test_diagnosis FOREIGN KEY (test_diagnosis) REFERENCES diagnosis (diagnosis_id);
+        CONSTRAINT fk_test_diagnosis FOREIGN KEY (test_diagnosis) REFERENCES diagnosis (diag_id);
 
 ALTER TABLE appointment
     ADD
@@ -114,8 +135,70 @@ ALTER TABLE appointment
     ADD
         CONSTRAINT fk_appt_doctor FOREIGN KEY (appt_doctor) REFERENCES doctor (doctor_id);
 
--- INSERT INTO patient(patient_first_name, patient_last_name, patient_email, patient_address, patient_phone_number,
---                     patient_age, patient_gender, patient_dob, patient_user)
--- VALUES ('Test', 'Test','test@test.com', '1234 test', 'XXXXXXXXXX', 21, 'Male', NOW()::DATE,1);
+
+CREATE FUNCTION insert_availability() RETURNS trigger AS
+$$
+BEGIN
+    NEW.doctor_availability :=
+            array(select json_build_object('time', tstzrange(a, a + '1 hour'::interval, '[]'), 'taken', FALSE)
+                  from generate_series
+                           (
+                               timestamp '2020-03-10 09:00:00',
+                               CURRENT_TIMESTAMP + '2 YEAR',
+                               interval '1 HOUR'
+                           ) AS a (dt)
+                  WHERE MOD(EXTRACT(DOW FROM dt)::INTEGER, 6) != 0
+                    AND dt::TIME >= '09:00:00'
+                    AND dt::TIME < '17:00:00'::TIME);
+    RETURN NEW;
+END
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER insert_doctor_availability
+    BEFORE INSERT
+    ON doctor
+    FOR EACH ROW
+    WHEN (NEW.doctor_availability IS NULL)
+EXECUTE PROCEDURE insert_availability();
+
+-- INSERT INTO db_user(username, password, role)
+-- VALUES ('doc1', '12345', 'doctor');
 --
--- SELECT * FROM patient INNER JOIN db_user ON patient.patient_user = db_user.user_id;
+-- INSERT INTO office(office_capacity, office_phone_number, office_opening_hour, office_address, office_specialty)
+-- VALUES ('100', '7130000000',
+--         CURRENT_TIME, '3333 Cullen St. Houston, TX 77777', 'ENT, Primary Care');
+--
+-- INSERT INTO doctor(doctor_address, doctor_first_name, doctor_last_name, doctor_phone_number, doctor_office, doctor_spec,
+--                    doctor_user)
+-- VALUES ('4444 Cullen St. Houston, TX 70000', 'Carlos', 'Rincon', '832000000', 1, 'ENT', 1);
+--
+--
+-- SELECT (doctor_availability[1] -> 'taken')
+-- FROM doctor;
+--
+-- INSERT INTO doctor(doctor_address, doctor_first_name, doctor_last_name, doctor_phone_number, doctor_office, doctor_spec,
+--                    doctor_user)
+-- VALUES ('4444 Cullen St. Houston, TX 70000', 'Carlos2', 'Rincon2', '832000000', 1, 'ENT', 1);
+--
+-- INSERT INTO db_user(username, password)
+-- VALUES ('patient1', '12345');
+--
+-- INSERT INTO patient(patient_first_name, patient_last_name, patient_email, patient_address, patient_phone_number,
+--                     patient_gender, patient_dob, patient_user)
+-- VALUES ('Michael', 'Austin', 'mpaustin@gmail.com', '4444 Cool St. Houston, TX 77005', '7136666666', 'Male',
+--         '2020-03-10', (SELECT user_id FROM db_user WHERE username = 'patient1'));
+--
+-- INSERT INTO appointment(appt_patient, appt_doctor, appt_start, appt_end, appt_reason, appt_office)
+-- VALUES ((SELECT patient_id from patient WHERE patient_first_name = 'Michael'),
+--         (SELECT doctor_id from doctor WHERE doctor_first_name = 'Carlos'), CURRENT_TIMESTAMP,
+--         CURRENT_TIMESTAMP + '1 HOUR', 'Sick', (SELECT doctor_office from doctor where doctor_first_name = 'Carlos'));
+--
+-- INSERT INTO test(test_date, test_scan, test_equipment, test_office, test_doctor, test_patient)
+-- VALUES ('2020-03-10', TRUE, 'X-ray Machine', 1, 1, 1);
+--
+-- SELECT *
+-- from doctor;
+
+
+
+

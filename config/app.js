@@ -25,7 +25,6 @@ const limiter = rateLimit({
   message:
     { message: 'Too many accounts created from this IP, please try again after an hour' },
 });
-
 app.use(compression());
 app.use(helmet());
 app.use(morgan('common'));
