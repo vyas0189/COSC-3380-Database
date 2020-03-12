@@ -20,15 +20,15 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const res = await axios.post('/api/users', { id: idInput });
-    if (res.data.message) {
-      setErr(true)
-      seterrMsg(res.data.message)
-    } else {
-      setData(res.data);
-      setErr(false);
-    }
-    setLoading(false);
+    const res = await axios.post('/test');
+    // if (res.data.message) {
+    //   setErr(true)
+    //   seterrMsg(res.data.message)
+    // } else {
+    //   setData(res.data);
+    //   setErr(false);
+    // }
+    // setLoading(false);
   }
 
   const handleChange = (e) => {
@@ -41,7 +41,7 @@ function App() {
         <input type="text" placeholder="ID" value={idInput} onChange={handleChange} />
         <button type="submit">Search</button>
       </form>
-      {
+      {/* {
         loading ? <h1>Loading...</h1> :
           err ? <h1>{errMsg}</h1> :
             data ? data.map(user => <div key={user.id}>
@@ -51,7 +51,9 @@ function App() {
               <p>Age: {user.age}</p>
               <p>Email: {user.email}</p>
             </div>) : <div>Hello World</div>
-      }
+      } */}
+
+      test
     </div >
   );
 }
