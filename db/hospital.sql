@@ -4,6 +4,8 @@ GRANT ALL ON SCHEMA public TO vyas0;
 GRANT ALL ON SCHEMA public TO public;
 COMMENT ON SCHEMA public IS 'standard public schema';
 
+-- alter database poster set timezone to 'US/Pacific';
+
 CREATE TABLE db_user
 (
     user_id  SERIAL       NOT NULL PRIMARY KEY,
@@ -138,8 +140,8 @@ BEGIN
             array(select json_build_object('time', tstzrange(a, a + '1 hour'::interval, '[]'), 'taken', FALSE)
                   from generate_series
                            (
-                               timestamp '2020-03-10 09:00:00',
-                               CURRENT_TIMESTAMP + '2 YEAR',
+                               timestamp '2020-03-10 09:00:00' at time zone 'utc',
+                               CURRENT_TIMESTAMP at time zone 'utc' + '1 YEAR',
                                interval '1 HOUR'
                            ) AS a (dt)
                   WHERE MOD(EXTRACT(DOW FROM dt)::INTEGER, 6) != 0
@@ -156,20 +158,20 @@ CREATE TRIGGER insert_doctor_availability
     WHEN (NEW.doctor_availability IS NULL)
 EXECUTE PROCEDURE insert_availability();
 
--- INSERT INTO db_user(username, password, role)
--- VALUES ('doc1', '12345', 'doctor');
---
--- INSERT INTO office(office_capacity, office_phone_number, office_opening_hour, office_address, office_specialty)
--- VALUES ('100', '7130000000',
---         CURRENT_TIME, '3333 Cullen St. Houston, TX 77777', 'ENT, Primary Care');
---
--- INSERT INTO doctor(doctor_address, doctor_first_name, doctor_last_name, doctor_phone_number, doctor_office, doctor_spec,
---                    doctor_user)
--- VALUES ('4444 Cullen St. Houston, TX 70000', 'Carlos', 'Rincon', '832000000', 1, 'ENT', 1);
---
---
--- SELECT (doctor_availability[1] -> 'taken')
--- FROM doctor;
+INSERT INTO db_user(username, password, role)
+VALUES ('doc1', '12345', 'doctor');
+
+INSERT INTO office(office_capacity, office_phone_number, office_opening_hour, office_address, office_specialty)
+VALUES ('100', '7130000000',
+        CURRENT_TIME, '3333 Cullen St. Houston, TX 77777', 'ENT, Primary Care');
+
+INSERT INTO doctor(doctor_address, doctor_first_name, doctor_last_name, doctor_phone_number, doctor_office, doctor_spec,
+                   doctor_user)
+VALUES ('4444 Cullen St. Houston, TX 70000', 'Carlos', 'Rincon', '832000000', 1, 'ENT', 1);
+
+
+SELECT (doctor_availability)
+FROM doctor;
 --
 -- INSERT INTO doctor(doctor_address, doctor_first_name, doctor_last_name, doctor_phone_number, doctor_office, doctor_spec,
 --                    doctor_user)
@@ -194,6 +196,15 @@ EXECUTE PROCEDURE insert_availability();
 -- SELECT *
 -- from doctor;
 
+--
+-- SELECT * FROM session;
 
+-- SELECT * FROM json_each((SELECT doctor_availability[1] FROM doctor));
+--
+-- create index idx_availability on doctor using GIN(doctor_availability);
+--
+-- SELECT * FROM doctor WHERE doctor_availability @> '{[2020-03-10 09:00:00+00]}';
+--
+-- SELECT timezone('US/Central', CURRENT_TIMESTAMP);
 
-
+-- "{\"time\" : \"[\\\"2020-03-10 09:00:00+00\\\",\\\"2020-03-10 10:00:00+00\\\"]\", \"taken\" : false}"
