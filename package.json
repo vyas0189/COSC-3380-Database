@@ -27,7 +27,7 @@
     "client": "cd client && yarn start",
     "start": "node server.js",
     "server": "nodemon server.js",
-    "build": "yarn && cd client && yarn i && yarn run build",
+    "build": "yarn && cd client && yarn && yarn run build",
     "test": "cross-env NODE_ENV=test jest --testTimeout=10000",
     "dev": "concurrently --kill-others-on-fail \"yarn run server\" \"yarn run client\"",
     "prod": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
