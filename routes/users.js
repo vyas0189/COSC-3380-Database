@@ -30,4 +30,8 @@ router.get('/', async (req, res) => {
   // res.send('Hello');
 });
 
+router.get('/test', (req, res) => {
+  res.send("Hey, how's it going")
+});
+
 module.exports = router;
