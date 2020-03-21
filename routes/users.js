@@ -24,10 +24,8 @@ router.get('/', async (req, res) => {
       res.status(500).json({ message: 'User Not Found' });
     }
   } catch (err) {
-    // console.error(err);
-    res.json({ message: 'Please enter a valid ID', err });
-  }
-  // res.send('Hello');
+        res.json({ message: 'Please enter a valid ID', err });
+  }  
 });
 
 router.get('/test', (req, res) => {
