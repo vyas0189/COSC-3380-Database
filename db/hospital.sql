@@ -169,7 +169,6 @@ INSERT INTO doctor(doctor_address, doctor_first_name, doctor_last_name, doctor_p
                    doctor_user)
 VALUES ('4444 Cullen St. Houston, TX 70000', 'Carlos', 'Rincon', '832000000', 1, 'ENT', 1);
 
-
 SELECT (doctor_availability)
 FROM doctor;
 --
