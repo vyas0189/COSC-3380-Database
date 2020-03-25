@@ -26,7 +26,7 @@ router.get('/', async (req, res) => {
 	// } catch (err) {
 	// 	res.json({ message: 'Please enter a valid ID', err });
 	// }
-	res.send('Test');
+	res.send('Hello World');
 });
 
 router.get('/test', (req, res) => {
