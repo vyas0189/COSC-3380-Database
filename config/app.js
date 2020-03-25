@@ -5,7 +5,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const compression = require('compression');
 const { join } = require('path');
-const rateLimit = require('express-rate-limit');
+// const rateLimit = require('express-rate-limit');
 const session = require('express-session');
 const PGSession = require('connect-pg-simple')(session);
 const db = require('./db');
@@ -20,16 +20,16 @@ db.connect()
 
 const app = express();
 
-const limiter = rateLimit({
-  windowMs: 1 * 60 * 1000,
-  max: 15,
-  message:
-    { message: 'Too many accounts created from this IP, please try again after an hour' },
-});
+// const limiter = rateLimit({
+//   windowMs: 1 * 60 * 1000,
+//   max: 15,
+//   message:
+//     { message: 'Too many accounts created from this IP, please try again after an hour' },
+// });
 app.use(compression());
 app.use(helmet());
 app.use(morgan('common'));
-app.use(limiter);
+// app.use(limiter);
 
 app.use(session(
   {
