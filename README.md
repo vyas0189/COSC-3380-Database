@@ -6,19 +6,21 @@ A health provider company has multiple offices in many different states. Many do
 
 ## Team
 
-Frontend Development: Justin, Tony, & Vyas
-Backend Development: Alex, Michael, & Vyas
+* Database Development: Vyas, Michael, Justin, Tony, & Alex
+* Frontend Development: Justin, Tony, & Vyas
+* Backend Development: Alex, Michael, & Vyas
+
+## Getting Started
+
+* [Help Guide](https://docs.google.com/document/d/1eZ2r1eRtG109pFLE8rKsNM4CFUtbYfSStVRLpPnTkdY/edit)
 
 ## To-do
 
-1) Finalize conceptual schema
-2) Finish building database in PostgreSQL
-3) Finish building Frontend in React & Backend in Node.js
+Refer to the Projects tab of the master branch
 
-### Prerequisites
+## Endpoints
 
-* [NodeJS](https://nodejs.org/en/download/)
-* [Postgres](https://www.postgresql.org/download/)
+* [Endpoints](https://docs.google.com/spreadsheets/d/1HIb7BuNchcjxNITPpUxLYYIe9IP078B49JRIjNX52ZM/edit#gid=0)
   
 ## Installations
 * Install the node dependencies for the server:
@@ -30,16 +32,15 @@ Backend Development: Alex, Michael, & Vyas
   - Rename the file `.env.local` to `.env`
   - Fill in the required information in the `.env` 
 
-## Getting Started
 
 
 ## Authors
 
-* Vyas Ramnakulangara - [vyas0189](https://github.com/vyas0189)
-* Michael Patrick Austin - [mpaustin1993](https://github.com/mpaustin1993)
-* Justin West - [Justin-WR-West](https://github.com/Justin-WR-West)
-* Tony Nguyen - [aqnguy30](https://github.com/aqnguy30)
-* Alexander Tran - [altub](https://github.com/altub)
+* Vyas Ramnakulangara - [vyas0189](https://github.com/vyas0189) - vyas0189@gmail.com
+* Michael Patrick Austin - [mpaustin1993](https://github.com/mpaustin1993) - mpaustin1993@gmail.com
+* Justin West - [Justin-WR-West](https://github.com/Justin-WR-West) - jswest137@gmail.com
+* Tony Nguyen - [aqnguy30](https://github.com/aqnguy30) - quocanh191997@gmail.com
+* Alexander Tran - [altub](https://github.com/altub) - alex9tran@gmail.com
 
 ## License
 
