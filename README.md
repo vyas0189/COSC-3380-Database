@@ -33,7 +33,7 @@ Backend Development: Alex, Michael, & Vyas
 
 ## Getting Started
 
-* [Help Guide]https://docs.google.com/document/d/1eZ2r1eRtG109pFLE8rKsNM4CFUtbYfSStVRLpPnTkdY/edit
+* [Help Guide](https://docs.google.com/document/d/1eZ2r1eRtG109pFLE8rKsNM4CFUtbYfSStVRLpPnTkdY/edit)
 
 ## Authors
 
