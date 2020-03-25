@@ -10,16 +10,17 @@ A health provider company has multiple offices in many different states. Many do
 * Frontend Development: Justin, Tony, & Vyas
 * Backend Development: Alex, Michael, & Vyas
 
+## Getting Started
+
+* [Help Guide](https://docs.google.com/document/d/1eZ2r1eRtG109pFLE8rKsNM4CFUtbYfSStVRLpPnTkdY/edit)
+
 ## To-do
 
-1) Finalize conceptual schema
-2) Finish building database in PostgreSQL
-3) Finish building Frontend in React & Backend in Node.js
+Refer to the Projects tab of the master branch
 
-### Prerequisites
+## Endpoints
 
-* [NodeJS](https://nodejs.org/en/download/)
-* [Postgres](https://www.postgresql.org/download/)
+* [Endpoints](https://docs.google.com/spreadsheets/d/1HIb7BuNchcjxNITPpUxLYYIe9IP078B49JRIjNX52ZM/edit#gid=0)
   
 ## Installations
 * Install the node dependencies for the server:
@@ -31,9 +32,7 @@ A health provider company has multiple offices in many different states. Many do
   - Rename the file `.env.local` to `.env`
   - Fill in the required information in the `.env` 
 
-## Getting Started
 
-* [Help Guide](https://docs.google.com/document/d/1eZ2r1eRtG109pFLE8rKsNM4CFUtbYfSStVRLpPnTkdY/edit)
 
 ## Authors
 
