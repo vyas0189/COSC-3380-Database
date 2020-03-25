@@ -6,9 +6,9 @@ A health provider company has multiple offices in many different states. Many do
 
 ## Team
 
-Database Development: Vyas, Michael, Justin, Tony, & Alex
-Frontend Development: Justin, Tony, & Vyas
-Backend Development: Alex, Michael, & Vyas
+* Database Development: Vyas, Michael, Justin, Tony, & Alex
+* Frontend Development: Justin, Tony, & Vyas
+* Backend Development: Alex, Michael, & Vyas
 
 ## To-do
 
