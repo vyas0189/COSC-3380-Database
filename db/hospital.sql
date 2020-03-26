@@ -1,8 +1,8 @@
-DROP SCHEMA public CASCADE;
-CREATE SCHEMA public;
-GRANT ALL ON SCHEMA public TO vyas0;
-GRANT ALL ON SCHEMA public TO public;
-COMMENT ON SCHEMA public IS 'standard public schema';
+-- DROP SCHEMA public CASCADE;
+-- CREATE SCHEMA public;
+-- GRANT ALL ON SCHEMA public TO vyas0;
+-- GRANT ALL ON SCHEMA public TO public;
+-- COMMENT ON SCHEMA public IS 'standard public schema';
 
 CREATE TABLE db_user
 (
