@@ -41,7 +41,7 @@ app.use(express.json({ extended: false }));
 app.get('/', (req, res) => {
   res.redirect('/api');
 });
-app.use('/api/user', user));
+app.use('/api/user', user);
 
 
 if (isProduction) {
