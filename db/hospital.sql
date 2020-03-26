@@ -1,3 +1,9 @@
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
+GRANT ALL ON SCHEMA public TO vyas0;
+GRANT ALL ON SCHEMA public TO public;
+COMMENT ON SCHEMA public IS 'standard public schema';
+
 CREATE TABLE db_user
 (
     user_id    SERIAL       NOT NULL PRIMARY KEY,
@@ -7,15 +13,15 @@ CREATE TABLE db_user
     created_at TIMESTAMP    NOT NULL                                                DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP    NOT NULL                                                DEFAULT CURRENT_TIMESTAMP
 );
-
+SELECT  * FROM db_user;
 INSERT INTO db_user(username, password, role)
 VALUES ('admin', 'admin1234', 'admin');
 
 CREATE TABLE IF NOT EXISTS address
 (
     address_id SERIAL       PRIMARY KEY NOT NULL,
-    address    TEXT         NOT NULL,
-    address2   TEXT,
+    address_name    TEXT         NOT NULL,
+    address2_name   TEXT,
     city       VARCHAR(100) NOT NULL,
     state      VARCHAR(50)  NOT NULL,
     zip        INTEGER      NOT NULL
@@ -56,6 +62,7 @@ CREATE TABLE IF NOT EXISTS office
     office_opening_hour TIME               NOT NULL,
     office_specialty    TEXT               NOT NULL
 );
+
 
 CREATE TABLE IF NOT EXISTS doctor
 (
