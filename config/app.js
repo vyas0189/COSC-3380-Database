@@ -5,15 +5,9 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const compression = require('compression');
 const { join } = require('path');
-<<<<<<< HEAD
-const rateLimit = require('express-rate-limit');
-const session = require('express-session');
-const PGSession = require('connect-pg-simple')(session);
-=======
 // const rateLimit = require('express-rate-limit');
 // const session = require('express-session');
 // const PGSession = require('connect-pg-simple')(session);
->>>>>>> 5ef49888427f4133ab9840aec0ccd30442ec4457
 const db = require('./db');
 const user = require('../routes/users')
 
