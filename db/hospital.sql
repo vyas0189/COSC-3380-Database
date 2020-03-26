@@ -1,9 +1,3 @@
-DROP SCHEMA public CASCADE;
-CREATE SCHEMA public;
-GRANT ALL ON SCHEMA public TO cwrcssinnvfayz;
-GRANT ALL ON SCHEMA public TO public;
-COMMENT ON SCHEMA public IS 'standard public schema';
-
 CREATE TABLE db_user
 (
     user_id    SERIAL       NOT NULL PRIMARY KEY,
@@ -107,17 +101,17 @@ CREATE TABLE IF NOT EXISTS diagnosis
     diag_symptoms  TEXT NOT NULL,
     diag_condition TEXT NOT NULL
 );
-CREATE TABLE "session"
-(
-    "sid"    VARCHAR      NOT NULL COLLATE "default",
-    "sess"   JSON         NOT NULL,
-    "expire" TIMESTAMP(6) NOT NULL
-) WITH (OIDS = FALSE);
-
-ALTER TABLE "session"
-    ADD
-        CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
-CREATE INDEX "IDX_session_expire" ON "session" ("expire");
+-- CREATE TABLE "session"
+-- (
+--     "sid"    VARCHAR      NOT NULL COLLATE "default",
+--     "sess"   JSON         NOT NULL,
+--     "expire" TIMESTAMP(6) NOT NULL
+-- ) WITH (OIDS = FALSE);
+--
+-- ALTER TABLE "session"
+--     ADD
+--         CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
+-- CREATE INDEX "IDX_session_expire" ON "session" ("expire");
 
 ALTER TABLE patient
     ADD
@@ -218,6 +212,8 @@ FROM doctor;
 
 -- INSERT INTO db_user(username, password, role)
 -- VALUES ('doc1', '12345', 'doctor');
+
+-- SELECT * FROM db_user;
 --
 -- INSERT INTO office(office_capacity, office_phone_number, office_opening_hour, office_address, office_specialty)
 -- VALUES ('100', '7130000000',
@@ -275,5 +271,3 @@ FROM doctor;
 -- SELECT doctor_availability
 -- from doctor;
 --
--- SELECT *
--- from session;

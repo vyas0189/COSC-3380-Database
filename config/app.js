@@ -5,9 +5,15 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const compression = require('compression');
 const { join } = require('path');
+<<<<<<< HEAD
 const rateLimit = require('express-rate-limit');
 const session = require('express-session');
 const PGSession = require('connect-pg-simple')(session);
+=======
+// const rateLimit = require('express-rate-limit');
+// const session = require('express-session');
+// const PGSession = require('connect-pg-simple')(session);
+>>>>>>> 5ef49888427f4133ab9840aec0ccd30442ec4457
 const db = require('./db');
 const user = require('../routes/users')
 
@@ -31,18 +37,18 @@ app.use(helmet());
 app.use(morgan('common'));
 app.use(limiter);
 
-app.use(session(
-  {
-    store: new PGSession({
-      pool: db,
-      tableName: 'session',
-    }),
-    secret: 'test',
-    resave: true,
-    cookie: { secure: false, maxAge: 60 * 60 * 1000 },
-    saveUninitialized: true,
-  },
-));
+// app.use(session(
+//   {
+//     store: new PGSession({
+//       pool: db,
+//       tableName: 'session',
+//     }),
+//     secret: 'test',
+//     resave: true,
+//     cookie: { secure: false, maxAge: 60 * 60 * 1000 },
+//     saveUninitialized: true,
+//   },
+// ));
 
 const isProduction = process.env.NODE_ENV === 'production';
 const origin = {
