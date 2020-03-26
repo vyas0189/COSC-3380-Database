@@ -170,10 +170,10 @@ ALTER TABLE appointment
 --     WHEN (NEW.doctor_availability IS NULL)
 -- EXECUTE PROCEDURE insert_availability();
 
-INSERT INTO db_user(username, password, role)
-VALUES ('doc1', '12345', 'doctor');
+-- INSERT INTO db_user(username, password, role)
+-- VALUES ('doc1', '12345', 'doctor');
 
-SELECT * FROM db_user;
+-- SELECT * FROM db_user;
 --
 -- INSERT INTO office(office_capacity, office_phone_number, office_opening_hour, office_address, office_specialty)
 -- VALUES ('100', '7130000000',
@@ -230,5 +230,3 @@ SELECT * FROM db_user;
 -- SELECT doctor_availability
 -- from doctor;
 --
-SELECT *
-from session;
