@@ -1,6 +1,8 @@
 const { Router } = require('express');
+const bcrypt = require('bcryptjs');
+
 // const moment = require('moment');
-// const db = require('../config/db');
+const db = require('../config/db');
 
 const router = Router();
 
@@ -29,8 +31,24 @@ router.get('/', async (req, res) => {
 	res.send('Hello World');
 });
 
-router.get('/test', (req, res) => {
-	res.send("Hey, how's it going");
+router.post('/fakeUser', async (req, res) => {
+	const { username, password, role } = req.body;
+	const query = 'SELECT * FROM db_user WHERE username = $1';
+	const values = [username];
+	try {
+		const { rows } = await db.query(query, values);
+		if (rows.length > 0) {
+			return res.status(500).json({ message: 'Username already exists' });
+		}
+		const hasPassword = await bcrypt.hash(password, 10);
+		const insertQuey = 'INSERT INTO db_user (username, password, role, created_at, updated_at) VALUES ($1, $2, $3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)';
+		const insertValues = [username, hasPassword, role];
+
+		const insertResult = await db.query(insertQuey, insertValues);
+		return res.status(200).json(insertResult.command);
+	} catch (err) {
+		return res.status(500).json(err.message);
+	}
 });
 
 module.exports = router;
