@@ -8,27 +8,28 @@ const router = Router();
 // look for doctor availability
 
 router.get('/', async (req, res) => {
-  try {
-    const { rows } = await db.query({ text: 'SELECT (doctor_availability) FROM doctor;' });
-    if (rows.length > 0) {
-      const t = rows[0].doctor_availability.map((d, i) => {
-        if (!d.taken) {
-          const tem = d.time.split(',')[0].replace('[', '');
-          const date = moment(new Date(Date.parse(tem))).utc().format('MM/DD/YYYY');
-          const time = moment(new Date(Date.parse(tem))).utc().format('hh:mm:ss A');
-          return {
-            idx: i + 1, date, time, taken: d.taken,
-          };
-        }
-      });
+  // try {
+  //   const { rows } = await db.query({ text: 'SELECT (doctor_availability) FROM doctor;' });
+  //   if (rows.length > 0) {
+  //     const t = rows[0].doctor_availability.map((d, i) => {
+  //       if (!d.taken) {
+  //         const tem = d.time.split(',')[0].replace('[', '');
+  //         const date = moment(new Date(Date.parse(tem))).utc().format('MM/DD/YYYY');
+  //         const time = moment(new Date(Date.parse(tem))).utc().format('hh:mm:ss A');
+  //         return {
+  //           idx: i + 1, date, time, taken: d.taken,
+  //         };
+  //       }
+  //     });
 
-      res.status(200).json({ t });
-    } else {
-      res.status(500).json({ message: 'User Not Found' });
-    }
-  } catch (err) {
-    res.json({ message: 'Please enter a valid ID', err });
-  }
+  //     res.status(200).json({ t });
+  //   } else {
+  //     res.status(500).json({ message: 'User Not Found' });
+  //   }
+  // } catch (err) {
+  //   res.json({ message: 'Please enter a valid ID', err });
+  // }
+  res.send('Hi');
 });
 
 router.post('/fakeUser', async (req, res) => {
@@ -53,17 +54,14 @@ router.post('/fakeUser', async (req, res) => {
 
 router.get('/appointments', async (req, res) => {
   try {
-    const { patients } = await db.query("SELECT patient_id FROM appointment WHERE appt_doctor = doctor_id");
+    const { patients } = await db.query('SELECT patient_id FROM appointment WHERE appt_doctor = doctor_id');
     if (patients.length > 0) {
-
-      patients.forEach(patient => {
-
-        let patient_Info = db.query("SELECT (patient_first_name, patient_last_name, patient_diagnosis) WHERE patient_id = $1",
+      patients.forEach((patient) => {
+        const patient_Info = db.query('SELECT (patient_first_name, patient_last_name, patient_diagnosis) WHERE patient_id = $1',
           [patient]);
 
         console.log(patient_Info);
-
-      })
+      });
     } else {
       res.status(500).json({ message: 'User Not Found' });
     }
@@ -72,7 +70,7 @@ router.get('/appointments', async (req, res) => {
   }
 });
 
-//from patient's side
+// from patient's side
 
 router.post('/update/patientInfo', async (req, res) => {
   const {
@@ -83,7 +81,7 @@ router.post('/update/patientInfo', async (req, res) => {
     patient_phone_number,
     patient_gender,
     patient_address,
-    patient_dob
+    patient_dob,
   } = req.body;
 
   try {
@@ -91,8 +89,7 @@ router.post('/update/patientInfo', async (req, res) => {
       [patient_id]);
 
     if (patient !== NULL) {
-
-      db.query("UPDATE patient SET (patient_first_name = $1, patient_last_name = $2, patient_email = $3, patient_phone_number = $4, patient_gender = $5, patient_address = $6, patient_dob = $7) WHERE patient_id = $8,"
+      db.query('UPDATE patient SET (patient_first_name = $1, patient_last_name = $2, patient_email = $3, patient_phone_number = $4, patient_gender = $5, patient_address = $6, patient_dob = $7) WHERE patient_id = $8,'
 
       [
         patient_first_name,
@@ -103,14 +100,11 @@ router.post('/update/patientInfo', async (req, res) => {
         patient_address,
         patient_dob,
         patient_id
-      ]
-      )
-    }
-    else {
+      ]);
+    } else {
       res.status(500).json({ message: 'That patient does not exist.' });
     }
-  }
-  catch (err) {
+  } catch (err) {
     res.json({ message: 'Please enter a valid patient ID', err });
   }
 });
@@ -130,28 +124,24 @@ router.post('/update/doctorInfo', async (req, res) => {
       [patient_id]);
 
     if (patient !== NULL) {
-
-      db.query("UPDATE patient SET (doctor_first_name = $1, doctor_last_name = $2, doctor_phone_number = $3) WHERE doctor_id = $4,"
+      db.query('UPDATE patient SET (doctor_first_name = $1, doctor_last_name = $2, doctor_phone_number = $3) WHERE doctor_id = $4,'
 
       [
         doctor_first_name,
         doctor_last_name,
         doctor_phone_number,
         doctor_id
-      ]
-      )
-    }
-    else {
+      ]);
+    } else {
       res.status(500).json({ message: 'That doctor does not exist.' });
     }
-  }
-  catch (err) {
+  } catch (err) {
     res.json({ message: 'Please enter a valid doctor ID', err });
   }
 });
 
 
-//doctor updating patient info
+// doctor updating patient info
 router.post('/update/patientInfo', async (req, res) => {
   const { patient_id, patient_diagnosis, patient_primary_doctor } = req.body;
 
@@ -160,25 +150,18 @@ router.post('/update/patientInfo', async (req, res) => {
       [patient_id]);
 
     if (patient !== NULL) {
-
-      db.query("UPDATE patient SET (patient_diagnosis = $1, patient_primary_doctor = $2) WHERE patient_id = $3,"
+      db.query('UPDATE patient SET (patient_diagnosis = $1, patient_primary_doctor = $2) WHERE patient_id = $3,'
 
       [patient_id,
       patient_diagnosis,
-        patient_primary_doctor]
-      )
-    }
-
-    else {
+        patient_primary_doctor]);
+    } else {
       res.status(500).json({ message: 'That patient does not exist.' });
     }
-  }
-  catch (err) {
+  } catch (err) {
     res.json({ message: 'Please enter a valid patient ID', err });
   }
 });
-
-
 
 
 module.exports = router;

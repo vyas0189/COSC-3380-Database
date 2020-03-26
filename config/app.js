@@ -6,8 +6,6 @@ const morgan = require('morgan');
 const compression = require('compression');
 const { join } = require('path');
 // const rateLimit = require('express-rate-limit');
-// const session = require('express-session');
-// const PGSession = require('connect-pg-simple')(session);
 const db = require('./db');
 const user = require('../routes/users');
 
@@ -26,23 +24,11 @@ const app = express();
 //   message:
 //     { message: 'Too many accounts created from this IP, please try again after an hour' },
 // });
+
 app.use(compression());
 app.use(helmet());
 app.use(morgan('common'));
 // app.use(limiter);
-
-// app.use(session(
-//   {
-//     store: new PGSession({
-//       pool: db,
-//       tableName: 'session',
-//     }),
-//     secret: 'test',
-//     resave: true,
-//     cookie: { secure: false, maxAge: 60 * 60 * 1000 },
-//     saveUninitialized: true,
-//   },
-// ));
 
 const isProduction = process.env.NODE_ENV === 'production';
 const origin = {
@@ -55,11 +41,7 @@ app.use(express.json({ extended: false }));
 app.get('/', (req, res) => {
   res.redirect('/api');
 });
-app.use('/user', require('../routes/users'));
-// app.get('/test', (req, res) => {
-//   req.session.user = { user: 'username' };
-//   res.send({ user: 'username' });
-// });
+app.use('/api/user', user));
 
 
 if (isProduction) {
@@ -68,7 +50,5 @@ if (isProduction) {
     res.sendFile(join(__dirname, '../client/build', 'index.html'));
   });
 }
-
-// app.use('/api/users', require('../routes/users'));
 
 module.exports = app;
