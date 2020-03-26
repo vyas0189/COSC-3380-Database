@@ -9,6 +9,7 @@ const { join } = require('path');
 // const session = require('express-session');
 // const PGSession = require('connect-pg-simple')(session);
 const db = require('./db');
+const user = require('../routes/users');
 
 db.connect()
   .then(() => { console.log('Database connected!'); })
@@ -60,10 +61,6 @@ app.use('/user', require('../routes/users'));
 //   res.send({ user: 'username' });
 // });
 
-app.get('/api', (req, res) => {
-  res.status(200).json({ msg: 'Welcome to the Medical Clinic API!' });
-});
-
 
 if (isProduction) {
   app.use(express.static(join(__dirname, '../client/build')));
@@ -72,6 +69,6 @@ if (isProduction) {
   });
 }
 
-app.use('/api/users', require('../routes/users'));
+// app.use('/api/users', require('../routes/users'));
 
 module.exports = app;
