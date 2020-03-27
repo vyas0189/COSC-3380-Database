@@ -10,9 +10,6 @@ CREATE TABLE db_user
     updated_at TIMESTAMP        NOT NULL                                                DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO db_user(username, password, role)
-VALUES ('admin', 'admin1234', 'admin');
-
 CREATE TABLE IF NOT EXISTS address
 (
     address_id    UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
@@ -25,7 +22,7 @@ CREATE TABLE IF NOT EXISTS address
 CREATE TABLE IF NOT EXISTS patient
 (
     patient_id             UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
-    patient_first_name     VARCHAR(100)     NOT NULL,
+    patient_first_name     VARCHAR(100)     NOT NULL,u
     patient_last_name      VARCHAR(100)     NOT NULL,
     patient_email          TEXT UNIQUE      NOT NULL,
     patient_phone_number   TEXT             NOT NULL,
@@ -62,6 +59,7 @@ CREATE TABLE IF NOT EXISTS doctor
     doctor_address      UUID             NOT NULL REFERENCES address (address_id),
     doctor_first_name   varchar(100)     NOT NULL,
     doctor_last_name    varchar(100)     NOT NULL,
+    doctor_email        TEXT UNIQUE      NOT NULL,
     doctor_phone_number TEXT             NOT NULL,
     doctor_office       UUID             NOT NULL REFERENCES office (office_id),
     doctor_spec         TEXT             NOT NULL,
@@ -208,8 +206,3 @@ ALTER TABLE appointment
 -- set doctor_availability[1] = json_build_object('time', '["2020-03-10 09:00:00+00","2020-03-10 10:00:00+00"]'::tstzrange,
 --                                                'taken', false);
 --
--- SELECT doctor_availability
--- from doctor;
---
-SELECT *
-FROM address;

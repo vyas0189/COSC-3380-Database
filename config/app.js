@@ -41,8 +41,12 @@ app.use(express.json({ extended: false }));
 app.get('/', (req, res) => {
   res.redirect('/api');
 });
+<<<<<<< HEAD
 app.use('/api/user', user);
 
+=======
+app.use('/user', user);
+>>>>>>> 45b09238f8b1864cfe7af1f54d73468f909e459e
 
 if (isProduction) {
   app.use(express.static(join(__dirname, '../client/build')));
