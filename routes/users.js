@@ -1,9 +1,6 @@
 const { Router } = require('express');
 const bcrypt = require('bcryptjs');
-<<<<<<< HEAD
-=======
 const { validate, registerPatientSchema } = require('../validation');
->>>>>>> 45b09238f8b1864cfe7af1f54d73468f909e459e
 // const moment = require('moment');
 const db = require('../config/db');
 
