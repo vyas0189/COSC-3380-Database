@@ -33,42 +33,42 @@ router.get('/', async (req, res) => {
   res.send('Hi');
 });
 router.post('/register/patient', async (req, res) => {
-	try {
-		await validate(registerPatientSchema, req.body, req, res);
-		const {
-			username, password, role, firstName, lastName, email, address, city, state, zip, phoneNumber, dob, gender,
-		} = req.body;
+  try {
+    await validate(registerPatientSchema, req.body, req, res);
+    const {
+      username, password, role, firstName, lastName, email, address, city, state, zip, phoneNumber, dob, gender,
+    } = req.body;
 
-		let { address2 } = req.body;
+    let { address2 } = req.body;
 
-		const user = await db.query('SELECT * FROM db_user u JOIN patient p ON u.user_id = p.patient_id WHERE u.username = $1 OR p.patient_email = $2',
-			[username, email]);
+    const user = await db.query('SELECT * FROM db_user u JOIN patient p ON u.user_id = p.patient_id WHERE u.username = $1 OR p.patient_email = $2',
+      [username, email]);
 
-		if (user.rows.length > 0) {
-			return res.status(401).json({ message: 'Username or email is already taken' });
-		}
+    if (user.rows.length > 0) {
+      return res.status(401).json({ message: 'Username or email is already taken' });
+    }
 
-		const hashedPassword = await bcrypt.hashSync(password, 10);
+    const hashedPassword = await bcrypt.hashSync(password, 10);
 
-		if (address2 === 'n/a' || address2 === 'N/A') {
-			address2 = null;
-		}
+    if (address2 === 'n/a' || address2 === 'N/A') {
+      address2 = null;
+    }
 
-		const dbUser = await db.query('INSERT INTO db_user(username, password, role) VALUES ($1, $2, $3) RETURNING user_id, username, role',
-			[username, hashedPassword, role]);
+    const dbUser = await db.query('INSERT INTO db_user(username, password, role) VALUES ($1, $2, $3) RETURNING user_id, username, role',
+      [username, hashedPassword, role]);
 
-		const userAddress = await db.query('INSERT INTO address(address_name, address2_name, city, state, zip) VALUES($1, $2, $3, $4, $5) RETURNING *',
-			[address, address2, city, state, zip]);
+    const userAddress = await db.query('INSERT INTO address(address_name, address2_name, city, state, zip) VALUES($1, $2, $3, $4, $5) RETURNING *',
+      [address, address2, city, state, zip]);
 
-		// res.send({ dbUser: dbUser.rows[0], userAddress: userAddress.rows[0] });
+    // res.send({ dbUser: dbUser.rows[0], userAddress: userAddress.rows[0] });
 
-		const userProfile = await db.query('INSERT INTO patient(patient_first_name, patient_last_name, patient_email, patient_phone_number, patient_gender, patient_address, patient_dob, patient_user) VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
-			[firstName, lastName, email, phoneNumber, gender, userAddress.rows[0].address_id, dob, dbUser.rows[0].user_id]);
+    const userProfile = await db.query('INSERT INTO patient(patient_first_name, patient_last_name, patient_email, patient_phone_number, patient_gender, patient_address, patient_dob, patient_user) VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
+      [firstName, lastName, email, phoneNumber, gender, userAddress.rows[0].address_id, dob, dbUser.rows[0].user_id]);
 
-		res.json(userProfile.rows[0]);
-	} catch (err) {
-		console.log(err);
-	}
+    res.json(userProfile.rows[0]);
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 // router.post('/register/doctor', async (req, res) => {
@@ -130,10 +130,6 @@ router.post('/register/patient', async (req, res) => {
 // 		if (address2 === 'n/a' || address2 === 'N/A') {
 // 			address2 = null;
 // 		}
-
-
-
-
 
 // 		// res.send({ dbUser: dbUser.rows[0], userAddress: userAddress.rows[0] });
 
