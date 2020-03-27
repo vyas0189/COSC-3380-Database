@@ -55,12 +55,7 @@ app.use(express.json({ extended: false }));
 app.get('/', (req, res) => {
   res.redirect('/api');
 });
-app.use('/user', require('../routes/users'));
-// app.get('/test', (req, res) => {
-//   req.session.user = { user: 'username' };
-//   res.send({ user: 'username' });
-// });
-
+app.use('/user', user);
 
 if (isProduction) {
   app.use(express.static(join(__dirname, '../client/build')));
@@ -68,7 +63,5 @@ if (isProduction) {
     res.sendFile(join(__dirname, '../client/build', 'index.html'));
   });
 }
-
-// app.use('/api/users', require('../routes/users'));
 
 module.exports = app;
