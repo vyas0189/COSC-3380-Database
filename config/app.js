@@ -31,19 +31,6 @@ app.use(helmet());
 app.use(morgan('common'));
 // app.use(limiter);
 
-// app.use(session(
-//   {
-//     store: new PGSession({
-//       pool: db,
-//       tableName: 'session',
-//     }),
-//     secret: 'test',
-//     resave: true,
-//     cookie: { secure: false, maxAge: 60 * 60 * 1000 },
-//     saveUninitialized: true,
-//   },
-// ));
-
 const isProduction = process.env.NODE_ENV === 'production';
 const origin = {
   origin: isProduction ? 'https://www.example.com' : '*',
@@ -55,12 +42,7 @@ app.use(express.json({ extended: false }));
 app.get('/', (req, res) => {
   res.redirect('/api');
 });
-app.use('/user', require('../routes/users'));
-// app.get('/test', (req, res) => {
-//   req.session.user = { user: 'username' };
-//   res.send({ user: 'username' });
-// });
-
+app.use('/user', user);
 
 if (isProduction) {
   app.use(express.static(join(__dirname, '../client/build')));
@@ -68,7 +50,5 @@ if (isProduction) {
     res.sendFile(join(__dirname, '../client/build', 'index.html'));
   });
 }
-
-// app.use('/api/users', require('../routes/users'));
 
 module.exports = app;
