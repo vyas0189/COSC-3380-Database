@@ -31,19 +31,6 @@ app.use(helmet());
 app.use(morgan('common'));
 // app.use(limiter);
 
-// app.use(session(
-//   {
-//     store: new PGSession({
-//       pool: db,
-//       tableName: 'session',
-//     }),
-//     secret: 'test',
-//     resave: true,
-//     cookie: { secure: false, maxAge: 60 * 60 * 1000 },
-//     saveUninitialized: true,
-//   },
-// ));
-
 const isProduction = process.env.NODE_ENV === 'production';
 const origin = {
   origin: isProduction ? 'https://www.example.com' : '*',
