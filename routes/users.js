@@ -1,6 +1,11 @@
 const { Router } = require('express');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const { validate, registerPatientSchema } = require('../validation');
+const { login } = require('../auth');
+const { auth, admin } = require('../middleware/auth');
+
+const { JWT_SECRET, SESSION_EXPIRES = 60 * 60 } = process.env;
 // const moment = require('moment');
 const db = require('../config/db');
 
@@ -39,7 +44,7 @@ router.post('/register/patient', async (req, res) => {
 
 		let { address2 } = req.body;
 
-		const user = await db.query('SELECT * FROM db_user u JOIN patient p ON u.user_id = p.patient_id WHERE u.username = $1 OR p.patient_email = $2',
+		let user = await db.query('SELECT * FROM db_user u JOIN patient p ON u.user_id = p.patient_user WHERE u.username = $1 OR p.patient_email = $2',
 			[username, email]);
 
 		if (user.rows.length > 0) {
@@ -58,12 +63,14 @@ router.post('/register/patient', async (req, res) => {
 		const userAddress = await db.query('INSERT INTO address(address_name, address2_name, city, state, zip) VALUES($1, $2, $3, $4, $5) RETURNING *',
 			[address, address2, city, state, zip]);
 
-		// res.send({ dbUser: dbUser.rows[0], userAddress: userAddress.rows[0] });
-
-		const userProfile = await db.query('INSERT INTO patient(patient_first_name, patient_last_name, patient_email, patient_phone_number, patient_gender, patient_address, patient_dob, patient_user) VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
+		await db.query('INSERT INTO patient(patient_first_name, patient_last_name, patient_email, patient_phone_number, patient_gender, patient_address, patient_dob, patient_user) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
 			[firstName, lastName, email, phoneNumber, gender, userAddress.rows[0].address_id, dob, dbUser.rows[0].user_id]);
-
-		res.json(userProfile.rows[0]);
+		user = { userID: dbUser.rows[0].user_id, role: dbUser.rows[0].role };
+		const payload = {
+			user,
+		};
+		const token = jwt.sign(payload, JWT_SECRET, { expiresIn: SESSION_EXPIRES });
+		res.json(token);
 	} catch (err) {
 		console.log(err);
 	}
@@ -128,9 +135,6 @@ router.post('/register/patient', async (req, res) => {
 // 		if (address2 === 'n/a' || address2 === 'N/A') {
 // 			address2 = null;
 // 		}
-
-
-
 
 
 // 		// res.send({ dbUser: dbUser.rows[0], userAddress: userAddress.rows[0] });
