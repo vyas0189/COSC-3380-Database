@@ -8,6 +8,7 @@ const { join } = require('path');
 // const rateLimit = require('express-rate-limit');
 const db = require('./db');
 const auth = require('../routes/auth');
+const patient = require('../routes/patient');
 
 db.connect()
   .then(() => { console.log('Database connected!'); })
@@ -39,9 +40,11 @@ app.use(cors(origin));
 app.use(express.json({ extended: false }));
 
 app.get('/', (req, res) => {
-  res.redirect('/api');
+  res.json({ welcome: 'Hospital' });
 });
+
 app.use('/auth', auth);
+app.use('/patient', patient);
 
 if (isProduction) {
   app.use(express.static(join(__dirname, '../client/build')));
