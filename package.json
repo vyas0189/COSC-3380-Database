@@ -28,7 +28,7 @@
   "scripts": {
     "client": "cd client && yarn start",
     "start": "node server.js",
-    "server": "nodemon server.js",
+    "server": "cross-env NODE_ENV=production nodemon server.js",
     "server:dev": "cross-env NODE_ENV=development nodemon server.js",
     "build": "yarn && cd client && yarn && yarn build",
     "test": "cross-env NODE_ENV=test jest --testTimeout=10000",
