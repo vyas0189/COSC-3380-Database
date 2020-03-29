@@ -56,7 +56,7 @@ module.exports = {
        firstName, lastName, email, address, address2, city, state, zip, phoneNumber, dob, gender,
     }),
     updateDoctorSchema: Joi.object().keys({
-        username, password, role, firstName, lastName, email, address, address2, city, state, zip, phoneNumber, primary, specialty, office,
+        firstName, lastName, email, address, address2, city, state, zip, phoneNumber, primary, specialty, office,
     }),
     
 };
