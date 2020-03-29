@@ -1,9 +1,9 @@
 const { Router } = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { validate, registerPatientSchema } = require('../validation');
-const { login } = require('../auth');
-const { auth, admin } = require('../middleware/auth');
+const { validate, registerPatientSchema, loginPatientSchema } = require('../validation');
+// const { login } = require('../auth');
+const { auth, admin, doc } = require('../middleware/auth');
 
 const { JWT_SECRET, SESSION_EXPIRES = 60 * 60 } = process.env;
 // const moment = require('moment');
@@ -11,30 +11,30 @@ const db = require('../config/db');
 
 const router = Router();
 
-router.get('/', async (req, res) => {
-	// try {
-	// 	const { rows } = await db.query({ text: 'SELECT (doctor_availability) FROM doctor;' });
-	// 	if (rows.length > 0) {
-	// 		const t = rows[0].doctor_availability.map((d, i) => {
-	// 			if (!d.taken) {
-	// 				const tem = d.time.split(',')[0].replace('[', '');
-	// 				const date = moment(new Date(Date.parse(tem))).utc().format('MM/DD/YYYY');
-	// 				const time = moment(new Date(Date.parse(tem))).utc().format('hh:mm:ss A');
-	// 				return {
-	// 					idx: i + 1, date, time, taken: d.taken,
-	// 				};
-	// 			}
-	// 		});
-
-	// 		res.status(200).json({ t });
-	// 	} else {
-	// 		res.status(500).json({ message: 'User Not Found' });
-	// 	}
-	// } catch (err) {
-	// 	res.json({ message: 'Please enter a valid ID', err });
-	// }
-	res.send('Hello World');
+router.get('/patient/me', auth, async (req, res) => {
+	try {
+		const user = await db.query('SELECT * FROM db_user u JOIN patient p ON u.user_id = p.patient_user WHERE u.user_id = $1', [req.user.userID]);
+		if (user.rows.length > 0) {
+			return res.status(200).json({ message: 'OK', user: user.rows[0] });
+		}
+		return res.status(401).json({ message: 'User not found' });
+	} catch (err) {
+		res.status(500).json({ message: 'Server Error' });
+	}
 });
+
+router.get('/doctor/me', doc, async (req, res) => {
+	try {
+		const user = await db.query('SELECT * FROM db_user u JOIN docktor d ON u.user_id = d.docktor_user WHERE u.user_id = $1', [req.user.userID]);
+		if (user.rows.length > 0) {
+			return res.status(200).json({ message: 'OK', user: user.rows[0] });
+		}
+		return res.status(401).json({ message: 'User not found' });
+	} catch (err) {
+		res.status(500).json({ message: 'Server Error' });
+	}
+});
+
 router.post('/register/patient', async (req, res) => {
 	try {
 		await validate(registerPatientSchema, req.body, req, res);
@@ -66,16 +66,38 @@ router.post('/register/patient', async (req, res) => {
 		await db.query('INSERT INTO patient(patient_first_name, patient_last_name, patient_email, patient_phone_number, patient_gender, patient_address, patient_dob, patient_user) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
 			[firstName, lastName, email, phoneNumber, gender, userAddress.rows[0].address_id, dob, dbUser.rows[0].user_id]);
 		user = { userID: dbUser.rows[0].user_id, role: dbUser.rows[0].role };
-		const payload = {
-			user,
-		};
-		const token = jwt.sign(payload, JWT_SECRET, { expiresIn: SESSION_EXPIRES });
-		res.json(token);
+
+		const token = jwt.sign(user, JWT_SECRET, { expiresIn: SESSION_EXPIRES });
+		res.status(200).json({ message: 'OK', token });
 	} catch (err) {
-		console.log(err);
+		res.status(500).json({ message: 'Server Error' });
 	}
 });
 
+router.post('/login/patient', async (req, res) => {
+	try {
+		await validate(loginPatientSchema, req.body, req, res);
+		const { username, password } = req.body;
+		const user = await db.query('SELECT * FROM db_user WHERE username = $1', [username]);
+
+		if (user.rows.length === 0) {
+			return res.status(401).json({ message: 'Invalid username or password' });
+		}
+
+		const validPassword = await bcrypt.compare(password, user.rows[0].password);
+
+		if (!validPassword) {
+			return res.status(401).json({ message: 'Invalid username or password' });
+		}
+		const currentUser = { userID: user.rows[0].user_id, role: user.rows[0].role };
+
+		const token = jwt.sign(currentUser, JWT_SECRET, { expiresIn: SESSION_EXPIRES });
+
+		res.status(200).json({ message: 'OK', token });
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error' });
+	}
+});
 // router.post('/register/doctor', async (req, res) => {
 // 	try {
 // 		await validate(registerDoctorSchema, req.body, req, res);

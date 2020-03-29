@@ -14,6 +14,8 @@ FROM address;
 SELECT *
 FROM patient;
 
+SELECT * FROM db_user u JOIN patient p ON u.user_id = p.patient_user WHERE u.user_id = 'dc5dc0f2-fe58-4b7e-9f77-b2865c1037e7';
+
 SELECT *
 FROM db_user u
          JOIN patient p ON u.user_id = p.patient_user
