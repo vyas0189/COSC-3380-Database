@@ -43,16 +43,20 @@ module.exports = {
     registerPatientSchema: Joi.object().keys({
         username, password, role, firstName, lastName, email, address, address2, city, state, zip, phoneNumber, dob, gender,
     }),
-    updatePatientSchema: Joi.object().keys({
-        username, password, role, firstName, lastName, email, address, address2, city, state, zip, phoneNumber, dob, gender,
+    patientLoginSchema: Joi.object().keys({
+        username, password,
     }),
     registerDoctorSchema: Joi.object().keys({
         username, password, role, firstName, lastName, email, address, address2, city, state, zip, phoneNumber, primary, specialty, office,
     }),
+    doctorLoginSchema: Joi.object().keys({
+        username, password,
+    }),
+    updatePatientSchema: Joi.object().keys({
+       firstName, lastName, email, address, address2, city, state, zip, phoneNumber, dob, gender,
+    }),
     updateDoctorSchema: Joi.object().keys({
         username, password, role, firstName, lastName, email, address, address2, city, state, zip, phoneNumber, primary, specialty, office,
     }),
-    loginPatientSchema: Joi.object().keys({
-        username, password,
-    }),
+    
 };

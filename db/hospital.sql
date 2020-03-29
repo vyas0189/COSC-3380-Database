@@ -1,35 +1,35 @@
 DROP SCHEMA public CASCADE;
 CREATE SCHEMA public;
-GRANT ALL ON SCHEMA public TO vyas0;
+GRANT ALL ON SCHEMA public TO cqymabuhycrune;
 GRANT ALL ON SCHEMA public TO public;
 COMMENT ON SCHEMA public IS 'standard public schema';
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-SELECT *
-FROM db_user;
-
-SELECT *
-FROM address;
-
-SELECT *
-FROM patient;
-
-SELECT * FROM db_user u JOIN patient p ON u.user_id = p.patient_user WHERE u.user_id = 'dc5dc0f2-fe58-4b7e-9f77-b2865c1037e7';
-
-SELECT *
-FROM db_user u
-         JOIN patient p ON u.user_id = p.patient_user
-WHERE u.username = 'testing123'
-   OR p.patient_email = 'testing@gmail.com';
-
-DELETE
-FROM db_user;
-
-DELETE
-FROM address;
-
-DELETE
-FROM patient;
+-- SELECT *
+-- FROM db_user;
+--
+-- SELECT *
+-- FROM address;
+--
+-- SELECT *
+-- FROM patient;
+--
+-- SELECT * FROM db_user u JOIN patient p ON u.user_id = p.patient_user WHERE u.user_id = 'dc5dc0f2-fe58-4b7e-9f77-b2865c1037e7';
+--
+-- SELECT *
+-- FROM db_user u
+--          JOIN patient p ON u.user_id = p.patient_user
+-- WHERE u.username = 'testing123'
+--    OR p.patient_email = 'testing@gmail.com';
+--
+-- DELETE
+-- FROM db_user;
+--
+-- DELETE
+-- FROM address;
+--
+-- DELETE
+-- FROM patient;
 
 CREATE TABLE db_user
 (
@@ -65,13 +65,13 @@ CREATE TABLE IF NOT EXISTS patient
 );
 CREATE TABLE IF NOT EXISTS appointment
 (
-    appt_id      UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
-    appt_patient UUID             NOT NULL,
-    appt_doctor  UUID             NOT NULL,
-    appt_start   TIMESTAMP        NOT NULL,
-    appt_end     TIMESTAMP        NOT NULL,
-    appt_reason  TEXT             NOT NULL,
-    appt_office  UUID             NOT NULL
+    appointment_id      UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
+    appointment_patient UUID             NOT NULL,
+    appointment_doctor  UUID             NOT NULL,
+    appointment_start   TIMESTAMP        NOT NULL,
+    appointment_end     TIMESTAMP        NOT NULL,
+    appointment_reason  TEXT             NOT NULL,
+    appointment_office  UUID             NOT NULL
 );
 CREATE TABLE IF NOT EXISTS office
 (
@@ -79,8 +79,7 @@ CREATE TABLE IF NOT EXISTS office
     office_capacity     INT              NOT NULL,
     office_address      UUID             NOT NULL REFERENCES address (address_id) ON DELETE CASCADE ON UPDATE CASCADE,
     office_phone_number TEXT             NOT NULL,
-    office_opening_hour TIME             NOT NULL,
-    office_specialty    TEXT             NOT NULL
+    office_opening_hour TIME             NOT NULL
 );
 CREATE TABLE IF NOT EXISTS doctor
 (
@@ -92,7 +91,7 @@ CREATE TABLE IF NOT EXISTS doctor
     doctor_email        TEXT UNIQUE      NOT NULL,
     doctor_phone_number TEXT             NOT NULL,
     doctor_office       UUID             NOT NULL REFERENCES office (office_id),
-    doctor_spec         TEXT             NOT NULL,
+    doctor_specialty    TEXT             NOT NULL,
     doctor_user         UUID             NOT NULL REFERENCES db_user (user_id),
     doctor_diagnosis    UUID,
     doctor_test         UUID
@@ -121,9 +120,9 @@ CREATE TABLE IF NOT EXISTS test
 );
 CREATE TABLE IF NOT EXISTS diagnosis
 (
-    diag_id        UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
-    diag_symptoms  TEXT             NOT NULL,
-    diag_condition TEXT             NOT NULL
+    diagnosis_id        UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
+    diagnosis_symptoms  TEXT             NOT NULL,
+    diagnosis_condition TEXT             NOT NULL
 );
 -- CREATE TABLE "session"
 -- (
@@ -141,25 +140,25 @@ ALTER TABLE patient
         CONSTRAINT fk_doctor FOREIGN KEY (patient_primary_doctor) REFERENCES doctor (doctor_id);
 ALTER TABLE patient
     ADD
-        CONSTRAINT fk_patient_diagnosis FOREIGN KEY (patient_diagnosis) REFERENCES diagnosis (diag_id);
+        CONSTRAINT fk_patient_diagnosis FOREIGN KEY (patient_diagnosis) REFERENCES diagnosis (diagnosis_id);
 ALTER TABLE doctor
     ADD
-        CONSTRAINT fk_doctor_diagnosis FOREIGN KEY (doctor_diagnosis) REFERENCES diagnosis (diag_id);
+        CONSTRAINT fk_doctor_diagnosis FOREIGN KEY (doctor_diagnosis) REFERENCES diagnosis (diagnosis_id);
 ALTER TABLE doctor
     ADD
         CONSTRAINT fk_doctor_test FOREIGN KEY (doctor_test) REFERENCES test (test_id);
 ALTER TABLE test
     ADD
-        CONSTRAINT fk_test_diagnosis FOREIGN KEY (test_diagnosis) REFERENCES diagnosis (diag_id);
+        CONSTRAINT fk_test_diagnosis FOREIGN KEY (test_diagnosis) REFERENCES diagnosis (diagnosis_id);
 ALTER TABLE appointment
     ADD
-        CONSTRAINT fk_appt_office FOREIGN KEY (appt_office) REFERENCES office (office_id);
+        CONSTRAINT fk_appointment_office FOREIGN KEY (appointment_office) REFERENCES office (office_id);
 ALTER TABLE appointment
     ADD
-        CONSTRAINT fk_appt_patient FOREIGN KEY (appt_patient) REFERENCES patient (patient_id);
+        CONSTRAINT fk_appointment_patient FOREIGN KEY (appointment_patient) REFERENCES patient (patient_id);
 ALTER TABLE appointment
     ADD
-        CONSTRAINT fk_appt_doctor FOREIGN KEY (appt_doctor) REFERENCES doctor (doctor_id);
+        CONSTRAINT fk_appointment_doctor FOREIGN KEY (appointment_doctor) REFERENCES doctor (doctor_id);
 -- CREATE FUNCTION insert_availability() RETURNS trigger AS
 -- $$
 -- BEGIN
