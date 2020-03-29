@@ -7,7 +7,7 @@ const compression = require('compression');
 const { join } = require('path');
 // const rateLimit = require('express-rate-limit');
 const db = require('./db');
-const user = require('../routes/users');
+const auth = require('../routes/auth');
 
 db.connect()
   .then(() => { console.log('Database connected!'); })
@@ -41,7 +41,7 @@ app.use(express.json({ extended: false }));
 app.get('/', (req, res) => {
   res.redirect('/api');
 });
-app.use('/user', user);
+app.use('/auth', auth);
 
 if (isProduction) {
   app.use(express.static(join(__dirname, '../client/build')));

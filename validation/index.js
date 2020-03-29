@@ -52,7 +52,7 @@ module.exports = {
     updateDoctorSchema: Joi.object().keys({
         username, password, role, firstName, lastName, email, address, address2, city, state, zip, phoneNumber, primary, specialty, office,
     }),
-    loginSchema: Joi.object().keys({
+    loginPatientSchema: Joi.object().keys({
         username, password,
     }),
 };
