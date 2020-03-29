@@ -138,10 +138,6 @@ router.post('/register/patient', async (req, res) => {
 // 			address2 = null;
 // 		}
 
-<<<<<<< HEAD
-=======
-
->>>>>>> f3e38c724e0425c24e560cf131cc8833dbcaa250
 // 		// res.send({ dbUser: dbUser.rows[0], userAddress: userAddress.rows[0] });
 
 // 		const userProfile = await db.query('INSERT INTO patient(patient_first_name, patient_last_name, patient_email, patient_phone_number, patient_gender, patient_address, patient_dob, patient_user) VALUES($1, $2, $3, $4, $5, $6, $7, $8',
