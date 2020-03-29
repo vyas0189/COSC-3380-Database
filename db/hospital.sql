@@ -1,4 +1,33 @@
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
+GRANT ALL ON SCHEMA public TO vyas0;
+GRANT ALL ON SCHEMA public TO public;
+COMMENT ON SCHEMA public IS 'standard public schema';
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+SELECT *
+FROM db_user;
+
+SELECT *
+FROM address;
+
+SELECT *
+FROM patient;
+
+SELECT *
+FROM db_user u
+         JOIN patient p ON u.user_id = p.patient_user
+WHERE u.username = 'testing123'
+   OR p.patient_email = 'testing@gmail.com';
+
+DELETE
+FROM db_user;
+
+DELETE
+FROM address;
+
+DELETE
+FROM patient;
 
 CREATE TABLE db_user
 (
@@ -9,7 +38,6 @@ CREATE TABLE db_user
     created_at TIMESTAMP        NOT NULL                                                DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP        NOT NULL                                                DEFAULT CURRENT_TIMESTAMP
 );
-
 CREATE TABLE IF NOT EXISTS address
 (
     address_id    UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
@@ -22,14 +50,14 @@ CREATE TABLE IF NOT EXISTS address
 CREATE TABLE IF NOT EXISTS patient
 (
     patient_id             UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
-    patient_first_name     VARCHAR(100)     NOT NULL,u
+    patient_first_name     VARCHAR(100)     NOT NULL,
     patient_last_name      VARCHAR(100)     NOT NULL,
     patient_email          TEXT UNIQUE      NOT NULL,
     patient_phone_number   TEXT             NOT NULL,
     patient_gender         VARCHAR(7)       NOT NULL,
-    patient_address        UUID             NOT NULL REFERENCES address (address_id),
+    patient_address        UUID             NOT NULL REFERENCES address (address_id) ON DELETE CASCADE ON UPDATE CASCADE,
     patient_dob            DATE             NOT NULL,
-    patient_user           UUID             NOT NULL REFERENCES db_user (user_id),
+    patient_user           UUID             NOT NULL REFERENCES db_user (user_id) ON DELETE CASCADE ON UPDATE CASCADE,
     patient_diagnosis      UUID,
     patient_primary_doctor UUID
 );
@@ -47,7 +75,7 @@ CREATE TABLE IF NOT EXISTS office
 (
     office_id           UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
     office_capacity     INT              NOT NULL,
-    office_address      UUID             NOT NULL REFERENCES address (address_id),
+    office_address      UUID             NOT NULL REFERENCES address (address_id) ON DELETE CASCADE ON UPDATE CASCADE,
     office_phone_number TEXT             NOT NULL,
     office_opening_hour TIME             NOT NULL,
     office_specialty    TEXT             NOT NULL

@@ -4,7 +4,7 @@ const {
   PGUSER, PGPASSWORD, PGHOST, PGPORT, PGDATABASE, NODE_ENV = 'development',
 } = process.env;
 
-const isProduction = process.env.NODE_ENV === 'production';
+const isProduction = NODE_ENV === 'production';
 const connectionString = `postgresql://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}`;
 
 const db = new Pool({
