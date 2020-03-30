@@ -1,9 +1,11 @@
 const { Router } = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+
 const {
-	validate, registerPatientSchema, loginPatientSchema, registerDoctorSchema, up,
+	validate, registerPatientSchema, loginPatientSchema, registerDoctorSchema, loginDoctorSchema, up,
 } = require('../validation');
+
 // const { login } = require('../auth');
 const { auth, admin, doc } = require('../middleware/auth');
 
@@ -27,7 +29,7 @@ router.get('/patient/me', auth, async (req, res) => {
 
 router.get('/doctor/me', doc, async (req, res) => {
 	try {
-		const user = await db.query('SELECT * FROM db_user u JOIN docktor d ON u.user_id = d.docktor_user WHERE u.user_id = $1', [req.user.userID]);
+		const user = await db.query('SELECT * FROM db_user u JOIN doctor d ON u.user_id = d.doctor_user WHERE u.user_id = $1', [req.user.userID]);
 		if (user.rows.length > 0) {
 			return res.status(200).json({ message: 'OK', user: user.rows[0] });
 		}
@@ -36,6 +38,20 @@ router.get('/doctor/me', doc, async (req, res) => {
 		res.status(500).json({ message: 'Server Error' });
 	}
 });
+
+// router.delete('/delete/patient', admin, async (req, res) => {
+// 	try {
+
+// 		const { username } = req.body;
+
+// 		let user = await db.query('SELECT * FROM db_user u JOIN patient p ON u.user_id = p.patient_user WHERE u.username = $1 OR p.patient_email = $2');
+
+
+// 		res.status(200).json({ message: 'OK'});
+// 	} catch (err) {
+// 		res.status(500).json({ message: 'Server Error' });
+// 	}
+// });
 
 router.post('/register/patient', async (req, res) => {
 	try {
@@ -103,7 +119,6 @@ router.post('/login/patient', async (req, res) => {
 	}
 });
 
-
 router.post('/register/doctor', async (req, res) => {
 	try {
 		await validate(registerDoctorSchema, req.body, req, res);
@@ -146,30 +161,29 @@ router.post('/register/doctor', async (req, res) => {
 	}
 });
 
-// router.post('/login/doctor', async (req, res) => {
-// 	try {
-// 		await validate(loginDoctorSchema, req.body, req, res);
-// 		const { username, password } = req.body;
-// 		const user = await db.query('SELECT * FROM db_user WHERE username = $1', [username]);
+router.post('/login/doctor', async (req, res) => {
+	try {
+		await validate(loginDoctorSchema, req.body, req, res);
+		const { username, password } = req.body;
+		const user = await db.query('SELECT * FROM db_user WHERE username = $1', [username]);
 
-// 		if (user.rows.length === 0) {
-// 			return res.status(401).json({ message: 'Invalid username or password' });
-// 		}
+		if (user.rows.length === 0) {
+			return res.status(401).json({ message: 'Invalid username or password' });
+		}
 
-// 		const validPassword = await bcrypt.compare(password, user.rows[0].password);
+		const validPassword = await bcrypt.compare(password, user.rows[0].password);
 
-// 		if (!validPassword) {
-// 			return res.status(401).json({ message: 'Invalid username or password' });
-// 		}
-// 		const currentUser = { userID: user.rows[0].user_id, role: user.rows[0].role };
+		if (!validPassword) {
+			return res.status(401).json({ message: 'Invalid username or password' });
+		}
+		const currentUser = { userID: user.rows[0].user_id, role: user.rows[0].role };
 
-// 		const token = jwt.sign(currentUser, JWT_SECRET, { expiresIn: SESSION_EXPIRES });
+		const token = jwt.sign(currentUser, JWT_SECRET, { expiresIn: SESSION_EXPIRES });
 
-// 		json({ message: 'Server Error' });
-// 	} catch (err) {
+		json({ message: 'Server Error' });
+	} catch (err) {
 
-// 	}
-// });
-
+	}
+});
 
 module.exports = router;

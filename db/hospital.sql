@@ -68,6 +68,7 @@ CREATE TABLE IF NOT EXISTS appointment
     appointment_id      UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
     appointment_patient UUID             NOT NULL,
     appointment_doctor  UUID             NOT NULL,
+    appointment_date    DATE             NOT NULL DEFAULT,
     appointment_start   TIMESTAMP        NOT NULL,
     appointment_end     TIMESTAMP        NOT NULL,
     appointment_reason  TEXT             NOT NULL,
@@ -93,6 +94,7 @@ CREATE TABLE IF NOT EXISTS doctor
     doctor_office       UUID             NOT NULL REFERENCES office (office_id),
     doctor_specialty    TEXT             NOT NULL,
     doctor_user         UUID             NOT NULL REFERENCES db_user (user_id),
+    doctor_availability UUID             NOT NULL REFERENCES address (availability_id) ON DELETE CASCADE ON UPDATE CASCADE,
     doctor_diagnosis    UUID,
     doctor_test         UUID
 );
@@ -112,7 +114,6 @@ CREATE TABLE IF NOT EXISTS test
     test_scan      BOOLEAN          NOT NULL DEFAULT FALSE,
     test_physical  BOOLEAN          NOT NULL DEFAULT FALSE,
     test_blood     BOOLEAN          NOT NULL DEFAULT FALSE,
-    test_equipment TEXT             NOT NULL,
     test_office    UUID             NOT NULL REFERENCES office (office_id),
     test_doctor    UUID             NOT NULL REFERENCES doctor (doctor_id),
     test_patient   UUID             NOT NULL REFERENCES patient (patient_id),
