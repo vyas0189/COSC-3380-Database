@@ -162,7 +162,7 @@ router.post('/schedule/specialistAppointment', auth, async (req, res) => {
             const doctorCity = await db.query('SELECT city FROM address WHERE address_id = $1',
                 [doctorAddress]);
 
-            if (patientCity === doctorCity) {
+            if (patientCity.rows[0] === doctorCity.rows[0]) {
                 doctorsInCity.push(currentDoctor);
             }
         }

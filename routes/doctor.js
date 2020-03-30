@@ -65,13 +65,13 @@ router.get('/view/allAppointments', auth, async (req, res) => {
             const currPatient = patients[i];
 
             const { patientInfo } = await db.query('SELECT * FROM patient WHERE patient_id = $1',
-                [currPatient]);
+                [currPatient.rows[0]]);
 
             const officeID = appointments[i].rows[0].appointment_office;
 
             // ****this might be wrong...****
             const officeAddressID = await db.query('SELECT office_address FROM office WHERE office_id = $1',
-                [officeID]);
+                [officeID.rows[0]]);
 
             const { officeAddress } = await db.query('SELECT * FROM address WHERE address_id = $1',
                 [officeAddressID.rows[0]]);
@@ -128,10 +128,10 @@ router.get('/view/appointmentsWithPatient', auth, async (req, res) => {
             const officeID = appointments[i].rows[0].appointment_office;
 
             const officeAddressID = await db.query('SELECT office_address FROM office WHERE office_id = $1',
-                [officeID]);
+                [officeID.rows[0]]);
 
             const { officeAddress } = await db.query('SELECT * FROM address WHERE address_id = $1',
-                [officeAddressID]);
+                [officeAddressID.rows[0]]);
 
 
             res.json('Appointment #:', i,
