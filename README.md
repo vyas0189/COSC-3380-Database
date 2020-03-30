@@ -4,6 +4,12 @@
 
 A health provider company has multiple offices in many different states. Many doctors work for the company, and each doctor takes care of multiple patients. Some doctors just work in one office, and others work in different offices on different days. The database keeps information about each doctor, such as name, address, contact phones, area of specialization, and so on. Each patient can be assigned to one or more doctors. Specific patient information is also kept in the database (name, address, phones, health record number, date of birth, history of appointments, prescriptions, blood tests, diagnoses, etc.). Customers can schedule and cancel appointments either over the phone or using the company Web site. Some restrictions apply — for example, to see a specialist, the patient needs an approval from his/her primary physician.
 
+## Triggers
+
+1) Alert & deny patient user from scheduling appointment outside of doctor's availability dates & times
+
+2) Alert & deny patient user from scheduling appointment with specialist if they don't have a primary care doctor assigned
+
 ## Team
 
 * Database Development: Vyas, Michael, Justin, Tony, & Alex
