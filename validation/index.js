@@ -77,6 +77,9 @@ module.exports = {
     chooseDoctor: Joi.object().keys({
         firstName, lastName,
     }),
+    cancelAppointment: Joi.object().keys({
+        date,
+    }),
 
     //doctor scehmas
     registerDoctorSchema: Joi.object().keys({
@@ -90,6 +93,12 @@ module.exports = {
     }),
     viewAppointmentsWithPatient: Joi.object().keys({
         firstName, lastName, dob
+    }),
+    updateDiagnosis: Joi.object().keys({
+        firstName, lastName, dob, symptoms, condition,
+    }),
+    orderTest: Joi.object().keys({
+        firstName, lastName, dob, date, scan, physical, blood,
     })
 
 };

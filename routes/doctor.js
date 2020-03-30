@@ -49,13 +49,15 @@ router.get('/view/allAppointments', auth, async (req, res) => {
         const { userID } = req.user;
         const user = await db.query('SELECT user_id FROM db_user WHERE user_id = $1', [userID]);
 
-        const { appointments } = await db.query('SELECT * FROM appointments WHERE appointment_doctor = $1', [userID]);
+        const doctorID = await db.query('SELECT doctor_id FROM doctor WHERE doctor_user = $1', [userID]);
+
+        const { appointments } = await db.query('SELECT * FROM appointments WHERE appointment_doctor = $1', [doctorID]);
 
         if (appointments.length === 0) {
             return res.status(401).json({ message: 'No appointments have been scheduled with you.' });
         }
 
-        const { patients } = await db.query('SELECT appointment_patient FROM appointments WHERE appointment_doctor = $1', [userID]);
+        const { patients } = await db.query('SELECT appointment_patient FROM appointments WHERE appointment_doctor = $1', [doctorID]);
 
         for (var i = 0; i < patients.length; i++) {
 
@@ -112,7 +114,7 @@ router.get('/view/appointmentsWithPatient', auth, async (req, res) => {
         const patientID = await db.query('SELECT patient_id FROM patient WHERE patient_first_name = $1, patient_last_name = $2, patient_dob = $3',
             [firstName, lastName, dob]);
 
-        if (patientID.length === null) {
+        if (patientID.rows.length === 0) {
             return res.status(401).json({ message: 'That patient is not in our database. Please try again.' });
         }
 
@@ -153,5 +155,65 @@ router.get('/view/appointmentsWithPatient', auth, async (req, res) => {
         res.status(500).json({ message: 'Server Error', err });
     }
 });
+
+router.put('/update/patientDiagnosis', auth, async (req, res) => {
+    try {
+        await validate(updateDiagnosis, req.body, req, res);
+        const {
+            firstName, lastName, dob, symptoms, condition,
+        } = req.body;
+
+        const { userID } = req.user;
+        const user = await db.query('SELECT user_id FROM db_user WHERE user_id = $1', [userID]);
+
+        const patientID = await db.query('SELECT patient_id FROM patient WHERE patient_first_name = $1, patient_last_name = $2, patient_dob = $3',
+            [firstName, lastName, dob]);
+
+        if (patientID.rows.length === 0) {
+            return res.status(401).json({ message: 'That patient is not in our database. Please try again.' });
+        }
+
+        const diagnosisID = await db.query('SELECT diagnosis_id FROM diagnosis WHERE diagnosis_symptoms = $1, diagnosis_condition = $2',
+            [symptoms, condition])
+
+        if (diagnosisID.rows.length === 0) {
+            return res.status(401).json({ message: 'That diagnosis is not in our database. Please try again.' });
+        }
+
+        await db.query('UPDATE patient SET patient_diagnosis = $1 WHERE patient_id = $2',
+            [diagnosisID, patientId.rows[0]]);
+
+        res.status(200).json({ message: 'OK' });
+    } catch (err) {
+        res.status(500).json({ message: 'Server Error', err });
+    }
+});
+
+router.post('/insert/test', auth, async (req, res) => {
+    try {
+        await validate(orderTest, req.body, req, res);
+        const {
+            firstName, lastName, dob, date, scan, physical, blood,
+        } = req.body;
+
+        const { userID } = req.user;
+        const user = await db.query('SELECT user_id FROM db_user WHERE user_id = $1', [userID]);
+
+        const { patient } = await db.query('SELECT * FROM patient WHERE patient_first_name = $1, patient_last_name = $2, patient_dob = $3',
+            [firstName, lastName, dob]);
+
+        if (patient.rows.length === 0) {
+            return res.status(401).json({ message: 'That patient is not in our database. Please try again.' });
+        }
+
+        await db.query('INSERT INTO test(test_date, test_scan, test_physical, test_blood, test_office, test_doctor, test_patient, test_diagnosis) VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
+            [date, scan, physical, blood, user.rows[0].doctor_office, user.rows[0].doctor_id, patient.rows[0].patient_id, patient.rows[0].patient_diagnosis]);
+
+        res.status(200).json({ message: 'OK' });
+    } catch (err) {
+        res.status(500).json({ message: 'Server Error', err });
+    }
+});
+
 
 module.exports = router;

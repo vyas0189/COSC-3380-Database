@@ -98,8 +98,8 @@ router.post('/schedule/primaryAppointment', auth, async (req, res) => {
         }
 
         if (availableDoctors.length === 0) {
-			return res.status(401).json({ message: 'No primary doctors with that date & time are available. Please try again.' });
-		}
+            return res.status(401).json({ message: 'No primary doctors with that date & time are available. Please try again.' });
+        }
 
         // frontend displays names of all doctors that patient can see
 
@@ -114,8 +114,11 @@ router.post('/schedule/primaryAppointment', auth, async (req, res) => {
         await db.query('INSERT INTO appointment(appointment_patient, appointment_doctor, appointment_date, appointment_start, appointment_end, appointment_reason, appointment_office) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *',
             [userID, chosenDoctor.rows[0].doctor_id, date, startTime, endTime, reason, chosenDoctor.rows[0].doctor_office]);
 
-        await db.query('UPDATE patient SET patient_primary_doctor = $1 WHERE patient_user = $2', 
-            [chosenDoctor.rows[0].doctor_id, userID])
+        // first time with a primary physician
+        if (patient.rows[0].patient_primary_doctor === null) {
+            await db.query('UPDATE patient SET patient_primary_doctor = $1 WHERE patient_user = $2',
+                [chosenDoctor.rows[0].doctor_id, userID])
+        }
 
 
         res.status(200).json({ message: 'OK' });
@@ -139,7 +142,7 @@ router.post('/schedule/specialistAppointment', auth, async (req, res) => {
 
         //trigger for checking if patient has already had primary care appointment
 
-        if(patient.rows[0].patient_primary_doctor === undefined){
+        if (patient.rows[0].patient_primary_doctor === null) {
             return res.status(401).json({ message: 'You need to schedule an appointment with primary care doctor before you can see a specialist. Please schedule an appointment with a primary care doctor.' });
         }
 
@@ -184,8 +187,8 @@ router.post('/schedule/specialistAppointment', auth, async (req, res) => {
         }
 
         if (availableDoctors.length === 0) {
-			return res.status(401).json({ message: 'No specialist doctors with that date & time are available. Please try again.' });
-		}
+            return res.status(401).json({ message: 'No specialist doctors with that date & time are available. Please try again.' });
+        }
 
         // frontend displays names of all doctors that patient can see
 
@@ -198,7 +201,7 @@ router.post('/schedule/specialistAppointment', auth, async (req, res) => {
         [firstName, lastName]);
 
         await db.query('INSERT INTO appointment(appointment_patient, appointment_doctor, appointment_date, appointment_start, appointment_end, appointment_reason, appointment_office) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-            [userID, chosenDoctor.rows[0].doctor_id, date, startTime, endTime, reason, chosenDoctor.rows[0].doctor_office]);    
+            [userID, chosenDoctor.rows[0].doctor_id, date, startTime, endTime, reason, chosenDoctor.rows[0].doctor_office]);
 
         res.status(200).json({ message: 'OK' });
     } catch (err) {
@@ -206,7 +209,33 @@ router.post('/schedule/specialistAppointment', auth, async (req, res) => {
     }
 });
 
+router.delete('/cancel', auth, async (req, res) => {
+    try {
+        await validate(cancelAppointment, req.body, req, res);
+        const {
+            date
+        } = req.body;
 
+        const { userID } = req.user;
+
+        const patient = await db.query('SELECT * FROM patient WHERE patient_user = $1',
+            [userID]);
+
+        const { scheduledAppointment } = await db.query('SELECT * FROM appointment WHERE appointment_patient = $1, appointment_date = $2',
+            [userID, date]);
+
+        if (patient.rows.length === 0) {
+            return res.status(401).json({ message: 'You do not have an appointment scheduled on ' + date });
+        }
+
+        await db.query('DELETE * FROM appointment WHERE appointment_patient = $1, appointment_date = $2',
+            [userID, date]);
+
+        res.status(200).json({ message: 'OK' });
+    } catch (err) {
+        res.status(500).json({ message: 'Server Error', err });
+    }
+});
 
 module.exports = router;
 
