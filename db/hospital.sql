@@ -5,32 +5,6 @@ GRANT ALL ON SCHEMA public TO public;
 COMMENT ON SCHEMA public IS 'standard public schema';
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- SELECT *
--- FROM db_user;
---
--- SELECT *
--- FROM address;
---
--- SELECT *
--- FROM patient;
---
--- SELECT * FROM db_user u JOIN patient p ON u.user_id = p.patient_user WHERE u.user_id = 'dc5dc0f2-fe58-4b7e-9f77-b2865c1037e7';
---
--- SELECT *
--- FROM db_user u
---          JOIN patient p ON u.user_id = p.patient_user
--- WHERE u.username = 'testing123'
---    OR p.patient_email = 'testing@gmail.com';
---
--- DELETE
--- FROM db_user;
---
--- DELETE
--- FROM address;
---
--- DELETE
--- FROM patient;
-
 CREATE TABLE db_user
 (
     user_id    UUID PRIMARY KEY NOT NULL                                                DEFAULT uuid_generate_v4(),
@@ -54,6 +28,7 @@ CREATE TABLE IF NOT EXISTS patient
     patient_id             UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
     patient_first_name     VARCHAR(100)     NOT NULL,
     patient_last_name      VARCHAR(100)     NOT NULL,
+    patient_ssn            VARCHAR(100)     NOT NULL,
     patient_email          TEXT UNIQUE      NOT NULL,
     patient_phone_number   TEXT             NOT NULL,
     patient_gender         VARCHAR(7)       NOT NULL,
@@ -71,8 +46,9 @@ CREATE TABLE IF NOT EXISTS appointment
     appointment_date    DATE             NOT NULL DEFAULT,
     appointment_start   TIMESTAMP        NOT NULL,
     appointment_end     TIMESTAMP        NOT NULL,
+    appointment_primary      BOOLEAN     NOT NULL DEFAULT FALSE,
     appointment_reason  TEXT             NOT NULL,
-    appointment_office  UUID             NOT NULL
+    appointment_office  UUID             NOT NULL    
 );
 CREATE TABLE IF NOT EXISTS office
 (
@@ -85,7 +61,7 @@ CREATE TABLE IF NOT EXISTS office
 CREATE TABLE IF NOT EXISTS doctor
 (
     doctor_id           UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
-    doctor_primary      BOOLEAN                   DEFAULT FALSE,
+    doctor_primary      BOOLEAN          NOT NULL DEFAULT FALSE,
     doctor_address      UUID             NOT NULL REFERENCES address (address_id),
     doctor_first_name   varchar(100)     NOT NULL,
     doctor_last_name    varchar(100)     NOT NULL,
@@ -125,17 +101,7 @@ CREATE TABLE IF NOT EXISTS diagnosis
     diagnosis_symptoms  TEXT             NOT NULL,
     diagnosis_condition TEXT             NOT NULL
 );
--- CREATE TABLE "session"
--- (
---     "sid"    VARCHAR      NOT NULL COLLATE "default",
---     "sess"   JSON         NOT NULL,
---     "expire" TIMESTAMP(6) NOT NULL
--- ) WITH (OIDS = FALSE);
---
--- ALTER TABLE "session"
---     ADD
---         CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
--- CREATE INDEX "IDX_session_expire" ON "session" ("expire");
+
 ALTER TABLE patient
     ADD
         CONSTRAINT fk_doctor FOREIGN KEY (patient_primary_doctor) REFERENCES doctor (doctor_id);
@@ -160,6 +126,53 @@ ALTER TABLE appointment
 ALTER TABLE appointment
     ADD
         CONSTRAINT fk_appointment_doctor FOREIGN KEY (appointment_doctor) REFERENCES doctor (doctor_id);
+
+-- 1) Alert & deny patient user from scheduling appointment outside of doctor's availability dates / times
+
+CREATE TRIGGER APPOINTMENT_OUTSIDE_DOCTOR_AVAILABILITY
+    BEFORE INSERT OR UPDATE
+    ON appointment
+    FOR EACH ROW 
+    EXECUTE PROCEDURE deny_scheduling_alert_user();
+
+CREATE FUNCTION deny_scheduling_alert_user() RETURNS trigger AS
+$$
+BEGIN
+
+    IF (NEW.appointment_start < (SELECT availability_from_time FROM availability WHERE doctor_id = NEW.appointment_doctor) OR 
+    (SELECT availability_to_time FROM availability WHERE doctor_id = NEW.appointment_doctor) <= NEW.appointment_start)
+        THEN RAISE EXCEPTION 'That doctor is not available during that time.';
+        RETURN NULL;
+    END IF;
+
+RETURN NEW;
+END
+$$ LANGUAGE plpgsql;
+
+
+
+-- 2) Alert & deny patient user from scheduling appointment with specialist if they don't have a primary care doctor assigned
+
+CREATE TRIGGER SPECIALIST_APPOINTMENT_NO_PRIMARY_CARE_DOCTOR
+    BEFORE INSERT OR UPDATE
+    ON appointment
+    FOR EACH ROW    
+EXECUTE PROCEDURE deny_specialist_scheduling();
+
+CREATE FUNCTION deny_specialist_scheduling() RETURNS trigger AS
+$$
+BEGIN
+
+    IF (NEW.appointment_primary = FALSE AND (SELECT patient_primary_doctor FROM patient WHERE patient_id = NEW.appointment_patient) = NULL)
+    THEN RAISE EXCEPTION 'You cannot schedule a specialist appointment before you have seen a primary doctor'
+    RETURN NULL;
+    END IF;
+
+RETURN NEW;
+END
+$$ LANGUAGE plpgsql;
+
+
 -- CREATE FUNCTION insert_availability() RETURNS trigger AS
 -- $$
 -- BEGIN

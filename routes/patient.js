@@ -49,7 +49,7 @@ router.post('/schedule/primaryAppointment', auth, async (req, res) => {
     try {
         await validate(schedulePrimaryAppointment, req.body, req, res);
         const {
-            date, startTime, endTime, reason,
+            date, startTime, endTime, specialty, primaryAppointment, reason,
         } = req.body;
 
         const { userID } = req.user;
@@ -111,8 +111,8 @@ router.post('/schedule/primaryAppointment', auth, async (req, res) => {
         const chosenDoctor = await db.query('SELECT doctor_id FROM doctor WHERE doctor_first_name = $1, doctor_last_name = $2'
         [firstName, lastName]);
 
-        await db.query('INSERT INTO appointment(appointment_patient, appointment_doctor, appointment_date, appointment_start, appointment_end, appointment_reason, appointment_office) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-            [userID, chosenDoctor.rows[0].doctor_id, date, startTime, endTime, reason, chosenDoctor.rows[0].doctor_office]);
+        await db.query('INSERT INTO appointment(appointment_patient, appointment_doctor, appointment_date, appointment_start, appointment_end, appointment_primary, appointment_reason, appointment_office) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+            [userID, chosenDoctor.rows[0].doctor_id, date, startTime, endTime, appointmentPrimary, reason, chosenDoctor.rows[0].doctor_office]);
 
         // first time with a primary physician
         if (patient.rows[0].patient_primary_doctor === null) {
@@ -129,10 +129,10 @@ router.post('/schedule/primaryAppointment', auth, async (req, res) => {
 
 router.post('/schedule/specialistAppointment', auth, async (req, res) => {
     try {
-        await validate(viewAppointmentWithPatient, req.body, req, res);
+        await validate(scheduleSpecialistAppointment, req.body, req, res);
 
         const {
-            firstName, lastName, dob
+            date, startTime, endTime, specialty, primaryAppointment, reason,
         } = req.body;
 
         const { userID } = req.user;
@@ -200,8 +200,8 @@ router.post('/schedule/specialistAppointment', auth, async (req, res) => {
         const chosenDoctor = await db.query('SELECT doctor_id FROM doctor WHERE doctor_first_name = $1, doctor_last_name = $2'
         [firstName, lastName]);
 
-        await db.query('INSERT INTO appointment(appointment_patient, appointment_doctor, appointment_date, appointment_start, appointment_end, appointment_reason, appointment_office) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-            [userID, chosenDoctor.rows[0].doctor_id, date, startTime, endTime, reason, chosenDoctor.rows[0].doctor_office]);
+        await db.query('INSERT INTO appointment(appointment_patient, appointment_doctor, appointment_date, appointment_start, appointment_end, appointment_primary, appointment_reason, appointment_office) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+            [userID, chosenDoctor.rows[0].doctor_id, date, startTime, endTime, appointmentPrimary, reason, chosenDoctor.rows[0].doctor_office]);
 
         res.status(200).json({ message: 'OK' });
     } catch (err) {

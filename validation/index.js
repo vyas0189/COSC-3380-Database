@@ -30,6 +30,7 @@ const dob = Joi.string().trim().regex(/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|
 
 //doctor schema
 const primary = Joi.boolean().required();
+const primaryAppointment = Joi.boolean().required;
 const specialty = Joi.string().max(20).required();
 const office = Joi.string().guid().required();
 
@@ -69,10 +70,10 @@ module.exports = {
         firstName, lastName, email, address, address2, city, state, zip, phoneNumber, dob, gender,
     }),
     schedulePrimaryAppointment: Joi.object().keys({
-        date, startTime, endTime, reason,
+        date, startTime, endTime, primaryAppointment, reason,
     }),
     scheduleSpecialistAppointment: Joi.object().keys({
-        date, startTime, endTime, specialty, reason,
+        date, startTime, endTime, specialty, primaryAppointment, reason,
     }),
     chooseDoctor: Joi.object().keys({
         firstName, lastName,
