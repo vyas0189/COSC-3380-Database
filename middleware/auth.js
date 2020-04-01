@@ -21,14 +21,18 @@ module.exports = {
     doc: (req, res, next) => {
         try {
             const token = req.header('jwt_token');
+            // console.log(token);
             if (!token) {
+                console.log('in here');
+
                 return res.status(403).json({ message: 'Not Authorized' });
             }
 
             const payload = jwt.verify(token, JWT_SECRET);
-            if (payload.user.role === 'doctor') {
+
+            if (payload.role === 'doctor') {
                 req.user = payload;
-                next();
+                return next();
             }
             return res.status(403).json({ message: 'Not Authorized' });
         } catch (error) {
@@ -43,7 +47,7 @@ module.exports = {
             }
 
             const payload = jwt.verify(token, JWT_SECRET);
-            if (payload.user.role === 'admin') {
+            if (payload.role === 'admin') {
                 req.user = payload;
                 next();
             }

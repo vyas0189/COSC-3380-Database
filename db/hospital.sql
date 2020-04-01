@@ -5,6 +5,10 @@ GRANT ALL ON SCHEMA public TO public;
 COMMENT ON SCHEMA public IS 'standard public schema';
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> d910d279aa3f87803e6135d0dc43bad41ffcf74d
 CREATE TABLE db_user
 (
     user_id    UUID PRIMARY KEY NOT NULL                                                DEFAULT uuid_generate_v4(),
@@ -14,6 +18,7 @@ CREATE TABLE db_user
     created_at TIMESTAMP        NOT NULL                                                DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP        NOT NULL                                                DEFAULT CURRENT_TIMESTAMP
 );
+
 CREATE TABLE IF NOT EXISTS address
 (
     address_id    UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
@@ -23,6 +28,7 @@ CREATE TABLE IF NOT EXISTS address
     state         VARCHAR(50)      NOT NULL,
     zip           INTEGER          NOT NULL
 );
+
 CREATE TABLE IF NOT EXISTS patient
 (
     patient_id             UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
@@ -38,6 +44,7 @@ CREATE TABLE IF NOT EXISTS patient
     patient_diagnosis      UUID,
     patient_primary_doctor UUID
 );
+
 CREATE TABLE IF NOT EXISTS appointment
 (
     appointment_id      UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
@@ -50,6 +57,7 @@ CREATE TABLE IF NOT EXISTS appointment
     appointment_reason  TEXT             NOT NULL,
     appointment_office  UUID             NOT NULL    
 );
+
 CREATE TABLE IF NOT EXISTS office
 (
     office_id           UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
@@ -58,31 +66,43 @@ CREATE TABLE IF NOT EXISTS office
     office_phone_number TEXT             NOT NULL,
     office_opening_hour TIME             NOT NULL
 );
+
 CREATE TABLE IF NOT EXISTS doctor
 (
     doctor_id           UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
+<<<<<<< HEAD
     doctor_primary      BOOLEAN          NOT NULL DEFAULT FALSE,
     doctor_address      UUID             NOT NULL REFERENCES address (address_id),
+=======
+    doctor_primary      BOOLEAN                   DEFAULT FALSE,
+    doctor_address      UUID             NOT NULL REFERENCES address (address_id) ON DELETE CASCADE ON UPDATE CASCADE,
+>>>>>>> d910d279aa3f87803e6135d0dc43bad41ffcf74d
     doctor_first_name   varchar(100)     NOT NULL,
     doctor_last_name    varchar(100)     NOT NULL,
     doctor_email        TEXT UNIQUE      NOT NULL,
     doctor_phone_number TEXT             NOT NULL,
-    doctor_office       UUID             NOT NULL REFERENCES office (office_id),
+    doctor_office       UUID             NOT NULL REFERENCES office (office_id) ON DELETE CASCADE ON UPDATE CASCADE,
     doctor_specialty    TEXT             NOT NULL,
+<<<<<<< HEAD
     doctor_user         UUID             NOT NULL REFERENCES db_user (user_id),
     doctor_availability UUID             NOT NULL REFERENCES address (availability_id) ON DELETE CASCADE ON UPDATE CASCADE,
+=======
+    doctor_user         UUID             NOT NULL REFERENCES db_user (user_id) ON DELETE CASCADE ON UPDATE CASCADE,
+>>>>>>> d910d279aa3f87803e6135d0dc43bad41ffcf74d
     doctor_diagnosis    UUID,
     doctor_test         UUID
 );
+
 CREATE TABLE IF NOT EXISTS availability
 (
     availability_id        UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
-    doctor_id              UUID             NOT NULL REFERENCES doctor (doctor_id),
-    office_id              UUID             NOT NULL REFERENCES office (office_id),
+    doctor_id              UUID             NOT NULL REFERENCES doctor (doctor_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    office_id              UUID             NOT NULL REFERENCES office (office_id) ON DELETE CASCADE ON UPDATE CASCADE,
     availability_date      DATE             NOT NULL,
     availability_from_time TIME             NOT NULL,
     availability_to_time   TIME             NOT NULL
 );
+
 CREATE TABLE IF NOT EXISTS test
 (
     test_id        UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
@@ -95,6 +115,7 @@ CREATE TABLE IF NOT EXISTS test
     test_patient   UUID             NOT NULL REFERENCES patient (patient_id),
     test_diagnosis UUID
 );
+
 CREATE TABLE IF NOT EXISTS diagnosis
 (
     diagnosis_id        UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
@@ -104,27 +125,28 @@ CREATE TABLE IF NOT EXISTS diagnosis
 
 ALTER TABLE patient
     ADD
-        CONSTRAINT fk_doctor FOREIGN KEY (patient_primary_doctor) REFERENCES doctor (doctor_id);
+        CONSTRAINT fk_doctor FOREIGN KEY (patient_primary_doctor) REFERENCES doctor (doctor_id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE patient
     ADD
-        CONSTRAINT fk_patient_diagnosis FOREIGN KEY (patient_diagnosis) REFERENCES diagnosis (diagnosis_id);
+        CONSTRAINT fk_patient_diagnosis FOREIGN KEY (patient_diagnosis) REFERENCES diagnosis (diagnosis_id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE doctor
     ADD
-        CONSTRAINT fk_doctor_diagnosis FOREIGN KEY (doctor_diagnosis) REFERENCES diagnosis (diagnosis_id);
+        CONSTRAINT fk_doctor_diagnosis FOREIGN KEY (doctor_diagnosis) REFERENCES diagnosis (diagnosis_id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE doctor
     ADD
-        CONSTRAINT fk_doctor_test FOREIGN KEY (doctor_test) REFERENCES test (test_id);
+        CONSTRAINT fk_doctor_test FOREIGN KEY (doctor_test) REFERENCES test (test_id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE test
     ADD
-        CONSTRAINT fk_test_diagnosis FOREIGN KEY (test_diagnosis) REFERENCES diagnosis (diagnosis_id);
+        CONSTRAINT fk_test_diagnosis FOREIGN KEY (test_diagnosis) REFERENCES diagnosis (diagnosis_id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE appointment
     ADD
-        CONSTRAINT fk_appointment_office FOREIGN KEY (appointment_office) REFERENCES office (office_id);
+        CONSTRAINT fk_appointment_office FOREIGN KEY (appointment_office) REFERENCES office (office_id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE appointment
     ADD
-        CONSTRAINT fk_appointment_patient FOREIGN KEY (appointment_patient) REFERENCES patient (patient_id);
+        CONSTRAINT fk_appointment_patient FOREIGN KEY (appointment_patient) REFERENCES patient (patient_id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE appointment
     ADD
+<<<<<<< HEAD
         CONSTRAINT fk_appointment_doctor FOREIGN KEY (appointment_doctor) REFERENCES doctor (doctor_id);
 
 -- 1) Alert & deny patient user from scheduling appointment outside of doctor's availability dates / times
@@ -172,6 +194,9 @@ RETURN NEW;
 END
 $$ LANGUAGE plpgsql;
 
+=======
+        CONSTRAINT fk_appointment_doctor FOREIGN KEY (appointment_doctor) REFERENCES doctor (doctor_id) ON DELETE CASCADE ON UPDATE CASCADE;
+>>>>>>> d910d279aa3f87803e6135d0dc43bad41ffcf74d
 
 -- CREATE FUNCTION insert_availability() RETURNS trigger AS
 -- $$

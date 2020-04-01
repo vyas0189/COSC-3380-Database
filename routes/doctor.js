@@ -1,15 +1,27 @@
 const { Router } = require('express');
+<<<<<<< HEAD
 const { auth } = require('../middleware/auth');
+=======
+const { doc } = require('../middleware/auth');
+>>>>>>> d910d279aa3f87803e6135d0dc43bad41ffcf74d
 const { updateDoctorSchema, validate } = require('../validation');
 
 const router = Router();
 const db = require('../config/db');
 
+<<<<<<< HEAD
 router.put('/update', auth, async (req, res) => {
     try {
         await validate(updateDoctorSchema, req.body, req, res);
         const {
             firstName, lastName, email, address, city, state, zip, phoneNumber, primary, specialty, office,
+=======
+router.put('/update', doc, async (req, res) => {
+    try {
+        await validate(updateDoctorSchema, req.body, req, res);
+        const {
+            firstName, lastName, email, address, city, state, zip, phoneNumber, office,
+>>>>>>> d910d279aa3f87803e6135d0dc43bad41ffcf74d
         } = req.body;
 
         let { address2 } = req.body;
@@ -31,9 +43,15 @@ router.put('/update', auth, async (req, res) => {
         await db.query('UPDATE address SET address_name = $1, address2_name = $2, city = $3, state = $4, zip = $5 WHERE address_id = $6',
             [address, address2, city, state, zip, doctorAddressID.rows[0].doctor_address]);
 
+<<<<<<< HEAD
         // UPDATE PATIENT TABLE
         await db.query('UPDATE doctor SET doctor_first_name = $1, doctor_last_name = $2, doctor_email = $3, doctor_phone_number = $4, doctor_primary = $5, doctor_specialty = $6, doctor_office = $7 WHERE doctor_user = $8',
             [firstName, lastName, email, phoneNumber, primary, specialty, office, userID]);
+=======
+        // UPDATE DOCTOR TABLE
+        await db.query('UPDATE doctor SET doctor_first_name = $1, doctor_last_name = $2, doctor_email = $3, doctor_phone_number = $4, doctor_office = $5 WHERE doctor_user = $6',
+            [firstName, lastName, email, phoneNumber, office, userID]);
+>>>>>>> d910d279aa3f87803e6135d0dc43bad41ffcf74d
 
         res.status(200).json({ message: 'OK' });
     } catch (err) {
@@ -43,7 +61,10 @@ router.put('/update', auth, async (req, res) => {
 
 // router.get('/view/allAppointments', auth, async (req, res) => {
 //     try {
+<<<<<<< HEAD
 
+=======
+>>>>>>> d910d279aa3f87803e6135d0dc43bad41ffcf74d
 //         const { userID } = req.user;
 //         const user = await db.query('SELECT user_id FROM db_user WHERE user_id = $1', [userID]);
 
@@ -57,8 +78,12 @@ router.put('/update', auth, async (req, res) => {
 
 //         const { patients } = await db.query('SELECT appointment_patient FROM appointments WHERE appointment_doctor = $1', [doctorID]);
 
+<<<<<<< HEAD
 //         for (var i = 0; i < patients.length; i++) {
 
+=======
+//         for (let i = 0; i < patients.length; i++) {
+>>>>>>> d910d279aa3f87803e6135d0dc43bad41ffcf74d
 //             const currAppointment = appointments[i].rows[0];
 
 //             // ****this might be wrong...****
