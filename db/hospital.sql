@@ -5,7 +5,6 @@ GRANT ALL ON SCHEMA public TO public;
 COMMENT ON SCHEMA public IS 'standard public schema';
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-
 CREATE TABLE db_user
 (
     user_id    UUID PRIMARY KEY NOT NULL                                                DEFAULT uuid_generate_v4(),
@@ -47,10 +46,12 @@ CREATE TABLE IF NOT EXISTS appointment
     appointment_id      UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
     appointment_patient UUID             NOT NULL,
     appointment_doctor  UUID             NOT NULL,
+    appointment_date    DATE             NOT NULL DEFAULT,
     appointment_start   TIMESTAMP        NOT NULL,
     appointment_end     TIMESTAMP        NOT NULL,
+    appointment_primary      BOOLEAN     NOT NULL DEFAULT FALSE,
     appointment_reason  TEXT             NOT NULL,
-    appointment_office  UUID             NOT NULL
+    appointment_office  UUID             NOT NULL    
 );
 
 CREATE TABLE IF NOT EXISTS office
@@ -95,7 +96,6 @@ CREATE TABLE IF NOT EXISTS test
     test_scan      BOOLEAN          NOT NULL DEFAULT FALSE,
     test_physical  BOOLEAN          NOT NULL DEFAULT FALSE,
     test_blood     BOOLEAN          NOT NULL DEFAULT FALSE,
-    test_equipment TEXT             NOT NULL,
     test_office    UUID             NOT NULL REFERENCES office (office_id),
     test_doctor    UUID             NOT NULL REFERENCES doctor (doctor_id),
     test_patient   UUID             NOT NULL REFERENCES patient (patient_id),
@@ -132,7 +132,52 @@ ALTER TABLE appointment
         CONSTRAINT fk_appointment_patient FOREIGN KEY (appointment_patient) REFERENCES patient (patient_id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE appointment
     ADD
-        CONSTRAINT fk_appointment_doctor FOREIGN KEY (appointment_doctor) REFERENCES doctor (doctor_id) ON DELETE CASCADE ON UPDATE CASCADE;
+        CONSTRAINT fk_appointment_doctor FOREIGN KEY (appointment_doctor) REFERENCES doctor (doctor_id);
+
+-- 1) Alert & deny patient user from scheduling appointment outside of doctor's availability dates / times
+
+CREATE TRIGGER APPOINTMENT_OUTSIDE_DOCTOR_AVAILABILITY
+    BEFORE INSERT OR UPDATE
+    ON appointment
+    FOR EACH ROW 
+    EXECUTE PROCEDURE deny_scheduling_alert_user();
+
+CREATE FUNCTION deny_scheduling_alert_user() RETURNS trigger AS
+$$
+BEGIN
+
+    IF (NEW.appointment_start < (SELECT availability_from_time FROM availability WHERE doctor_id = NEW.appointment_doctor) OR 
+    (SELECT availability_to_time FROM availability WHERE doctor_id = NEW.appointment_doctor) <= NEW.appointment_start)
+        THEN RAISE EXCEPTION 'That doctor is not available during that time.';
+        RETURN NULL;
+    END IF;
+
+RETURN NEW;
+END
+$$ LANGUAGE plpgsql;
+
+
+
+-- 2) Alert & deny patient user from scheduling appointment with specialist if they don't have a primary care doctor assigned
+
+CREATE TRIGGER SPECIALIST_APPOINTMENT_NO_PRIMARY_CARE_DOCTOR
+    BEFORE INSERT OR UPDATE
+    ON appointment
+    FOR EACH ROW    
+EXECUTE PROCEDURE deny_specialist_scheduling();
+
+CREATE FUNCTION deny_specialist_scheduling() RETURNS trigger AS
+$$
+BEGIN
+
+    IF (NEW.appointment_primary = FALSE AND (SELECT patient_primary_doctor FROM patient WHERE patient_id = NEW.appointment_patient) = NULL)
+    THEN RAISE EXCEPTION 'You cannot schedule a specialist appointment before you have seen a primary doctor'
+    RETURN NULL;
+    END IF;
+
+RETURN NEW;
+END
+$$ LANGUAGE plpgsql;
 
 -- CREATE FUNCTION insert_availability() RETURNS trigger AS
 -- $$

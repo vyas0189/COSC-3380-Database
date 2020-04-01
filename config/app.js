@@ -6,8 +6,6 @@ const morgan = require('morgan');
 const compression = require('compression');
 const { join } = require('path');
 // const rateLimit = require('express-rate-limit');
-// const session = require('express-session');
-// const PGSession = require('connect-pg-simple')(session);
 const db = require('./db');
 const auth = require('../routes/auth');
 const patient = require('../routes/patient');
@@ -28,6 +26,7 @@ const app = express();
 //   message:
 //     { message: 'Too many accounts created from this IP, please try again after an hour' },
 // });
+
 app.use(compression());
 app.use(helmet());
 app.use(morgan('common'));
