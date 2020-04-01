@@ -46,12 +46,7 @@ app.get('/', (req, res) => {
 
 app.use('/auth', auth);
 app.use('/patient', patient);
-<<<<<<< HEAD
-app.use('/doctor', doctor)
-
-=======
 app.use('/doctor', doctor);
->>>>>>> d910d279aa3f87803e6135d0dc43bad41ffcf74d
 if (isProduction) {
   app.use(express.static(join(__dirname, '../client/build')));
   app.get('*', (req, res) => {

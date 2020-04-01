@@ -24,49 +24,29 @@ const role = Joi.string().required();
 const address2 = Joi.string().trim();
 const phoneNumber = Joi.string().trim().regex(/^[0-9]{7,10}$/).required();
 
-<<<<<<< HEAD
-//patient schema
-const gender = Joi.string().max(1).regex(/^[mfoMFO]$/).required(); // o is for other
-const dob = Joi.string().trim().regex(/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/).required();
-
-//doctor schema
-=======
 // patient schema
 const gender = Joi.string().max(1).regex(/^[mfoMFO]$/).required(); // o is for other
 const dob = Joi.string().trim().regex(/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/).required();
 
 // doctor schema
->>>>>>> d910d279aa3f87803e6135d0dc43bad41ffcf74d
 const primary = Joi.boolean().required();
 const primaryAppointment = Joi.boolean().required;
 const specialty = Joi.string().max(20).required();
 const office = Joi.string().guid().required();
 
-<<<<<<< HEAD
-//appointment schema
-=======
 // appointment schema
->>>>>>> d910d279aa3f87803e6135d0dc43bad41ffcf74d
 const firstAppointment = Joi.boolean().required();
 const date = Joi.string().regex(/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/).required();
 const startTime = Joi.string().regex(/^([0-1][0-9]|[2][0-3]):([0-5][0-9])$/).required();
 const endTime = Joi.string().regex(/^([0-1][0-9]|[2][0-3]):([0-5][0-9])$/).required();
 const reason = Joi.string().required();
 
-<<<<<<< HEAD
-//test schema
-=======
 // test schema
->>>>>>> d910d279aa3f87803e6135d0dc43bad41ffcf74d
 const scan = Joi.boolean().required();
 const physical = Joi.boolean().required();
 const blood = Joi.boolean().required();
 
-<<<<<<< HEAD
-//diagnosis schema
-=======
 // diagnosis schema
->>>>>>> d910d279aa3f87803e6135d0dc43bad41ffcf74d
 const symptoms = Joi.string().required();
 const condition = Joi.string().required();
 
@@ -79,11 +59,7 @@ module.exports = {
         }
     },
 
-<<<<<<< HEAD
-    //patient schemas
-=======
     // patient schemas
->>>>>>> d910d279aa3f87803e6135d0dc43bad41ffcf74d
     registerPatientSchema: Joi.object().keys({
         username, password, role, firstName, lastName, email, address, address2, city, state, zip, phoneNumber, dob, gender,
     }),
@@ -106,11 +82,7 @@ module.exports = {
         date,
     }),
 
-<<<<<<< HEAD
-    //doctor scehmas
-=======
     // doctor scehmas
->>>>>>> d910d279aa3f87803e6135d0dc43bad41ffcf74d
     registerDoctorSchema: Joi.object().keys({
         username, password, role, firstName, lastName, email, address, address2, city, state, zip, phoneNumber, primary, specialty, office,
     }),
@@ -118,19 +90,6 @@ module.exports = {
         username, password,
     }),
     updateDoctorSchema: Joi.object().keys({
-<<<<<<< HEAD
-        firstName, lastName, email, address, address2, city, state, zip, phoneNumber, primary, specialty, office,
-    }),
-    viewAppointmentsWithPatient: Joi.object().keys({
-        firstName, lastName, dob
-    }),
-    updateDiagnosis: Joi.object().keys({
-        firstName, lastName, dob, symptoms, condition,
-    }),
-    orderTest: Joi.object().keys({
-        firstName, lastName, dob, date, scan, physical, blood,
-    })
-=======
         firstName, lastName, email, address, address2, city, state, zip, phoneNumber, office,
     }),
     viewAppointmentsWithPatient: Joi.object().keys({
@@ -142,6 +101,5 @@ module.exports = {
     orderTest: Joi.object().keys({
         firstName, lastName, dob, date, scan, physical, blood,
     }),
->>>>>>> d910d279aa3f87803e6135d0dc43bad41ffcf74d
 
 };

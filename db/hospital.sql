@@ -5,10 +5,6 @@ GRANT ALL ON SCHEMA public TO public;
 COMMENT ON SCHEMA public IS 'standard public schema';
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-<<<<<<< HEAD
-=======
-
->>>>>>> d910d279aa3f87803e6135d0dc43bad41ffcf74d
 CREATE TABLE db_user
 (
     user_id    UUID PRIMARY KEY NOT NULL                                                DEFAULT uuid_generate_v4(),
@@ -70,25 +66,15 @@ CREATE TABLE IF NOT EXISTS office
 CREATE TABLE IF NOT EXISTS doctor
 (
     doctor_id           UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
-<<<<<<< HEAD
-    doctor_primary      BOOLEAN          NOT NULL DEFAULT FALSE,
-    doctor_address      UUID             NOT NULL REFERENCES address (address_id),
-=======
     doctor_primary      BOOLEAN                   DEFAULT FALSE,
     doctor_address      UUID             NOT NULL REFERENCES address (address_id) ON DELETE CASCADE ON UPDATE CASCADE,
->>>>>>> d910d279aa3f87803e6135d0dc43bad41ffcf74d
     doctor_first_name   varchar(100)     NOT NULL,
     doctor_last_name    varchar(100)     NOT NULL,
     doctor_email        TEXT UNIQUE      NOT NULL,
     doctor_phone_number TEXT             NOT NULL,
     doctor_office       UUID             NOT NULL REFERENCES office (office_id) ON DELETE CASCADE ON UPDATE CASCADE,
     doctor_specialty    TEXT             NOT NULL,
-<<<<<<< HEAD
-    doctor_user         UUID             NOT NULL REFERENCES db_user (user_id),
-    doctor_availability UUID             NOT NULL REFERENCES address (availability_id) ON DELETE CASCADE ON UPDATE CASCADE,
-=======
     doctor_user         UUID             NOT NULL REFERENCES db_user (user_id) ON DELETE CASCADE ON UPDATE CASCADE,
->>>>>>> d910d279aa3f87803e6135d0dc43bad41ffcf74d
     doctor_diagnosis    UUID,
     doctor_test         UUID
 );
