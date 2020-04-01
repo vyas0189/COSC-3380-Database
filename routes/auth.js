@@ -179,10 +179,11 @@ router.post('/login/doctor', async (req, res) => {
 		const currentUser = { userID: user.rows[0].user_id, role: user.rows[0].role };
 
 		const token = jwt.sign(currentUser, JWT_SECRET, { expiresIn: SESSION_EXPIRES });
+		res.status(200).json({ message: 'OK', token });
 
-		json({ message: 'Server Error' });
+		
 	} catch (err) {
-
+		res.status(500).json({ message: 'Server Error' });
 	}
 });
 
