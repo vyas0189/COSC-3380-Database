@@ -2,7 +2,7 @@ const { Router } = require('express');
 const { auth } = require('../middleware/auth');
 const { updatePatientSchema, validate } = require('../validation');
 
-//registerPatientSchema
+// registerPatientSchema
 
 const router = Router();
 const db = require('../config/db');
@@ -204,34 +204,32 @@ router.put('/update', auth, async (req, res) => {
 //     }
 // });
 
-router.delete('/cancel', auth, async (req, res) => {
-    try {
-        await validate(cancelAppointment, req.body, req, res);
-        const {
-            date
-        } = req.body;
+// router.delete('/cancel', auth, async (req, res) => {
+//     try {
+//         await validate(cancelAppointment, req.body, req, res);
+//         const {
+//             date
+//         } = req.body;
 
-        const { userID } = req.user;
+//         const { userID } = req.user;
 
-        const patient = await db.query('SELECT * FROM patient WHERE patient_user = $1',
-            [userID]);
+//         const patient = await db.query('SELECT * FROM patient WHERE patient_user = $1',
+//             [userID]);
 
-        const { scheduledAppointment } = await db.query('SELECT * FROM appointment WHERE appointment_patient = $1, appointment_date = $2',
-            [userID, date]);
+//         const { scheduledAppointment } = await db.query('SELECT * FROM appointment WHERE appointment_patient = $1, appointment_date = $2',
+//             [userID, date]);
 
-        if (patient.rows.length === 0) {
-            return res.status(401).json({ message: 'You do not have an appointment scheduled on ' + date });
-        }
+//         if (patient.rows.length === 0) {
+//             return res.status(401).json({ message: 'You do not have an appointment scheduled on ' + date });
+//         }
 
-        await db.query('DELETE * FROM appointment WHERE appointment_patient = $1, appointment_date = $2',
-            [userID, date]);
+//         await db.query('DELETE * FROM appointment WHERE appointment_patient = $1, appointment_date = $2',
+//             [userID, date]);
 
-        res.status(200).json({ message: 'OK' });
-    } catch (err) {
-        res.status(500).json({ message: 'Server Error', err });
-    }
-});
+//         res.status(200).json({ message: 'OK' });
+//     } catch (err) {
+//         res.status(500).json({ message: 'Server Error', err });
+//     }
+// });
 
 module.exports = router;
-
-
