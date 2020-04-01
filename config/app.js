@@ -10,6 +10,7 @@ const db = require('./db');
 const auth = require('../routes/auth');
 const patient = require('../routes/patient');
 const doctor = require('../routes/doctor');
+const appointment = require('../routes/appointment')
 
 db.connect()
   .then(() => { console.log('Database connected!'); })
@@ -47,6 +48,8 @@ app.get('/', (req, res) => {
 app.use('/auth', auth);
 app.use('/patient', patient);
 app.use('/doctor', doctor);
+app.use('/appointment', appointment)
+
 if (isProduction) {
   app.use(express.static(join(__dirname, '../client/build')));
   app.get('*', (req, res) => {
