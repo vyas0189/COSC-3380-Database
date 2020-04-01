@@ -14,7 +14,7 @@ router.put('/update', auth, async (req, res) => {
 
         let { address2 } = req.body;
         const { userID } = req.user;
-        const user = await db.query('SELECT user_id FROM db_user WHERE user_id = $1', [userID]);
+        const user = await db.query('SELECT patient_address FROM patient p JOIN db_user du on p.patient_user = du.user_id WHERE du.user_id = $1', [userID]);
 
         if (!user.rows.length) {
             return res.status(401).json({ message: 'User not found' });
@@ -24,13 +24,8 @@ router.put('/update', auth, async (req, res) => {
             address2 = null;
         }
 
-        // _ UPDATE ADDRESS TABLE
-        const patientAddressID = await db.query('SELECT patient_address FROM patient WHERE patient_user = $1',
-            [userID]);
-        console.log(patientAddressID.rows[0]);
-
         await db.query('UPDATE address SET address_name = $1, address2_name = $2, city = $3, state = $4, zip = $5 WHERE address_id = $6',
-            [address, address2, city, state, zip, patientAddressID.rows[0].patient_address]);
+            [address, address2, city, state, zip, user.rows[0].patient_address]);
 
         // UPDATE PATIENT TABLE
         await db.query('UPDATE patient SET patient_first_name = $1, patient_last_name = $2, patient_email = $3, patient_phone_number = $4, patient_gender = $5, patient_dob = $6 WHERE patient_user = $7',
