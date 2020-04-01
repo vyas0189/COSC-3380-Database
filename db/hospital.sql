@@ -5,31 +5,6 @@ GRANT ALL ON SCHEMA public TO public;
 COMMENT ON SCHEMA public IS 'standard public schema';
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- SELECT *
--- FROM db_user;
---
--- SELECT *
--- FROM address;
---
--- SELECT *
--- FROM patient;
---
--- SELECT * FROM db_user u JOIN patient p ON u.user_id = p.patient_user WHERE u.user_id = 'dc5dc0f2-fe58-4b7e-9f77-b2865c1037e7';
---
--- SELECT *
--- FROM db_user u
---          JOIN patient p ON u.user_id = p.patient_user
--- WHERE u.username = 'testing123'
---    OR p.patient_email = 'testing@gmail.com';
---
--- DELETE
--- FROM db_user;
---
--- DELETE
--- FROM address;
---
--- DELETE
--- FROM patient;
 
 CREATE TABLE db_user
 (
@@ -40,6 +15,7 @@ CREATE TABLE db_user
     created_at TIMESTAMP        NOT NULL                                                DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP        NOT NULL                                                DEFAULT CURRENT_TIMESTAMP
 );
+
 CREATE TABLE IF NOT EXISTS address
 (
     address_id    UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
@@ -49,11 +25,13 @@ CREATE TABLE IF NOT EXISTS address
     state         VARCHAR(50)      NOT NULL,
     zip           INTEGER          NOT NULL
 );
+
 CREATE TABLE IF NOT EXISTS patient
 (
     patient_id             UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
     patient_first_name     VARCHAR(100)     NOT NULL,
     patient_last_name      VARCHAR(100)     NOT NULL,
+    patient_ssn            VARCHAR(100)     NOT NULL,
     patient_email          TEXT UNIQUE      NOT NULL,
     patient_phone_number   TEXT             NOT NULL,
     patient_gender         VARCHAR(7)       NOT NULL,
@@ -63,6 +41,7 @@ CREATE TABLE IF NOT EXISTS patient
     patient_diagnosis      UUID,
     patient_primary_doctor UUID
 );
+
 CREATE TABLE IF NOT EXISTS appointment
 (
     appointment_id      UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
@@ -73,6 +52,7 @@ CREATE TABLE IF NOT EXISTS appointment
     appointment_reason  TEXT             NOT NULL,
     appointment_office  UUID             NOT NULL
 );
+
 CREATE TABLE IF NOT EXISTS office
 (
     office_id           UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
@@ -81,30 +61,33 @@ CREATE TABLE IF NOT EXISTS office
     office_phone_number TEXT             NOT NULL,
     office_opening_hour TIME             NOT NULL
 );
+
 CREATE TABLE IF NOT EXISTS doctor
 (
     doctor_id           UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
     doctor_primary      BOOLEAN                   DEFAULT FALSE,
-    doctor_address      UUID             NOT NULL REFERENCES address (address_id),
+    doctor_address      UUID             NOT NULL REFERENCES address (address_id) ON DELETE CASCADE ON UPDATE CASCADE,
     doctor_first_name   varchar(100)     NOT NULL,
     doctor_last_name    varchar(100)     NOT NULL,
     doctor_email        TEXT UNIQUE      NOT NULL,
     doctor_phone_number TEXT             NOT NULL,
-    doctor_office       UUID             NOT NULL REFERENCES office (office_id),
+    doctor_office       UUID             NOT NULL REFERENCES office (office_id) ON DELETE CASCADE ON UPDATE CASCADE,
     doctor_specialty    TEXT             NOT NULL,
-    doctor_user         UUID             NOT NULL REFERENCES db_user (user_id),
+    doctor_user         UUID             NOT NULL REFERENCES db_user (user_id) ON DELETE CASCADE ON UPDATE CASCADE,
     doctor_diagnosis    UUID,
     doctor_test         UUID
 );
+
 CREATE TABLE IF NOT EXISTS availability
 (
     availability_id        UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
-    doctor_id              UUID             NOT NULL REFERENCES doctor (doctor_id),
-    office_id              UUID             NOT NULL REFERENCES office (office_id),
+    doctor_id              UUID             NOT NULL REFERENCES doctor (doctor_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    office_id              UUID             NOT NULL REFERENCES office (office_id) ON DELETE CASCADE ON UPDATE CASCADE,
     availability_date      DATE             NOT NULL,
     availability_from_time TIME             NOT NULL,
     availability_to_time   TIME             NOT NULL
 );
+
 CREATE TABLE IF NOT EXISTS test
 (
     test_id        UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
@@ -118,47 +101,39 @@ CREATE TABLE IF NOT EXISTS test
     test_patient   UUID             NOT NULL REFERENCES patient (patient_id),
     test_diagnosis UUID
 );
+
 CREATE TABLE IF NOT EXISTS diagnosis
 (
     diagnosis_id        UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
     diagnosis_symptoms  TEXT             NOT NULL,
     diagnosis_condition TEXT             NOT NULL
 );
--- CREATE TABLE "session"
--- (
---     "sid"    VARCHAR      NOT NULL COLLATE "default",
---     "sess"   JSON         NOT NULL,
---     "expire" TIMESTAMP(6) NOT NULL
--- ) WITH (OIDS = FALSE);
---
--- ALTER TABLE "session"
---     ADD
---         CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
--- CREATE INDEX "IDX_session_expire" ON "session" ("expire");
+
 ALTER TABLE patient
     ADD
-        CONSTRAINT fk_doctor FOREIGN KEY (patient_primary_doctor) REFERENCES doctor (doctor_id);
+        CONSTRAINT fk_doctor FOREIGN KEY (patient_primary_doctor) REFERENCES doctor (doctor_id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE patient
     ADD
-        CONSTRAINT fk_patient_diagnosis FOREIGN KEY (patient_diagnosis) REFERENCES diagnosis (diagnosis_id);
+        CONSTRAINT fk_patient_diagnosis FOREIGN KEY (patient_diagnosis) REFERENCES diagnosis (diagnosis_id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE doctor
     ADD
-        CONSTRAINT fk_doctor_diagnosis FOREIGN KEY (doctor_diagnosis) REFERENCES diagnosis (diagnosis_id);
+        CONSTRAINT fk_doctor_diagnosis FOREIGN KEY (doctor_diagnosis) REFERENCES diagnosis (diagnosis_id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE doctor
     ADD
-        CONSTRAINT fk_doctor_test FOREIGN KEY (doctor_test) REFERENCES test (test_id);
+        CONSTRAINT fk_doctor_test FOREIGN KEY (doctor_test) REFERENCES test (test_id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE test
     ADD
-        CONSTRAINT fk_test_diagnosis FOREIGN KEY (test_diagnosis) REFERENCES diagnosis (diagnosis_id);
+        CONSTRAINT fk_test_diagnosis FOREIGN KEY (test_diagnosis) REFERENCES diagnosis (diagnosis_id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE appointment
     ADD
-        CONSTRAINT fk_appointment_office FOREIGN KEY (appointment_office) REFERENCES office (office_id);
+        CONSTRAINT fk_appointment_office FOREIGN KEY (appointment_office) REFERENCES office (office_id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE appointment
     ADD
-        CONSTRAINT fk_appointment_patient FOREIGN KEY (appointment_patient) REFERENCES patient (patient_id);
+        CONSTRAINT fk_appointment_patient FOREIGN KEY (appointment_patient) REFERENCES patient (patient_id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE appointment
     ADD
-        CONSTRAINT fk_appointment_doctor FOREIGN KEY (appointment_doctor) REFERENCES doctor (doctor_id);
+        CONSTRAINT fk_appointment_doctor FOREIGN KEY (appointment_doctor) REFERENCES doctor (doctor_id) ON DELETE CASCADE ON UPDATE CASCADE;
+
 -- CREATE FUNCTION insert_availability() RETURNS trigger AS
 -- $$
 -- BEGIN
