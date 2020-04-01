@@ -12,7 +12,7 @@ module.exports = {
             const payload = jwt.verify(token, JWT_SECRET);
 
             req.user = payload;
-            next();
+            return next();
         } catch (error) {
             return res.status(403).json({ message: 'Not Authorized' });
         }
@@ -47,9 +47,11 @@ module.exports = {
             }
 
             const payload = jwt.verify(token, JWT_SECRET);
+            console.log(payload);
+            
             if (payload.role === 'admin') {
                 req.user = payload;
-                next();
+                return next();
             }
             return res.status(403).json({ message: 'Not Authorized' });
         } catch (error) {

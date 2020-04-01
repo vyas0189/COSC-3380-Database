@@ -26,20 +26,21 @@ const phoneNumber = Joi.string().trim().regex(/^[0-9]{7,10}$/).required();
 
 // patient schema
 const gender = Joi.string().max(1).regex(/^[mfoMFO]$/).required(); // o is for other
-const dob = Joi.string().trim().regex(/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/).required();
+const dob = Joi.date().required();
 
 // doctor schema
 const primary = Joi.boolean().required();
-const primaryAppointment = Joi.boolean().required;
 const specialty = Joi.string().max(20).required();
 const office = Joi.string().guid().required();
 
 // appointment schema
-const firstAppointment = Joi.boolean().required();
-const date = Joi.string().regex(/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/).required();
-const startTime = Joi.string().regex(/^([0-1][0-9]|[2][0-3]):([0-5][0-9])$/).required();
-const endTime = Joi.string().regex(/^([0-1][0-9]|[2][0-3]):([0-5][0-9])$/).required();
+
+const date = Joi.date().required();
+// const startTime = Joi.string().regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([ ])([AaPp][Mm])$/).required();
+// const endTime = Joi.string().regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([ ])([AaPp][Mm])$/).required();
+const primaryAppointment = Joi.boolean().required();
 const reason = Joi.string().required();
+const availabilityID = Joi.string().guid().required();
 
 // test schema
 const scan = Joi.boolean().required();
@@ -59,7 +60,20 @@ module.exports = {
         }
     },
 
+    //admin schemas
+
+    loginAdminSchema: Joi.object().keys({
+        username, password,
+    }),
+    registerDoctorSchema: Joi.object().keys({
+        username, password, role, firstName, lastName, email, address, address2, city, state, zip, phoneNumber, primary, specialty, office,
+    }),
+    updateDoctorAdminSchema: Joi.object().keys({
+        primary, specialty, office,
+    }),
+
     // patient schemas
+
     registerPatientSchema: Joi.object().keys({
         username, password, role, firstName, lastName, email, address, address2, city, state, zip, phoneNumber, dob, gender,
     }),
@@ -69,23 +83,10 @@ module.exports = {
     updatePatientSchema: Joi.object().keys({
         firstName, lastName, email, address, address2, city, state, zip, phoneNumber, dob, gender,
     }),
-    schedulePrimaryAppointment: Joi.object().keys({
-        date, startTime, endTime, primaryAppointment, reason,
-    }),
-    scheduleSpecialistAppointment: Joi.object().keys({
-        date, startTime, endTime, specialty, primaryAppointment, reason,
-    }),
-    chooseDoctor: Joi.object().keys({
-        firstName, lastName,
-    }),
-    cancelAppointment: Joi.object().keys({
-        date,
-    }),
 
-    // doctor scehmas
-    registerDoctorSchema: Joi.object().keys({
-        username, password, role, firstName, lastName, email, address, address2, city, state, zip, phoneNumber, primary, specialty, office,
-    }),
+
+    // doctor schemas
+
     loginDoctorSchema: Joi.object().keys({
         username, password,
     }),
@@ -101,5 +102,17 @@ module.exports = {
     orderTest: Joi.object().keys({
         firstName, lastName, dob, date, scan, physical, blood,
     }),
+
+    // appointment schemas
+
+    schedulePrimaryAppointment: Joi.object().keys({
+        primaryAppointment, reason, availabilityID,
+    }),
+    // scheduleSpecialistAppointment: Joi.object().keys({
+    //     date, startTime, endTime, specialty, primaryAppointment, reason,
+    // }),
+    // cancelAppointment: Joi.object().keys({
+    //     date,
+    // }),
 
 };

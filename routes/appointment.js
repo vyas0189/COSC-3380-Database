@@ -1,7 +1,6 @@
 const { Router } = require('express');
-const { auth } = require('../middleware/auth');
-const { doc } = require('../middleware/auth');
-
+const { auth, doc } = require('../middleware/auth');
+const { schedulePrimaryAppointment, validate } = require('../validation')
 const router = Router();
 const db = require('../config/db');
 
@@ -9,68 +8,25 @@ router.post('/schedule/primaryAppointment', auth, async (req, res) => {
     try {
         await validate(schedulePrimaryAppointment, req.body, req, res);
         const {
-            date, startTime, endTime, specialty, primaryAppointment, reason,
+            primaryAppointment, reason, availabilityID,
         } = req.body;
+        console.log(req.user);
 
         const { userID } = req.user;
+        console.log(userID);
 
-        const patient = await db.query('SELECT * FROM patient WHERE patient_user = $1',
+        const patient = await db.query('SELECT patient_id FROM patient WHERE patient_user = $1',
             [userID]);
 
-        const patientAddress = patient.rows[0].address;
+        console.log(patient.rows[0].patient_id);
 
-        const patientCity = await db.query('SELECT city FROM address WHERE address_id = $1',
-            [patientAddress]);
+        const appointment = await db.query('INSERT INTO appointment(appointment_patient, appointment_primary, appointment_reason, appointment_availability) VALUES($1, $2, $3, $4) RETURNING *',
+            [patient.rows[0].patient_id, primaryAppointment, reason, availabilityID]);
 
-        const { primaryDoctors } = await db.query('SELECT doctor_id FROM doctor WHERE doctor_primary = $1',
-            true);
+        await db.query('UPDATE availability SET availability_taken = true WHERE availability_id = $1',
+            [availabilityID]);
 
-        const { doctorsInCity } = primaryDoctors.map(doctor => await db.query('SELECT city FROM address WHERE address_id = $1',
-            [doctor.rows[0].address]));
-
-        console.log(doctorsInCity);
-
-        // const { availableDoctors };
-
-        // for (var j = 0; j < doctorsInCity.length; j++) {
-
-        //     const currentDoctor = doctorsInCity[j].rows[0];
-
-        //     let doctorAvailability = await db.query('SELECT * from availability WHERE doctor_id = $1',
-        //         [currentDoctor.doctor_id]);
-
-        //     if (date == doctorAvailability.rows[0].availability_date && doctorAvailability.rows[0].availability_from_time <= startTime && startTime < doctorAvailability.rows[0].availability_from_time) {
-
-        //         availableDoctors.push(currentDoctor);
-        //         console.log(specialistDoctors[j].rows[0], doctor_first_name, specialistDoctors[j].rows[0], doctor_last_name);
-        //     }
-        // }
-
-        // if (availableDoctors.length === 0) {
-        //     return res.status(401).json({ message: 'No primary doctors with that date & time are available. Please try again.' });
-        // }
-
-        // // frontend displays names of all doctors that patient can see
-
-        // await validate(chooseDoctor, req.body, req, res);
-        // const {
-        //     firstName, lastName,
-        // } = req.body;
-
-        // const chosenDoctor = await db.query('SELECT doctor_id FROM doctor WHERE doctor_first_name = $1, doctor_last_name = $2'
-        // [firstName, lastName]);
-
-        // await db.query('INSERT INTO appointment(appointment_patient, appointment_doctor, appointment_date, appointment_start, appointment_end, appointment_primary, appointment_reason, appointment_office) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-        //     [userID, chosenDoctor.rows[0].doctor_id, date, startTime, endTime, appointmentPrimary, reason, chosenDoctor.rows[0].doctor_office]);
-
-        // // first time with a primary physician
-        // if (patient.rows[0].patient_primary_doctor === null) {
-        //     await db.query('UPDATE patient SET patient_primary_doctor = $1 WHERE patient_user = $2',
-        //         [chosenDoctor.rows[0].doctor_id, userID])
-        // }
-
-
-        res.status(200).json({ message: 'OK' });
+        res.status(200).json({ message: 'OK', appointment: appointment.rows[0] });
     } catch (err) {
         res.status(500).json({ message: 'Server Error', err });
     }

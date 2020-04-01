@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const {
 	validate, registerPatientSchema, loginPatientSchema, registerDoctorSchema, loginDoctorSchema,
 } = require('../validation');
-const { auth, doc } = require('../middleware/auth');
+const { auth, doc, admin } = require('../middleware/auth');
 
 const { JWT_SECRET, SESSION_EXPIRES = 60 * 60 } = process.env;
 // const moment = require('moment');
@@ -94,7 +94,6 @@ router.post('/login/patient', async (req, res) => {
 		const currentUser = { userID: user.rows[0].user_id, role: user.rows[0].role };
 
 		const token = jwt.sign(currentUser, JWT_SECRET, { expiresIn: SESSION_EXPIRES });
-		console.log(token);
 
 		res.status(200).json({ message: 'OK', token });
 	} catch (error) {
@@ -103,7 +102,7 @@ router.post('/login/patient', async (req, res) => {
 });
 
 
-router.post('/register/doctor', async (req, res) => {
+router.post('/register/doctor', admin, async (req, res) => {
 	try {
 		await validate(registerDoctorSchema, req.body, req, res);
 		const {

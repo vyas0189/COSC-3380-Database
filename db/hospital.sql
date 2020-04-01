@@ -45,13 +45,9 @@ CREATE TABLE IF NOT EXISTS appointment
 (
     appointment_id      UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
     appointment_patient UUID             NOT NULL,
-    appointment_doctor  UUID             NOT NULL,
-    appointment_date    DATE             NOT NULL DEFAULT,
-    appointment_start   TIMESTAMP        NOT NULL,
-    appointment_end     TIMESTAMP        NOT NULL,
     appointment_primary BOOLEAN          NOT NULL DEFAULT FALSE,
     appointment_reason  TEXT             NOT NULL,
-    appointment_office  UUID             NOT NULL
+    appointment_availability UUID        NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS office
@@ -66,13 +62,13 @@ CREATE TABLE IF NOT EXISTS office
 CREATE TABLE IF NOT EXISTS doctor
 (
     doctor_id           UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
-    doctor_primary      BOOLEAN                   DEFAULT FALSE,
     doctor_address      UUID             NOT NULL REFERENCES address (address_id) ON DELETE CASCADE ON UPDATE CASCADE,
     doctor_first_name   varchar(100)     NOT NULL,
     doctor_last_name    varchar(100)     NOT NULL,
     doctor_email        TEXT UNIQUE      NOT NULL,
     doctor_phone_number TEXT             NOT NULL,
     doctor_office       UUID             NOT NULL REFERENCES office (office_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    doctor_primary      BOOLEAN                   DEFAULT FALSE,
     doctor_specialty    TEXT             NOT NULL,
     doctor_user         UUID             NOT NULL REFERENCES db_user (user_id) ON DELETE CASCADE ON UPDATE CASCADE,
     doctor_diagnosis    UUID,
@@ -84,6 +80,7 @@ CREATE TABLE IF NOT EXISTS availability
     availability_id        UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
     doctor_id              UUID             NOT NULL REFERENCES doctor (doctor_id) ON DELETE CASCADE ON UPDATE CASCADE,
     office_id              UUID             NOT NULL REFERENCES office (office_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    availability_taken     BOOLEAN          NOT NULL DEFAULT FALSE,
     availability_date      DATE             NOT NULL,
     availability_from_time TIME             NOT NULL,
     availability_to_time   TIME             NOT NULL
@@ -92,7 +89,7 @@ CREATE TABLE IF NOT EXISTS availability
 CREATE TABLE IF NOT EXISTS test
 (
     test_id        UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
-    test_date      TIMESTAMP        NOT NULL DEFAULT NOW(),
+    test_date      DATE             NOT NULL DEFAULT NOW(),
     test_scan      BOOLEAN          NOT NULL DEFAULT FALSE,
     test_physical  BOOLEAN          NOT NULL DEFAULT FALSE,
     test_blood     BOOLEAN          NOT NULL DEFAULT FALSE,
@@ -124,16 +121,13 @@ ALTER TABLE doctor
 ALTER TABLE test
     ADD
         CONSTRAINT fk_test_diagnosis FOREIGN KEY (test_diagnosis) REFERENCES diagnosis (diagnosis_id) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE appointment
-    ADD
-        CONSTRAINT fk_appointment_office FOREIGN KEY (appointment_office) REFERENCES office (office_id) ON DELETE CASCADE ON UPDATE CASCADE;
+
 ALTER TABLE appointment
     ADD
         CONSTRAINT fk_appointment_patient FOREIGN KEY (appointment_patient) REFERENCES patient (patient_id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE appointment
     ADD
-        CONSTRAINT fk_appointment_doctor FOREIGN KEY (appointment_doctor) REFERENCES doctor (doctor_id);
-
+        CONSTRAINT fk_appointment_availability FOREIGN KEY (appointment_availability) REFERENCES availability (availability_id) ON DELETE CASCADE ON UPDATE CASCADE;
 -- 1) Alert & deny patient user from scheduling appointment outside of doctor's availability dates / times
 
 CREATE TRIGGER APPOINTMENT_OUTSIDE_DOCTOR_AVAILABILITY
