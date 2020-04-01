@@ -132,7 +132,6 @@ ALTER TABLE appointment
         CONSTRAINT fk_appointment_patient FOREIGN KEY (appointment_patient) REFERENCES patient (patient_id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE appointment
     ADD
-<<<<<<< HEAD
         CONSTRAINT fk_appointment_doctor FOREIGN KEY (appointment_doctor) REFERENCES doctor (doctor_id);
 
 -- 1) Alert & deny patient user from scheduling appointment outside of doctor's availability dates / times
@@ -179,10 +178,6 @@ BEGIN
 RETURN NEW;
 END
 $$ LANGUAGE plpgsql;
-
-=======
-        CONSTRAINT fk_appointment_doctor FOREIGN KEY (appointment_doctor) REFERENCES doctor (doctor_id) ON DELETE CASCADE ON UPDATE CASCADE;
->>>>>>> d910d279aa3f87803e6135d0dc43bad41ffcf74d
 
 -- CREATE FUNCTION insert_availability() RETURNS trigger AS
 -- $$
