@@ -1,7 +1,7 @@
 const { Pool } = require('pg');
 
 const {
-  PGUSER, PGPASSWORD, PGHOST, PGPORT, PGDATABASE, NODE_ENV = 'development', DATABASE_URL
+  PGUSER, PGPASSWORD, PGHOST, PGPORT, PGDATABASE, NODE_ENV = 'development', DATABASE_URL,
 } = process.env;
 
 const isProduction = NODE_ENV === 'production';
