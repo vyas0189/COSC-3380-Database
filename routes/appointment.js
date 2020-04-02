@@ -17,14 +17,15 @@ router.post('/schedule/primaryAppointment', auth, async (req, res) => {
 
         const patient = await db.query('SELECT patient_id FROM patient WHERE patient_user = $1',
             [userID]);
-
-        console.log(patient.rows[0].patient_id);
-
+        
         const appointment = await db.query('INSERT INTO appointment(appointment_patient, appointment_primary, appointment_reason, appointment_availability) VALUES($1, $2, $3, $4) RETURNING *',
             [patient.rows[0].patient_id, primaryAppointment, reason, availabilityID]);
 
-        await db.query('UPDATE availability SET availability_taken = true WHERE availability_id = $1',
+        const updatedAvailability = await db.query('UPDATE availability SET availability_taken = true WHERE availability_id = $1 RETURNING *',
             [availabilityID]);
+        
+        await db.query('UPDATE patient SET patient_primary_doctor = $1 WHERE patient_id = $2',
+            [updatedAvailability.rows[0].doctor_id, patient.rows[0].patient_id]);
 
         res.status(200).json({ message: 'OK', appointment: appointment.rows[0] });
     } catch (err) {
@@ -32,87 +33,31 @@ router.post('/schedule/primaryAppointment', auth, async (req, res) => {
     }
 });
 
-// router.post('/schedule/specialistAppointment', auth, async (req, res) => {
-//     try {
-//         await validate(scheduleSpecialistAppointment, req.body, req, res);
+router.post('/schedule/specialistAppointment', auth, async (req, res) => {
+    try {
+        await validate(schedulePrimaryAppointment, req.body, req, res);
+        const {
+            primaryAppointment, reason, availabilityID,
+        } = req.body;
+        
+        const { userID } = req.user;
+       
+        const patient = await db.query('SELECT patient_id FROM patient WHERE patient_user = $1',
+            [userID]);
 
-//         const {
-//             date, startTime, endTime, specialty, primaryAppointment, reason,
-//         } = req.body;
+        console.log(patient.rows[0].patient_id);
 
-//         const { userID } = req.user;
+        const appointment = await db.query('INSERT INTO appointment(appointment_patient, appointment_primary, appointment_reason, appointment_availability) VALUES($1, $2, $3, $4) RETURNING *',
+            [patient.rows[0].patient_id, primaryAppointment, reason, availabilityID]);
 
-//         const patient = await db.query('SELECT * FROM patient WHERE patient_user = $1',
-//             [userID]);
+        await db.query('UPDATE availability SET availability_taken = TRUE WHERE availability_id = $1',
+            [availabilityID]);
 
-//         //trigger for checking if patient has already had primary care appointment
-
-//         if (patient.rows[0].patient_primary_doctor === null) {
-//             return res.status(401).json({ message: 'You need to schedule an appointment with primary care doctor before you can see a specialist. Please schedule an appointment with a primary care doctor.' });
-//         }
-
-//         const patientAddress = patient.rows[0].address;
-
-//         const patientCity = await db.query('SELECT city FROM address WHERE address_id = $1',
-//             [patientAddress]);
-
-//         const { specialistDoctors } = await db.query('SELECT doctor_id FROM doctor WHERE doctor_specialty = $1',
-//             [specialty]);
-
-//         const { doctorsInCity };
-
-//         for (var j = 0; j < specialistDoctors.length; j++) {
-
-//             const currentDoctor = specialistDoctors[j].rows[0];
-
-//             const doctorAddress = currentDoctor.rows[0].address;
-
-//             const doctorCity = await db.query('SELECT city FROM address WHERE address_id = $1',
-//                 [doctorAddress]);
-
-//             if (patientCity.rows[0] === doctorCity.rows[0]) {
-//                 doctorsInCity.push(currentDoctor);
-//             }
-//         }
-
-//         const { availableDoctors };
-
-//         for (var j = 0; j < doctorsInCity.length; j++) {
-
-//             const currentDoctor = doctorsInCity[j].rows[0];
-
-//             let doctorAvailability = await db.query('SELECT * from availability WHERE doctor_id = $1',
-//                 [currentDoctor.doctor_id]);
-
-//             if (date == doctorAvailability.rows[0].availability_date && doctorAvailability.rows[0].availability_from_time <= startTime && startTime < doctorAvailability.rows[0].availability_from_time) {
-
-//                 availableDoctors.push(currentDoctor);
-//                 console.log(specialistDoctors[j].rows[0], doctor_first_name, specialistDoctors[j].rows[0], doctor_last_name);
-//             }
-//         }
-
-//         if (availableDoctors.length === 0) {
-//             return res.status(401).json({ message: 'No specialist doctors with that date & time are available. Please try again.' });
-//         }
-
-//         // frontend displays names of all doctors that patient can see
-
-//         await validate(chooseDoctor, req.body, req, res);
-//         const {
-//             firstName, lastName,
-//         } = req.body;
-
-//         const chosenDoctor = await db.query('SELECT doctor_id FROM doctor WHERE doctor_first_name = $1, doctor_last_name = $2'
-//         [firstName, lastName]);
-
-//         await db.query('INSERT INTO appointment(appointment_patient, appointment_doctor, appointment_date, appointment_start, appointment_end, appointment_primary, appointment_reason, appointment_office) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-//             [userID, chosenDoctor.rows[0].doctor_id, date, startTime, endTime, appointmentPrimary, reason, chosenDoctor.rows[0].doctor_office]);
-
-//         res.status(200).json({ message: 'OK' });
-//     } catch (err) {
-//         res.status(500).json({ message: 'Server Error', err });
-//     }
-// });
+        res.status(200).json({ message: 'OK', appointment: appointment.rows[0] });
+    } catch (err) {
+        res.status(500).json({ message: 'Server Error', err });
+    }
+});
 
 // router.get('/view/allAppointments', auth, async (req, res) => {
 //     try {
