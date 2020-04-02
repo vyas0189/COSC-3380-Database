@@ -120,23 +120,23 @@ router.post('/register/doctor', admin, async (req, res) => {
     }
 });
 
-router.put('/doctor/update', admin, async (req, res) => {
+router.put('/update/doctor', admin, async (req, res) => {
     try {
-    await validate(updateDoctorAdminSchema, req.body, req, res);
-    const {
-        doctorID, primary, specialty, office,
-    } = req.body;
+        await validate(updateDoctorAdminSchema, req.body, req, res);
+        const {
+            doctorID, primary, specialty, office,
+        } = req.body;
 
-    const doctor = await db.query('SELECT * FROM doctor WHERE doctor_id = $1', [doctorID]);
+        const doctor = await db.query('SELECT * FROM doctor WHERE doctor_id = $1', [doctorID]);
 
-    if (doctor.rows.length === 0) {
-        return res.status(401).json({ message: 'Doctor not found.' });
-    }
+        if (doctor.rows.length === 0) {
+            return res.status(401).json({ message: 'Doctor not found.' });
+        }
 
-    await db.query('UPDATE doctor SET doctor_primary = $1, doctor_specialty = $2, doctor_office = $3 WHERE doctor_id = $4',
-        [primary, specialty, office, doctorID]);
+        await db.query('UPDATE doctor SET doctor_primary = $1, doctor_specialty = $2, doctor_office = $3 WHERE doctor_id = $4',
+            [primary, specialty, office, doctorID]);
 
-    res.status(200).json({ message: 'OK' });
+        res.status(200).json({ message: 'OK' });
     } catch (err) {
         res.status(500).json({ message: 'Server Error', err });
     }

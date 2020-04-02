@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { auth, doc } = require('../middleware/auth');
-const { schedulePrimaryAppointment, validate } = require('../validation')
+const { validate, schedulePrimaryAppointment, scheduleSpecialistAppointment, viewAppointmentsWithPatient } = require('../validation')
 const router = Router();
 const db = require('../config/db');
 
@@ -17,13 +17,13 @@ router.post('/schedule/primaryAppointment', auth, async (req, res) => {
 
         const patient = await db.query('SELECT patient_id FROM patient WHERE patient_user = $1',
             [userID]);
-        
+
         const appointment = await db.query('INSERT INTO appointment(appointment_patient, appointment_primary, appointment_reason, appointment_availability) VALUES($1, $2, $3, $4) RETURNING *',
             [patient.rows[0].patient_id, primaryAppointment, reason, availabilityID]);
 
         const updatedAvailability = await db.query('UPDATE availability SET availability_taken = true WHERE availability_id = $1 RETURNING *',
             [availabilityID]);
-        
+
         await db.query('UPDATE patient SET patient_primary_doctor = $1 WHERE patient_id = $2',
             [updatedAvailability.rows[0].doctor_id, patient.rows[0].patient_id]);
 
@@ -35,13 +35,13 @@ router.post('/schedule/primaryAppointment', auth, async (req, res) => {
 
 router.post('/schedule/specialistAppointment', auth, async (req, res) => {
     try {
-        await validate(schedulePrimaryAppointment, req.body, req, res);
+        await validate(scheduleSpecialistAppointment, req.body, req, res);
         const {
             primaryAppointment, reason, availabilityID,
         } = req.body;
-        
+
         const { userID } = req.user;
-       
+
         const patient = await db.query('SELECT patient_id FROM patient WHERE patient_user = $1',
             [userID]);
 
@@ -49,6 +49,10 @@ router.post('/schedule/specialistAppointment', auth, async (req, res) => {
 
         const appointment = await db.query('INSERT INTO appointment(appointment_patient, appointment_primary, appointment_reason, appointment_availability) VALUES($1, $2, $3, $4) RETURNING *',
             [patient.rows[0].patient_id, primaryAppointment, reason, availabilityID]);
+
+        if (appointment.rows.length === 0) {
+            return res.status(401).json({ message: 'You must be approved by a primary doctor before you can see a specialist.' });
+        }
 
         await db.query('UPDATE availability SET availability_taken = TRUE WHERE availability_id = $1',
             [availabilityID]);
@@ -58,6 +62,34 @@ router.post('/schedule/specialistAppointment', auth, async (req, res) => {
         res.status(500).json({ message: 'Server Error', err });
     }
 });
+
+router.get('/view/appointmentsWithPatient', doc, async (req, res) => {
+    try {
+        await validate(viewAppointmentsWithPatient, req.body, req, res);
+        const {
+            patientID,
+        } = req.body;
+
+        const patient = await db.query('SELECT * FROM patient WHERE patient_id = $1',
+            [patientID]);
+
+        if (patient.rows.length = 0) {
+            return res.status(401).json({ message: 'That patient is not in our database. Please try again.' });
+        }
+
+        const appointments = await db.query('SELECT * FROM appointment WHERE appointment_patient = $1',
+            [patientID]);
+
+        if (appointments.rows.length === 0) {
+            return res.status(401).json({ message: 'That patient does not have any appointments schedule' });
+        }
+
+        res.status(200).json({ message: 'OK', appointments: appointments.rows });
+    } catch (err) {
+        res.status(500).json({ message: 'Server Error', err });
+    }
+});
+
 
 // router.get('/view/allAppointments', auth, async (req, res) => {
 //     try {
@@ -115,59 +147,5 @@ router.post('/schedule/specialistAppointment', auth, async (req, res) => {
 //     }
 // });
 
-// router.get('/view/appointmentsWithPatient', auth, async (req, res) => {
-//     try {
-//         await validate(viewAppointmentsWithPatient, req.body, req, res);
-//         const {
-//             firstName, lastName, dob,
-//         } = req.body;
-
-//         const { userID } = req.user;
-//         const user = await db.query('SELECT user_id FROM db_user WHERE user_id = $1', [userID]);
-
-//         const patientID = await db.query('SELECT patient_id FROM patient WHERE patient_first_name = $1, patient_last_name = $2, patient_dob = $3',
-//             [firstName, lastName, dob]);
-
-//         if (patientID.rows.length === 0) {
-//             return res.status(401).json({ message: 'That patient is not in our database. Please try again.' });
-//         }
-
-//         const patientInfo = await db.query('SELECT * FROM patient WHERE patient_id = $1',
-//             [patientID]);
-
-//         const { appointments } = await db.query('SELECT * FROM appointments WHERE appointment_patient = $1', [patientID]);
-
-//         for (var i = 0; i < appointments.length; i++) {
-
-//             const currAppointment = appointments[i].rows[0];
-
-//             const officeID = appointments[i].rows[0].appointment_office;
-
-//             const officeAddressID = await db.query('SELECT office_address FROM office WHERE office_id = $1',
-//                 [officeID.rows[0]]);
-
-//             const { officeAddress } = await db.query('SELECT * FROM address WHERE address_id = $1',
-//                 [officeAddressID.rows[0]]);
-
-
-//             res.json('Appointment #:', i,
-//                 '\nName: ', patientInfo.rows[0].patient_first_name, ' ', patientInfo.rows[0].patient_last_name,
-//                 '\nDOB: ', patientInfo.rows[0].patient_dob,
-//                 '\nDiagnosis', patientInfo.rows[0].patient_diagnosis,
-//                 '\nDate: ', currAppointment.rows[0].appointment_date,
-//                 '\nTime: ', currAppointment.rows[0].appointment_start,
-//                 '\nReason: ', currAppointment.rows[0].appointment_reason,
-//                 '\nAddress: ',
-//                 '\n', officeAddress.rows[0].address_name,
-//                 '\n', officeAddress.rows[0].city, ', ', officeAddress.rows[0].state, ' ', officeAddress.rows[0].zip,
-//                 '\n');
-//         }
-
-
-//         res.status(200).json({ message: 'OK' });
-//     } catch (err) {
-//         res.status(500).json({ message: 'Server Error', err });
-//     }
-// });
 
 module.exports = router;

@@ -27,6 +27,7 @@ const phoneNumber = Joi.string().trim().regex(/^[0-9]{7,10}$/).required();
 // patient schema
 const gender = Joi.string().max(1).regex(/^[mfoMFO]$/).required(); // o is for other
 const dob = Joi.date().required();
+const patientID = Joi.string().guid().required();
 
 // doctor schema
 const primary = Joi.boolean().required();
@@ -102,13 +103,13 @@ module.exports = {
         firstName, lastName, email, address, address2, city, state, zip, phoneNumber, office,
     }),
     viewAppointmentsWithPatient: Joi.object().keys({
-        firstName, lastName, dob,
+        patientID,
     }),
     updateDiagnosis: Joi.object().keys({
-        firstName, lastName, dob, symptoms, condition,
+        patientID, symptoms, condition,
     }),
     orderTest: Joi.object().keys({
-        firstName, lastName, dob, date, scan, physical, blood,
+        patientID, date, scan, physical, blood,
     }),
 
     // appointment schemas
