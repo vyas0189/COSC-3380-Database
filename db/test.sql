@@ -61,3 +61,5 @@ SELECT * FROM availability;
 DELETE FROM appointment WHERE appointment_id = 'ffdfd512-be92-4ddd-ab8e-9f203aee4e35';
 
 -- ALTER TABLE test ALTER COLUMN test_date TYPE DATE;
+
+ALTER TABLE patient ADD column patient_doctor_specialty TEXT;

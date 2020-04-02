@@ -1,24 +1,15 @@
 const { Router } = require('express');
-const { admin } = require('../middleware/auth');
-
-const router = Router();
-const db = require('../config/db');
-
-const { Router } = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const {
-	validate, loginAdminSchema, registerDoctorSchema,
+    validate, registerAdminSchema, loginAdminSchema, registerDoctorSchema, updateDoctorAdminSchema,
 } = require('../validation');
-const { auth, doc, admin } = require('../middleware/auth');
+const { admin } = require('../middleware/auth');
 
 const { JWT_SECRET, SESSION_EXPIRES = 60 * 60 } = process.env;
-// const moment = require('moment');
 const db = require('../config/db');
 
 const router = Router();
-
-module.exports = router;
 
 router.get('/me', admin, async (req, res) => {
     try {
@@ -32,28 +23,59 @@ router.get('/me', admin, async (req, res) => {
     }
 });
 
+router.post('/register', async (req, res) => {
+    try {
+        await validate(registerAdminSchema, req.body, req, res);
+        const {
+            username, password, role
+        } = req.body;
+
+        const user = await db.query('SELECT * FROM db_user WHERE username = $1 OR password = $2',
+            [username, password]);
+
+        if (user.rows.length > 0) {
+            return res.status(401).json({ message: 'Username or email is already taken' });
+        }
+
+        const hashedPassword = await bcrypt.hashSync(password, 10);
+
+        const dbUser = await db.query('INSERT INTO db_user(username, password, role) VALUES ($1, $2, $3) RETURNING user_id, username, role',
+            [username, hashedPassword, role]);
+        console.log(dbUser.rows[0]);
+
+        const currentUser = { userID: dbUser.rows[0].user_id, role: dbUser.rows[0].role };
+
+        const token = jwt.sign(currentUser, JWT_SECRET, { expiresIn: SESSION_EXPIRES });
+
+        res.status(200).json({ message: 'OK', token });
+
+    } catch (err) {
+        res.status(500).json({ message: 'Server Error', err });
+    }
+});
+
 router.post('/login', async (req, res) => {
-	try {
-		await validate(loginAdminSchema, req.body, req, res);
-		const { username, password } = req.body;
-		const user = await db.query('SELECT * FROM db_user WHERE username = $1', [username]);
+    try {
+        await validate(loginAdminSchema, req.body, req, res);
+        const { username, password } = req.body;
+        const user = await db.query('SELECT * FROM db_user WHERE username = $1', [username]);
 
-		if (user.rows.length === 0) {
-			return res.status(401).json({ message: 'Invalid username or password' });
-		}
-		const validPassword = await bcrypt.compare(password, user.rows[0].password);
+        if (user.rows.length === 0) {
+            return res.status(401).json({ message: 'Invalid username or password' });
+        }
+        const validPassword = await bcrypt.compare(password, user.rows[0].password);
 
-		if (!validPassword) {
-			return res.status(401).json({ message: 'Invalid username or password' });
-		}
-		const currentUser = { userID: user.rows[0].user_id, role: user.rows[0].role };
+        if (!validPassword) {
+            return res.status(401).json({ message: 'Invalid username or password' });
+        }
+        const currentUser = { userID: user.rows[0].user_id, role: user.rows[0].role };
 
-		const token = jwt.sign(currentUser, JWT_SECRET, { expiresIn: SESSION_EXPIRES });
+        const token = jwt.sign(currentUser, JWT_SECRET, { expiresIn: SESSION_EXPIRES });
 
-		res.status(200).json({ message: 'OK', token });
-	} catch (error) {
-		res.status(500).json({ message: 'Server Error' });
-	}
+        res.status(200).json({ message: 'OK', token });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error' });
+    }
 });
 
 router.post('/register/doctor', admin, async (req, res) => {
@@ -100,32 +122,24 @@ router.post('/register/doctor', admin, async (req, res) => {
 
 router.put('/doctor/update', admin, async (req, res) => {
     try {
-        await validate(updateDoctorAdminSchema, req.body, req, res);
-        const {
-            primary, specialty, office,
-        } = req.body;
+    await validate(updateDoctorAdminSchema, req.body, req, res);
+    const {
+        doctorID, primary, specialty, office,
+    } = req.body;
 
-        let { address2 } = req.body;
-        const { userID } = req.user;
-        const user = await db.query('SELECT user_id FROM db_user WHERE user_id = $1', [userID]);
+    const doctor = await db.query('SELECT * FROM doctor WHERE doctor_id = $1', [doctorID]);
 
-        if (!user.rows.length) {
-            return res.status(401).json({ message: 'User not found.' });
-        }
+    if (doctor.rows.length === 0) {
+        return res.status(401).json({ message: 'Doctor not found.' });
+    }
 
-        if (address2 === 'n/a' || address2 === 'N/A') {
-            address2 = null;
-        }
+    await db.query('UPDATE doctor SET doctor_primary = $1, doctor_specialty = $2, doctor_office = $3 WHERE doctor_id = $4',
+        [primary, specialty, office, doctorID]);
 
-        const doctorAddressID = await db.query('SELECT doctor_address FROM doctor WHERE doctor_user = $1',
-            [userID]);
-
-        // UPDATE DOCTOR TABLE
-        await db.query('UPDATE doctor SET doctor_primary = $1, doctor_specialty = $2, doctor_office = $3 WHERE doctor_user = $4',
-            [primary, specialty, office, userID]);
-
-        res.status(200).json({ message: 'OK' });
+    res.status(200).json({ message: 'OK' });
     } catch (err) {
         res.status(500).json({ message: 'Server Error', err });
     }
 });
+
+module.exports = router;

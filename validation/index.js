@@ -32,6 +32,11 @@ const dob = Joi.date().required();
 const primary = Joi.boolean().required();
 const specialty = Joi.string().max(20).required();
 const office = Joi.string().guid().required();
+const doctorID = Joi.string().guid().required();
+const doctorEmail = Joi.string().email().min(8).max(245)
+    .lowercase()
+    .trim()
+    .required();
 
 // appointment schema
 
@@ -62,6 +67,9 @@ module.exports = {
 
     //admin schemas
 
+    registerAdminSchema: Joi.object().keys({
+        username, password, role,
+    }),
     loginAdminSchema: Joi.object().keys({
         username, password,
     }),
@@ -69,7 +77,7 @@ module.exports = {
         username, password, role, firstName, lastName, email, address, address2, city, state, zip, phoneNumber, primary, specialty, office,
     }),
     updateDoctorAdminSchema: Joi.object().keys({
-        primary, specialty, office,
+        doctorID, primary, specialty, office,
     }),
 
     // patient schemas
@@ -108,9 +116,9 @@ module.exports = {
     schedulePrimaryAppointment: Joi.object().keys({
         primaryAppointment, reason, availabilityID,
     }),
-    // scheduleSpecialistAppointment: Joi.object().keys({
-    //     date, startTime, endTime, specialty, primaryAppointment, reason,
-    // }),
+    scheduleSpecialistAppointment: Joi.object().keys({
+        primaryAppointment, reason, availabilityID,
+    }),
     // cancelAppointment: Joi.object().keys({
     //     date,
     // }),
