@@ -2,7 +2,7 @@ const { Router } = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const {
-    validate, registerAdminSchema, loginAdminSchema, registerDoctorSchema, updateDoctorAdminSchema,
+    validate, registerAdmin, loginAdmin, registerDoctor, updateDoctorAdmin, cancelAppointmentAdmin,
 } = require('../validation');
 const { admin } = require('../middleware/auth');
 
@@ -25,7 +25,7 @@ router.get('/me', admin, async (req, res) => {
 
 router.post('/register', async (req, res) => {
     try {
-        await validate(registerAdminSchema, req.body, req, res);
+        await validate(registerAdmin, req.body, req, res);
         const {
             username, password, role
         } = req.body;
@@ -56,7 +56,7 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     try {
-        await validate(loginAdminSchema, req.body, req, res);
+        await validate(loginAdmin, req.body, req, res);
         const { username, password } = req.body;
         const user = await db.query('SELECT * FROM db_user WHERE username = $1', [username]);
 
@@ -80,7 +80,7 @@ router.post('/login', async (req, res) => {
 
 router.post('/register/doctor', admin, async (req, res) => {
     try {
-        await validate(registerDoctorSchema, req.body, req, res);
+        await validate(registerDoctor, req.body, req, res);
         const {
             username, password, role, firstName, lastName, email, address, city, state, zip, phoneNumber, primary, specialty, office,
         } = req.body;
@@ -122,7 +122,7 @@ router.post('/register/doctor', admin, async (req, res) => {
 
 router.put('/update/doctor', admin, async (req, res) => {
     try {
-        await validate(updateDoctorAdminSchema, req.body, req, res);
+        await validate(updateDoctorAdmin, req.body, req, res);
         const {
             doctorID, primary, specialty, office,
         } = req.body;
@@ -137,6 +137,33 @@ router.put('/update/doctor', admin, async (req, res) => {
             [primary, specialty, office, doctorID]);
 
         res.status(200).json({ message: 'OK' });
+    } catch (err) {
+        res.status(500).json({ message: 'Server Error', err });
+    }
+});
+
+router.delete('/cancel', admin, async (req, res) => {
+    try {
+        await validate(cancelAppointmentAdmin, req.body, req, res);
+        const {
+            patientID, appointmentID,
+        } = req.body;
+
+        const appointment = await db.query('SELECT * FROM appointment WHERE appointment_id = $1 AND appointment_patient = $2',
+            [appointmentID, patientID]);
+
+        if (appointment.rows.length === 0) {
+            return res.status(401).json({ message: 'You do not have an appointment scheduled then.' });
+        }
+
+        // setting taken condition to false
+        await db.query('UPDATE availability SET availability_taken = FALSE WHERE availability_id = $1',
+            [appointment.rows[0].appointment_availability]);
+
+        await db.query('DELETE FROM appointment WHERE appointment_id = $1 AND appointment_patient = $2',
+            [appointmentID, patientID]);
+
+        res.status(200).json({ message: 'OK - appointment deleted' });
     } catch (err) {
         res.status(500).json({ message: 'Server Error', err });
     }

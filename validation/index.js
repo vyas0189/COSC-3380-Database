@@ -25,11 +25,13 @@ const address2 = Joi.string().trim();
 const phoneNumber = Joi.string().trim().regex(/^[0-9]{7,10}$/).required();
 
 // patient schema
+
 const gender = Joi.string().max(1).regex(/^[mfoMFO]$/).required(); // o is for other
 const dob = Joi.date().required();
 const patientID = Joi.string().guid().required();
 
 // doctor schema
+
 const primary = Joi.boolean().required();
 const specialty = Joi.string().max(20).required();
 const office = Joi.string().guid().required();
@@ -47,13 +49,16 @@ const date = Joi.date().required();
 const primaryAppointment = Joi.boolean().required();
 const reason = Joi.string().required();
 const availabilityID = Joi.string().guid().required();
+const appointmentID = Joi.string().guid().required();
 
 // test schema
+
 const scan = Joi.boolean().required();
 const physical = Joi.boolean().required();
 const blood = Joi.boolean().required();
 
 // diagnosis schema
+
 const symptoms = Joi.string().required();
 const condition = Joi.string().required();
 
@@ -68,48 +73,48 @@ module.exports = {
 
     //admin schemas
 
-    registerAdminSchema: Joi.object().keys({
+    registerAdmin: Joi.object().keys({
         username, password, role,
     }),
-    loginAdminSchema: Joi.object().keys({
+    loginAdmin: Joi.object().keys({
         username, password,
     }),
-    registerDoctorSchema: Joi.object().keys({
+    registerDoctor: Joi.object().keys({
         username, password, role, firstName, lastName, email, address, address2, city, state, zip, phoneNumber, primary, specialty, office,
     }),
-    updateDoctorAdminSchema: Joi.object().keys({
+    updateDoctorAdmin: Joi.object().keys({
         doctorID, primary, specialty, office,
+    }),
+    cancelAppointmentAdmin: Joi.object().keys({
+        patientID, appointmentID,
     }),
 
     // patient schemas
 
-    registerPatientSchema: Joi.object().keys({
+    registerPatient: Joi.object().keys({
         username, password, role, firstName, lastName, email, address, address2, city, state, zip, phoneNumber, dob, gender,
     }),
-    loginPatientSchema: Joi.object().keys({
+    loginPatient: Joi.object().keys({
         username, password,
     }),
-    updatePatientSchema: Joi.object().keys({
+    updatePatient: Joi.object().keys({
         firstName, lastName, email, address, address2, city, state, zip, phoneNumber, dob, gender,
     }),
 
 
     // doctor schemas
 
-    loginDoctorSchema: Joi.object().keys({
+    loginDoctor: Joi.object().keys({
         username, password,
     }),
-    updateDoctorSchema: Joi.object().keys({
+    updateDoctor: Joi.object().keys({
         firstName, lastName, email, address, address2, city, state, zip, phoneNumber, office,
-    }),
-    viewAppointmentsWithPatient: Joi.object().keys({
-        patientID,
     }),
     updateDiagnosis: Joi.object().keys({
         patientID, symptoms, condition,
     }),
     orderTest: Joi.object().keys({
-        patientID, date, scan, physical, blood,
+        patientID, scan, physical, blood,
     }),
 
     // appointment schemas
@@ -120,8 +125,11 @@ module.exports = {
     scheduleSpecialistAppointment: Joi.object().keys({
         primaryAppointment, reason, availabilityID,
     }),
-    // cancelAppointment: Joi.object().keys({
-    //     date,
-    // }),
+    viewAppointmentsWithPatient: Joi.object().keys({
+        patientID,
+    }),
+    cancelAppointment: Joi.object().keys({
+        appointmentID,
+    }),
 
 };

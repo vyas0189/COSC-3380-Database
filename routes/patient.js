@@ -1,15 +1,15 @@
 const { Router } = require('express');
 const { auth } = require('../middleware/auth');
-const { updatePatientSchema, validate } = require('../validation');
+const { updatePatient, validate } = require('../validation');
 
-// registerPatientSchema
+// registerPatient
 
 const router = Router();
 const db = require('../config/db');
 
 router.put('/update', auth, async (req, res) => {
     try {
-        await validate(updatePatientSchema, req.body, req, res);
+        await validate(updatePatient, req.body, req, res);
         const {
             firstName, lastName, email, address, city, state, zip, phoneNumber, dob, gender,
         } = req.body;
@@ -39,35 +39,5 @@ router.put('/update', auth, async (req, res) => {
         res.status(500).json({ message: 'Server Error', err });
     }
 });
-
-
-
-// router.delete('/cancel', auth, async (req, res) => {
-//     try {
-//         await validate(cancelAppointment, req.body, req, res);
-//         const {
-//             date
-//         } = req.body;
-
-//         const { userID } = req.user;
-
-//         const patient = await db.query('SELECT * FROM patient WHERE patient_user = $1',
-//             [userID]);
-
-//         const { scheduledAppointment } = await db.query('SELECT * FROM appointment WHERE appointment_patient = $1, appointment_date = $2',
-//             [userID, date]);
-
-//         if (patient.rows.length === 0) {
-//             return res.status(401).json({ message: 'You do not have an appointment scheduled on ' + date });
-//         }
-
-//         await db.query('DELETE * FROM appointment WHERE appointment_patient = $1, appointment_date = $2',
-//             [userID, date]);
-
-//         res.status(200).json({ message: 'OK' });
-//     } catch (err) {
-//         res.status(500).json({ message: 'Server Error', err });
-//     }
-// });
 
 module.exports = router;
