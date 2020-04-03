@@ -29,7 +29,7 @@ router.put('/update', doc, async (req, res) => {
 		const { userID } = req.user;
 		const user = await db.query(
 			'SELECT user_id FROM db_user WHERE user_id = $1',
-			[userID]
+			[userID],
 		);
 
 		if (!user.rows.length) {
@@ -42,7 +42,7 @@ router.put('/update', doc, async (req, res) => {
 
 		const doctorAddressID = await db.query(
 			'SELECT doctor_address FROM doctor WHERE doctor_user = $1',
-			[userID]
+			[userID],
 		);
 
 		await db.query(
@@ -54,12 +54,12 @@ router.put('/update', doc, async (req, res) => {
 				state,
 				zip,
 				doctorAddressID.rows[0].doctor_address,
-			]
+			],
 		);
 
 		await db.query(
 			'UPDATE doctor SET doctor_first_name = $1, doctor_last_name = $2, doctor_email = $3, doctor_phone_number = $4, doctor_office = $5 WHERE doctor_user = $6',
-			[firstName, lastName, email, phoneNumber, office, userID]
+			[firstName, lastName, email, phoneNumber, office, userID],
 		);
 
 		res.status(200).json({ message: 'OK' });
@@ -71,18 +71,20 @@ router.put('/update', doc, async (req, res) => {
 router.post('/order/test', doc, async (req, res) => {
 	try {
 		await validate(orderTest, req.body, req, res);
-		const { patientID, scan, physical, blood } = req.body;
+		const {
+			patientID, scan, physical, blood,
+		} = req.body;
 
 		const { userID } = req.user;
 
 		const doctor = await db.query(
 			'SELECT * FROM doctor WHERE doctor_user = $1',
-			[userID]
+			[userID],
 		);
 
 		const patient = await db.query(
 			'SELECT * FROM patient WHERE patient_id = $1',
-			[patientID]
+			[patientID],
 		);
 
 		if (patient.rows.length === 0) {
@@ -104,7 +106,7 @@ router.post('/order/test', doc, async (req, res) => {
 				doctor.rows[0].doctor_id,
 				patient.rows[0].patient_id,
 				patient.rows[0].patient_diagnosis,
-			]
+			],
 		);
 
 		res.status(200).json({ message: 'OK' });
@@ -118,15 +120,15 @@ router.put('/update/diagnosis', doc, async (req, res) => {
 		await validate(updateDiagnosis, req.body, req, res);
 		const { patientID, symptoms, condition } = req.body;
 
-		const { userID } = req.user;
-		const user = await db.query(
-			'SELECT user_id FROM db_user WHERE user_id = $1',
-			[userID]
-		);
+		// const { userID } = req.user;
+		// const user = await db.query(
+		// 	'SELECT user_id FROM db_user WHERE user_id = $1',
+		// 	[userID],
+		// );
 
 		const patient = await db.query(
 			'SELECT * FROM patient WHERE patient_id = $1',
-			[patientID]
+			[patientID],
 		);
 
 		if (patient.rows.length === 0) {
@@ -140,7 +142,7 @@ router.put('/update/diagnosis', doc, async (req, res) => {
 
 		const diagnosis = await db.query(
 			'SELECT * FROM diagnosis WHERE diagnosis_symptoms = $1 AND diagnosis_condition = $2',
-			[symptoms, condition]
+			[symptoms, condition],
 		);
 
 		if (diagnosis.rows.length === 0) {
@@ -150,8 +152,8 @@ router.put('/update/diagnosis', doc, async (req, res) => {
 		}
 
 		const update = await db.query(
-			'UPDATE patient SET patient_diagnosis = $1 WHERE patient_id = $2',
-			[diagnosis.rows[0].diagnosis_id, patientID]
+			'UPDATE patient SET patient_diagnosis = $1 WHERE patient_id = $2 RETURNING *',
+			[diagnosis.rows[0].diagnosis_id, patientID],
 		);
 
 		if (update.rows.length === 0) {

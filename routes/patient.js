@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { auth } = require('../middleware/auth');
-const { validate, updatePatient, } = require('../validation');
+const { validate, updatePatient } = require('../validation');
 
 // registerPatient
 

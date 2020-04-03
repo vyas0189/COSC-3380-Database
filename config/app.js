@@ -47,11 +47,11 @@ app.get('/', (req, res) => {
   res.json({ welcome: 'Hospital' });
 });
 
-app.use('/admin', admin);
-app.use('/appointment', appointment);
-app.use('/auth', auth);
-app.use('/doctor', doctor);
-app.use('/patient', patient);
+app.use('/api/admin', admin);
+app.use('/api/appointment', appointment);
+app.use('/api/auth', auth);
+app.use('/api/doctor', doctor);
+app.use('/api/patient', patient);
 
 
 if (isProduction) {
