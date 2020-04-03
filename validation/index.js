@@ -36,14 +36,14 @@ const primary = Joi.boolean().required();
 const specialty = Joi.string().max(20).required();
 const office = Joi.string().guid().required();
 const doctorID = Joi.string().guid().required();
-const doctorEmail = Joi.string().email().min(8).max(245)
-    .lowercase()
-    .trim()
-    .required();
+// const doctorEmail = Joi.string().email().min(8).max(245)
+//     .lowercase()
+//     .trim()
+//     .required();
 
 // appointment schema
 
-const date = Joi.date().required();
+// const date = Joi.date().required();
 // const startTime = Joi.string().regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([ ])([AaPp][Mm])$/).required();
 // const endTime = Joi.string().regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([ ])([AaPp][Mm])$/).required();
 const primaryAppointment = Joi.boolean().required();
@@ -71,7 +71,7 @@ module.exports = {
         }
     },
 
-    //admin schemas
+    // admin schemas
 
     registerAdmin: Joi.object().keys({
         username, password, role,

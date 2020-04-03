@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { auth } = require('../middleware/auth');
-const { updatePatient, validate } = require('../validation');
+const { validate, updatePatient } = require('../validation');
 
 // registerPatient
 
@@ -29,10 +29,8 @@ router.put('/update', auth, async (req, res) => {
         await db.query('UPDATE address SET address_name = $1, address2_name = $2, city = $3, state = $4, zip = $5 WHERE address_id = $6',
             [address, address2, city, state, zip, user.rows[0].patient_address]);
 
-        // UPDATE PATIENT TABLE
         await db.query('UPDATE patient SET patient_first_name = $1, patient_last_name = $2, patient_email = $3, patient_phone_number = $4, patient_gender = $5, patient_dob = $6 WHERE patient_user = $7',
             [firstName, lastName, email, phoneNumber, gender, dob, userID]);
-
 
         res.status(200).json({ message: 'OK' });
     } catch (err) {

@@ -2,7 +2,7 @@ const { Router } = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const {
-    validate, registerAdmin, loginAdmin, registerDoctor, updateDoctorAdmin, cancelAppointmentAdmin,
+    validate, loginAdmin, registerDoctor, updateDoctorAdmin, cancelAppointmentAdmin,
 } = require('../validation');
 const { admin } = require('../middleware/auth');
 
@@ -20,37 +20,6 @@ router.get('/me', admin, async (req, res) => {
         return res.status(401).json({ message: 'User not found' });
     } catch (err) {
         res.status(500).json({ message: 'Server Error' });
-    }
-});
-
-router.post('/register', async (req, res) => {
-    try {
-        await validate(registerAdmin, req.body, req, res);
-        const {
-            username, password, role
-        } = req.body;
-
-        const user = await db.query('SELECT * FROM db_user WHERE username = $1 OR password = $2',
-            [username, password]);
-
-        if (user.rows.length > 0) {
-            return res.status(401).json({ message: 'Username or email is already taken' });
-        }
-
-        const hashedPassword = await bcrypt.hashSync(password, 10);
-
-        const dbUser = await db.query('INSERT INTO db_user(username, password, role) VALUES ($1, $2, $3) RETURNING user_id, username, role',
-            [username, hashedPassword, role]);
-        console.log(dbUser.rows[0]);
-
-        const currentUser = { userID: dbUser.rows[0].user_id, role: dbUser.rows[0].role };
-
-        const token = jwt.sign(currentUser, JWT_SECRET, { expiresIn: SESSION_EXPIRES });
-
-        res.status(200).json({ message: 'OK', token });
-
-    } catch (err) {
-        res.status(500).json({ message: 'Server Error', err });
     }
 });
 

@@ -1,6 +1,9 @@
 const { Router } = require('express');
 const { auth, doc } = require('../middleware/auth');
-const { validate, schedulePrimaryAppointment, scheduleSpecialistAppointment, viewAppointmentsWithPatient, cancelAppointment } = require('../validation')
+const {
+    validate, schedulePrimaryAppointment, scheduleSpecialistAppointment, viewAppointmentsWithPatient, cancelAppointment,
+} = require('../validation');
+
 const router = Router();
 const db = require('../config/db');
 
@@ -49,6 +52,7 @@ router.post('/schedule/specialistAppointment', auth, async (req, res) => {
 
         const appointment = await db.query('INSERT INTO appointment(appointment_patient, appointment_primary, appointment_reason, appointment_availability) VALUES($1, $2, $3, $4) RETURNING *',
             [patient.rows[0].patient_id, primaryAppointment, reason, availabilityID]);
+        console.log(appointment);
 
         if (appointment.rows.length === 0) {
             return res.status(401).json({ message: 'You must be approved by a primary doctor before you can see a specialist.' });
@@ -82,7 +86,7 @@ router.delete('/cancel', auth, async (req, res) => {
             return res.status(401).json({ message: 'You do not have an appointment scheduled then.' });
         }
 
-        const availability = await db.query('SELECT  FROM availability WHERE availability_id = $1',
+        await db.query('SELECT * FROM availability WHERE availability_id = $1',
             [appointment.rows[0].appointment_availability]);
 
         // setting taken condition to false
@@ -118,7 +122,6 @@ router.get('/view/myAppointments', auth, async (req, res) => {
         res.status(500).json({ message: 'Server Error', err });
     }
 });
-
 
 
 router.get('/view/appointmentsWithPatient', doc, async (req, res) => {
