@@ -150,7 +150,7 @@ router.put('/update/diagnosis', doc, async (req, res) => {
 		}
 
 		const update = await db.query(
-			'UPDATE patient SET patient_diagnosis = $1 WHERE patient_id = $2',
+			'UPDATE patient SET patient_diagnosis = $1 WHERE patient_id = $2 RETURNING *',
 			[diagnosis.rows[0].diagnosis_id, patientID]
 		);
 
