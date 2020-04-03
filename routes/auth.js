@@ -2,7 +2,7 @@ const { Router } = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const {
-	validate, registerPatientSchema, loginPatientSchema, registerDoctorSchema, loginDoctorSchema,
+	validate, registerPatient, loginPatient, registerDoctor, loginDoctor,
 } = require('../validation');
 const { auth, doc, admin } = require('../middleware/auth');
 
@@ -38,7 +38,7 @@ router.get('/doctor/me', doc, async (req, res) => {
 
 router.post('/register/patient', async (req, res) => {
 	try {
-		await validate(registerPatientSchema, req.body, req, res);
+		await validate(registerPatient, req.body, req, res);
 		const {
 			username, password, role, firstName, lastName, email, address, city, state, zip, phoneNumber, dob, gender,
 		} = req.body;
@@ -79,7 +79,7 @@ router.post('/register/patient', async (req, res) => {
 
 router.post('/login/patient', async (req, res) => {
 	try {
-		await validate(loginPatientSchema, req.body, req, res);
+		await validate(loginPatient, req.body, req, res);
 		const { username, password } = req.body;
 		const user = await db.query('SELECT * FROM db_user WHERE username = $1', [username]);
 
@@ -104,7 +104,7 @@ router.post('/login/patient', async (req, res) => {
 
 router.post('/register/doctor', admin, async (req, res) => {
 	try {
-		await validate(registerDoctorSchema, req.body, req, res);
+		await validate(registerDoctor, req.body, req, res);
 		const {
 			username, password, role, firstName, lastName, email, address, city, state, zip, phoneNumber, primary, specialty, office,
 		} = req.body;
@@ -146,7 +146,7 @@ router.post('/register/doctor', admin, async (req, res) => {
 
 router.post('/login/doctor', async (req, res) => {
 	try {
-		await validate(loginDoctorSchema, req.body, req, res);
+		await validate(loginDoctor, req.body, req, res);
 		const { username, password } = req.body;
 		const user = await db.query('SELECT * FROM db_user WHERE username = $1', [username]);
 

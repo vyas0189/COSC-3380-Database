@@ -74,7 +74,6 @@ CREATE TABLE IF NOT EXISTS availability (
 );
 CREATE TABLE IF NOT EXISTS test (
   test_id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
-  test_date DATE NOT NULL DEFAULT NOW(),
   test_scan BOOLEAN NOT NULL DEFAULT FALSE,
   test_physical BOOLEAN NOT NULL DEFAULT FALSE,
   test_blood BOOLEAN NOT NULL DEFAULT FALSE,
@@ -130,33 +129,23 @@ ADD
   -- END
   -- $$ LANGUAGE plpgsql;
   -- 2) Alert & deny patient user from scheduling appointment with specialist if they don't have a primary care doctor assigned
-  CREATE FUNCTION deny_specialist_scheduling() RETURNS trigger AS $$ BEGIN
-SELECT
-  patient_primary_doctor
-FROM patient
-WHERE
-  patient_id = NEW.appointment_patient;
-SELECT
-  patient_doctor_specialty
-FROM patient
-WHERE
-  patient_id = NEW.appointment_patient;
-IF (
+  CREATE FUNCTION deny_specialist_scheduling() RETURNS trigger AS $$ BEGIN IF (
     NEW.appointment_primary = FALSE
-    AND
-    SELECT
-      patient_primary_doctor
-    FROM patient
-    WHERE
-      patient_id = NEW.appointment_patient IS NULL
-      AND
-    SELECT
-      patient_doctor_specialty
-    FROM patient
-    WHERE
-      patient_id = NEW.appointment_patient IS NULL
-  ) THEN -- RAISE EXCEPTION 'You cannot schedule a specialist appointment before you have seen a primary doctor';
-  RETURN NULL;
+    AND (
+      SELECT
+        patient_primary_doctor
+      FROM patient
+      WHERE
+        patient_id = NEW.appointment_patient
+    ) IS NULL
+    AND (
+      SELECT
+        patient_doctor_specialty
+      FROM patient
+      WHERE
+        patient_id = NEW.appointment_patient
+    ) IS NULL
+  ) THEN RETURN NULL;
 END IF;
 RETURN NEW;
 END $$ LANGUAGE plpgsql;
@@ -164,79 +153,3 @@ CREATE TRIGGER SPECIALIST_APPOINTMENT_NO_PRIMARY_CARE_DOCTOR BEFORE
 INSERT
   OR
 UPDATE ON appointment FOR EACH ROW EXECUTE PROCEDURE deny_specialist_scheduling();
--- CREATE FUNCTION insert_availability() RETURNS trigger AS
-  -- $$
-  -- BEGIN
-  --     NEW.doctor_availability :=
-  --             array(select json_build_object('time', tstzrange(a, a + '1 hour'::interval, '[]'), 'taken', FALSE)
-  --                   from generate_series
-  --                            (
-  --                                timestamp '2020-03-10 09:00:00' at time zone 'utc',
-  --                                CURRENT_TIMESTAMP at time zone 'utc' + '1 YEAR',
-  --                                interval '1 HOUR'
-  --                            ) AS a (dt)
-  --                   WHERE MOD(EXTRACT(DOW FROM dt)::INTEGER, 6) != 0
-  --                     AND dt::TIME >= '09:00:00'
-  --                     AND dt::TIME < '17:00:00'::TIME);
-  --     RETURN NEW;
-  -- END
-  -- $$ LANGUAGE plpgsql;
-  --
-  -- CREATE TRIGGER insert_doctor_availability
-  --     BEFORE INSERT
-  --     ON doctor
-  --     FOR EACH ROW
-  --     WHEN (NEW.doctor_availability IS NULL)
-  -- EXECUTE PROCEDURE insert_availability();
-  -- INSERT INTO db_user(username, password, role)
-  -- VALUES ('doc1', '12345', 'doctor');
-  -- SELECT * FROM db_user;
-  --
-  -- INSERT INTO office(office_capacity, office_phone_number, office_opening_hour, office_address, office_specialty)
-  -- VALUES ('100', '7130000000',
-  --         CURRENT_TIME, '3333 Cullen St. Houston, TX 77777', 'ENT, Primary Care');
-  --
-  -- INSERT INTO doctor(doctor_address, doctor_first_name, doctor_last_name, doctor_phone_number, doctor_office, doctor_spec,
-  --                    doctor_user)
-  -- VALUES ('4444 Cullen St. Houston, TX 70000', 'Carlos', 'Rincon', '832000000', 1, 'ENT', 1);
-  --
-  --
-  -- SELECT (doctor_availability)
-  -- FROM doctor;
-  --
-  -- INSERT INTO doctor(doctor_address, doctor_first_name, doctor_last_name, doctor_phone_number, doctor_office, doctor_spec,
-  --                    doctor_user)
-  -- VALUES ('4444 Cullen St. Houston, TX 70000', 'Carlos2', 'Rincon2', '832000000', 1, 'ENT', 1);
-  --
-  -- INSERT INTO db_user(username, password)
-  -- VALUES ('patient1', '12345');
-  --
-  -- INSERT INTO patient(patient_first_name, patient_last_name, patient_email, patient_address, patient_phone_number,
-  --                     patient_gender, patient_dob, patient_user)
-  -- VALUES ('Michael', 'Austin', 'mpaustin@gmail.com', '4444 Cool St. Houston, TX 77005', '7136666666', 'Male',
-  --         '2020-03-10', (SELECT user_id FROM db_user WHERE username = 'patient1'));
-  --
-  -- INSERT INTO appointment(appt_patient, appt_doctor, appt_start, appt_end, appt_reason, appt_office)
-  -- VALUES ((SELECT patient_id from patient WHERE patient_first_name = 'Michael'),
-  --         (SELECT doctor_id from doctor WHERE doctor_first_name = 'Carlos'), CURRENT_TIMESTAMP,
-  --         CURRENT_TIMESTAMP + '1 HOUR', 'Sick', (SELECT doctor_office from doctor where doctor_first_name = 'Carlos'));
-  --
-  -- INSERT INTO test(test_date, test_scan, test_equipment, test_office, test_doctor, test_patient)
-  -- VALUES ('2020-03-10', TRUE, 'X-ray Machine', 1, 1, 1);
-  --
-  -- SELECT *
-  -- from doctor;
-  --
-  -- SELECT * FROM session;
-  -- SELECT * FROM json_each((SELECT doctor_availability[1] FROM doctor));
-  --
-  -- create index idx_availability on doctor using GIN(doctor_availability);
-  --
-  -- SELECT * FROM doctor WHERE doctor_availability @> '{[2020-03-10 09:00:00+00]}';
-  --
-  -- SELECT timezone('US/Central', CURRENT_TIMESTAMP);
-  -- "{\"time\" : \"[\\\"2020-03-10 09:00:00+00\\\",\\\"2020-03-10 10:00:00+00\\\"]\", \"taken\" : false}"
-  -- UPDATE doctor
-  -- set doctor_availability[1] = json_build_object('time', '["2020-03-10 09:00:00+00","2020-03-10 10:00:00+00"]'::tstzrange,
-  --                                                'taken', false);
-  --
