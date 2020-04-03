@@ -108,27 +108,8 @@ ADD
 ALTER TABLE appointment
 ADD
   CONSTRAINT fk_appointment_availability FOREIGN KEY (appointment_availability) REFERENCES availability (availability_id) ON DELETE CASCADE ON UPDATE CASCADE;
--- 1) Alert & deny patient user from scheduling appointment outside of doctor's availability dates / times
-  -- CREATE TRIGGER APPOINTMENT_OUTSIDE_DOCTOR_AVAILABILITY
-  --     BEFORE INSERT OR UPDATE
-  --     ON appointment
-  --     FOR EACH ROW
-  -- EXECUTE PROCEDURE deny_scheduling_alert_user();
-  -- CREATE FUNCTION deny_scheduling_alert_user() RETURNS trigger AS
-  -- $$
-  -- BEGIN
-  --     IF (NEW.appointment_start <
-  --         (SELECT availability_from_time FROM availability WHERE doctor_id = NEW.appointment_doctor) OR
-  --         (SELECT availability_to_time FROM availability WHERE doctor_id = NEW.appointment_doctor) <=
-  --         NEW.appointment_start)
-  --     THEN
-  --         RAISE EXCEPTION 'That doctor is not available during that time.';
-  --         RETURN NULL;
-  --     END IF;
-  --     RETURN NEW;
-  -- END
-  -- $$ LANGUAGE plpgsql;
-  -- 2) Alert & deny patient user from scheduling appointment with specialist if they don't have a primary care doctor assigned
+
+-- 1) Alert & deny patient user from scheduling appointment with specialist if they don't have a primary care doctor assigned
   CREATE FUNCTION deny_specialist_scheduling() RETURNS trigger AS $$ BEGIN IF (
     NEW.appointment_primary = FALSE
     AND (
@@ -149,7 +130,30 @@ ADD
 END IF;
 RETURN NEW;
 END $$ LANGUAGE plpgsql;
+
 CREATE TRIGGER SPECIALIST_APPOINTMENT_NO_PRIMARY_CARE_DOCTOR BEFORE
 INSERT
   OR
 UPDATE ON appointment FOR EACH ROW EXECUTE PROCEDURE deny_specialist_scheduling();
+
+
+
+-- 2) Deny doctor from updating diagnosis if patient doesn't have a primary care doctor
+CREATE FUNCTION deny_update_diagnosis() RETURNS trigger AS
+$$ BEGIN
+IF (
+    NEW.patient_primary_doctor IS NULL
+  )
+THEN
+  RETURN NULL;
+
+END IF;
+RETURN NEW;
+END $$ LANGUAGE plpgsql;
+
+CREATE TRIGGER UPDATE_DIAGNOSIS_NO_PRIMARY_DOCTOR BEFORE
+UPDATE OF patient_diagnosis ON patient
+FOR EACH ROW
+EXECUTE PROCEDURE deny_update_diagnosis();
+
+  

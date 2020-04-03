@@ -82,7 +82,7 @@ router.delete('/cancel', auth, async (req, res) => {
             return res.status(401).json({ message: 'You do not have an appointment scheduled then.' });
         }
 
-        const availability = await db.query('SELECT  FROM availability WHERE availability_id = $1',
+        const availability = await db.query('SELECT * FROM availability WHERE availability_id = $1',
             [appointment.rows[0].appointment_availability]);
 
         // setting taken condition to false
