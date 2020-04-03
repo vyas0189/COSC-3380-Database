@@ -23,6 +23,7 @@ router.get('/me', admin, async (req, res) => {
     }
 });
 
+
 router.post('/login', async (req, res) => {
     try {
         await validate(loginAdmin, req.body, req, res);

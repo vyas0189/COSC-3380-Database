@@ -13,10 +13,8 @@ router.post('/schedule/primaryAppointment', auth, async (req, res) => {
         const {
             primaryAppointment, reason, availabilityID,
         } = req.body;
-        console.log(req.user);
 
         const { userID } = req.user;
-        console.log(userID);
 
         const patient = await db.query('SELECT patient_id FROM patient WHERE patient_user = $1',
             [userID]);
@@ -48,11 +46,8 @@ router.post('/schedule/specialistAppointment', auth, async (req, res) => {
         const patient = await db.query('SELECT patient_id FROM patient WHERE patient_user = $1',
             [userID]);
 
-        console.log(patient.rows[0].patient_id);
-
         const appointment = await db.query('INSERT INTO appointment(appointment_patient, appointment_primary, appointment_reason, appointment_availability) VALUES($1, $2, $3, $4) RETURNING *',
             [patient.rows[0].patient_id, primaryAppointment, reason, availabilityID]);
-        console.log(appointment);
 
         if (appointment.rows.length === 0) {
             return res.status(401).json({ message: 'You must be approved by a primary doctor before you can see a specialist.' });
@@ -86,7 +81,7 @@ router.delete('/cancel', auth, async (req, res) => {
             return res.status(401).json({ message: 'You do not have an appointment scheduled then.' });
         }
 
-        await db.query('SELECT * FROM availability WHERE availability_id = $1',
+        const availability = await db.query('SELECT * FROM availability WHERE availability_id = $1',
             [appointment.rows[0].appointment_availability]);
 
         // setting taken condition to false
