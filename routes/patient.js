@@ -3,7 +3,6 @@ const { auth } = require('../middleware/auth');
 const { updatePatient, validate } = require('../validation');
 
 // registerPatient
-
 const router = Router();
 const db = require('../config/db');
 

@@ -21,10 +21,7 @@ module.exports = {
     doc: (req, res, next) => {
         try {
             const token = req.header('jwt_token');
-            // console.log(token);
             if (!token) {
-                console.log('in here');
-
                 return res.status(403).json({ message: 'Not Authorized' });
             }
 
@@ -47,8 +44,7 @@ module.exports = {
             }
 
             const payload = jwt.verify(token, JWT_SECRET);
-            console.log(payload);
-            
+
             if (payload.role === 'admin') {
                 req.user = payload;
                 return next();
