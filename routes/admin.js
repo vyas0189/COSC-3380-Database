@@ -1,9 +1,7 @@
 const { Router } = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const {
-    validate, registerAdmin, loginAdmin, registerDoctor, updateDoctorAdmin, cancelAppointmentAdmin,
-} = require('../validation');
+const { validate, registerAdmin, loginAdmin, registerDoctor, updateDoctorAdmin, cancelAppointmentAdmin, } = require('../validation');
 const { admin } = require('../middleware/auth');
 
 const { JWT_SECRET, SESSION_EXPIRES = 60 * 60 } = process.env;

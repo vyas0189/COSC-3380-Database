@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { doc } = require('../middleware/auth');
-const { updateDoctor, updateDiagnosis, orderTest, validate } = require('../validation');
+const { validate, updateDoctor, updateDiagnosis, orderTest } = require('../validation');
 
 const router = Router();
 const db = require('../config/db');

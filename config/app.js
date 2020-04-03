@@ -7,11 +7,12 @@ const compression = require('compression');
 const { join } = require('path');
 // const rateLimit = require('express-rate-limit');
 const db = require('./db');
+const admin = require('../routes/admin');
+const appointment = require('../routes/appointment');
 const auth = require('../routes/auth');
-const patient = require('../routes/patient');
 const doctor = require('../routes/doctor');
-const appointment = require('../routes/appointment')
-const admin = require('../routes/admin')
+const patient = require('../routes/patient');
+
 
 db.connect()
   .then(() => { console.log('Database connected!'); })
@@ -46,11 +47,11 @@ app.get('/', (req, res) => {
   res.json({ welcome: 'Hospital' });
 });
 
-app.use('/auth', auth);
 app.use('/admin', admin);
-app.use('/patient', patient);
-app.use('/doctor', doctor);
 app.use('/appointment', appointment);
+app.use('/auth', auth);
+app.use('/doctor', doctor);
+app.use('/patient', patient);
 
 
 if (isProduction) {
