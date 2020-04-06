@@ -17,7 +17,7 @@ const patient = require('../routes/patient');
 db.connect()
   .then(() => { console.log('Database connected!'); })
   .catch(async (err) => {
-    console.log(err);
+    console.error(err);
     await db.end();
   });
 
@@ -52,7 +52,6 @@ app.use('/api/appointment', appointment);
 app.use('/api/auth', auth);
 app.use('/api/doctor', doctor);
 app.use('/api/patient', patient);
-
 
 if (isProduction) {
   app.use(express.static(join(__dirname, '../client/build')));

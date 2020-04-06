@@ -124,5 +124,4 @@ router.post('/login/doctor', async (req, res) => {
 	}
 });
 
-
 module.exports = router;

@@ -71,7 +71,6 @@ router.post('/register/doctor', admin, async (req, res) => {
 
         const dbUser = await db.query('INSERT INTO db_user(username, password, role) VALUES ($1, $2, $3) RETURNING user_id, username, role',
             [username, hashedPassword, role]);
-        console.log(dbUser.rows[0]);
 
         const userAddress = await db.query('INSERT INTO address(address_name, address2_name, city, state, zip) VALUES($1, $2, $3, $4, $5) RETURNING *',
             [address, address2, city, state, zip]);
