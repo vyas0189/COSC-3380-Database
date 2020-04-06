@@ -153,11 +153,7 @@ router.put('/update/diagnosis', doc, async (req, res) => {
 
 		const update = await db.query(
 			'UPDATE patient SET patient_diagnosis = $1 WHERE patient_id = $2 RETURNING *',
-<<<<<<< HEAD
 			[diagnosis.rows[0].diagnosis_id, patientID]
-=======
-			[diagnosis.rows[0].diagnosis_id, patientID],
->>>>>>> bfeb4ca0587dcc6c58f3857784e58869dbfb4242
 		);
 
 		if (update.rows.length === 0) {
