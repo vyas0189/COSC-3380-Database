@@ -15,7 +15,7 @@ function App() {
   useEffect(() => {
     setAuthToken(localStorage.token)
     user();
-  }, [])
+  }, [user])
 
   return (
     <section>
