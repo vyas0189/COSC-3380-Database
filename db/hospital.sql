@@ -4,6 +4,7 @@ GRANT ALL ON SCHEMA public TO cqymabuhycrune;
 GRANT ALL ON SCHEMA public TO public;
 COMMENT ON SCHEMA public IS 'standard public schema';
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE db_user
 (
     user_id    UUID PRIMARY KEY NOT NULL                                                DEFAULT uuid_generate_v4(),
