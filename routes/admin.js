@@ -159,7 +159,6 @@ router.post('/register/office', admin, async (req, res) => {
 			state,
 			zip,
 			phoneNumber,
-			openingHour,
 		} = req.body;
 
 		const alreadyExists = await db.query(
@@ -183,8 +182,8 @@ router.post('/register/office', admin, async (req, res) => {
 		);
 
 		await db.query(
-			'INSERT INTO office(office_capacity, office_address, office_phone_number, office_opening_hour) VALUES($1, $2, $3, $4)',
-			[capacity, officeAddress.rows[0].address_id, phoneNumber, openingHour]
+			'INSERT INTO office(office_capacity, office_address, office_phone_number) VALUES($1, $2, $3, $4)',
+			[capacity, officeAddress.rows[0].address_id, phoneNumber]
 		);
 
 		res.status(200).json({ message: 'OK' });

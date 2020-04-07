@@ -72,10 +72,10 @@ const symptoms = Joi.string().required();
 const condition = Joi.string().required();
 
 // office schemas
-const capacity = Joi.number().max(4).required();
-const openingHour = Joi.string()
-	.regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])$/)
-	.required();
+const capacity = Joi.number().required();
+// const openingHour = Joi.string()
+// 	.regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
+// 	.required();
 
 module.exports = {
 	validate: async (schema, payload, req, res) => {
@@ -131,8 +131,7 @@ module.exports = {
 		city,
 		state,
 		zip,
-		phoneNumber,
-		openingHour,
+		phoneNumber
 	}),
 
 	// patient schemas
