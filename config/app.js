@@ -36,11 +36,11 @@ app.use(morgan('common'));
 // app.use(limiter);
 
 const isProduction = process.env.NODE_ENV === 'production';
-const origin = {
-  origin: isProduction ? 'https://www.example.com' : '*',
-};
+// const origin = {
+//   origin: isProduction ? 'https://www.example.com' : '*',
+// };
 
-app.use(cors(origin));
+app.use(cors());
 app.use(express.json({ extended: false }));
 
 app.get('/', (req, res) => {
