@@ -52,8 +52,7 @@ CREATE TABLE IF NOT EXISTS office
     office_id           UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
     office_capacity     INT              NOT NULL,
     office_address      UUID             NOT NULL REFERENCES address (address_id) ON DELETE CASCADE ON UPDATE CASCADE,
-    office_phone_number TEXT             NOT NULL,
-    office_opening_hour TIME             NOT NULL
+    office_phone_number TEXT             NOT NULL
 );
 CREATE TABLE IF NOT EXISTS doctor
 (

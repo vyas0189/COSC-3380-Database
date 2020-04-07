@@ -154,12 +154,13 @@ router.post('/register/office', admin, async (req, res) => {
 		const {
 			capacity,
 			address,
-			address2,
 			city,
 			state,
 			zip,
 			phoneNumber,
 		} = req.body;
+
+		let { address2 } = req.body;
 
 		const alreadyExists = await db.query(
 			'SELECT * FROM office WHERE office_phone_number = $1',
@@ -182,7 +183,7 @@ router.post('/register/office', admin, async (req, res) => {
 		);
 
 		await db.query(
-			'INSERT INTO office(office_capacity, office_address, office_phone_number) VALUES($1, $2, $3, $4)',
+			'INSERT INTO office(office_capacity, office_address, office_phone_number) VALUES($1, $2, $3)',
 			[capacity, officeAddress.rows[0].address_id, phoneNumber]
 		);
 
