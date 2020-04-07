@@ -8,9 +8,10 @@ const authModel = {
     loading: false,
     user: null,
     err: null,
+    loginErr: null,
 
     getCurrentPatient: thunk(async (action, _, { getState }) => {
-
+        action.setError(null)
         action.isLoading(true)
         try {
             const res = await axios.get('http://localhost:4000/api/auth/patient/me', {
@@ -26,13 +27,15 @@ const authModel = {
         } catch (err) {
             action.setAuthenticated(false)
             action.setUser(null)
-            action.setError(err)
+            action.setError(err.response.data.message)
         }
         action.isLoading(false);
     }),
 
     registerPatient: thunk(async (action, { username, password, role, email, firstName, lastName, address, address2, city, state, zip, phoneNumber, dob, gender }) => {
+        action.setError(null)
         action.isLoading(true);
+
         try {
             const res = await axios.post('http://localhost:4000/api/auth/register/patient', { username, password, role, email, firstName, lastName, address, address2, city, state, zip, phoneNumber, dob, gender })
 
@@ -42,12 +45,14 @@ const authModel = {
             }
         } catch (err) {
             action.setAuthenticated(false)
-            action.setError(err)
+            action.setError(err.response.data.message)
         }
         action.isLoading(false);
     }),
 
     loginPatient: thunk(async (action, { username, password }) => {
+        action.setError(null)
+        action.setLoginError(null)
         action.isLoading(true);
         try {
             const res = await axios.post('http://localhost:4000/api/auth/login/patient', { username, password });
@@ -61,7 +66,7 @@ const authModel = {
         } catch (err) {
             console.log(err.response);
 
-            action.setError(err.response.data.message)
+            action.setLoginError(err.response.data.message)
         }
         action.isLoading(false);
     }),
@@ -73,6 +78,7 @@ const authModel = {
         state.loading = false;
         state.user = null;
         state.err = null;
+        state.loginErr = null;
     }),
 
     isLoading: action((state, loading) => {
@@ -94,6 +100,10 @@ const authModel = {
 
     setError: action((state, error) => {
         state.err = error;
+    }),
+
+    setLoginError: action((state, error) => {
+        state.loginErr = error;
     })
 }
 

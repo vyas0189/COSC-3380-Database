@@ -1,4 +1,4 @@
-import { useStoreActions } from 'easy-peasy';
+import { useStoreActions, useStoreState } from 'easy-peasy';
 import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
 const Login = () => {
@@ -11,14 +11,14 @@ const Login = () => {
     const { username, password } = formData;
 
     const login = useStoreActions(actions => actions.auth.loginPatient)
-
-    const onChange = e =>
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+    const err = useStoreState(state => state.auth.loginErr)
+    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
     const onSubmit = async e => {
         e.preventDefault();
         const userLogin = { username, password }
         login(userLogin);
+        setFormData({ username: '', password: '' })
     };
 
     return (
@@ -53,6 +53,7 @@ const Login = () => {
             <p className='my-1'>
                 Don't have an account? <Link to='/register'>Sign Up</Link>
             </p>
+            {err ? <h1>{err}</h1> : null}
         </Fragment>
     )
 }
