@@ -40,7 +40,7 @@ const origin = {
   origin: isProduction ? 'https://www.example.com' : '*',
 };
 
-app.use(cors(origin));
+app.use(cors());
 app.use(express.json({ extended: false }));
 
 app.get('/', (req, res) => {
