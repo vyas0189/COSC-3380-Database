@@ -18,8 +18,8 @@ router.get('/patient/me', auth, async (req, res) => {
 			return res.status(200).json({ message: 'OK', user: user.rows[0] });
 		}
 		return res.status(401).json({ message: 'User not found' });
-	} catch (err) {
-		res.status(500).json({ message: 'Server Error' });
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error });
 	}
 });
 
@@ -30,8 +30,8 @@ router.get('/doctor/me', doc, async (req, res) => {
 			return res.status(200).json({ message: 'OK', user: user.rows[0] });
 		}
 		return res.status(401).json({ message: 'User not found' });
-	} catch (err) {
-		res.status(500).json({ message: 'Server Error' });
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error });
 	}
 });
 
@@ -74,8 +74,8 @@ router.post('/register/patient', async (req, res) => {
 		const token = jwt.sign(user, JWT_SECRET, { expiresIn: SESSION_EXPIRES });
 
 		return res.status(200).json({ message: 'OK', token });
-	} catch (err) {
-		res.status(500).json({ message: 'Enter the right Information', err });
+	} catch (error) {
+		res.status(500).json({ message: 'Enter the right Information', error });
 	}
 });
 
@@ -122,7 +122,7 @@ router.post('/login/doctor', async (req, res) => {
 
 		const token = jwt.sign(currentUser, JWT_SECRET, { expiresIn: SESSION_EXPIRES });
 		return res.status(200).json({ message: 'OK', token });
-	} catch (err) {
+	} catch (error) {
 		res.status(500).json({ message: 'Enter the valid Username or Password', error });
 	}
 });

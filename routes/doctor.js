@@ -62,8 +62,8 @@ router.put('/update', doc, async (req, res) => {
 		);
 
 		res.status(200).json({ message: 'OK' });
-	} catch (err) {
-		res.status(500).json({ message: 'Server Error', err });
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error });
 	}
 });
 
@@ -109,8 +109,8 @@ router.post('/order/test', doc, async (req, res) => {
 		);
 
 		res.status(200).json({ message: 'OK' });
-	} catch (err) {
-		res.status(500).json({ message: 'Server Error', err });
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error });
 	}
 });
 
@@ -165,8 +165,8 @@ router.put('/update/diagnosis', doc, async (req, res) => {
 		}
 
 		res.status(200).json({ message: 'OK' });
-	} catch (err) {
-		res.status(500).json({ message: 'Server Error', err });
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error });
 	}
 });
 

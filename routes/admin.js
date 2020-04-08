@@ -26,8 +26,8 @@ router.get('/me', admin, async (req, res) => {
             return res.status(200).json({ message: 'OK', user: user.rows[0] });
         }
         return res.status(401).json({ message: 'User not found' });
-    } catch (err) {
-        res.status(500).json({ message: 'Server Error', err });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error });
     }
 });
 
@@ -54,8 +54,8 @@ router.post('/create/admin', async (req, res) => {
         });
 
         res.status(200).json({ message: 'OK', token });
-    } catch (err) {
-        res.status(500).json({ message: 'Server Error', err });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error });
     }
 });
 
@@ -171,8 +171,8 @@ router.post('/register/doctor', admin, async (req, res) => {
         });
 
         res.status(200).json({ message: 'OK', token });
-    } catch (err) {
-        res.status(500).json({ message: 'Server Error', err });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error });
     }
 });
 
@@ -211,8 +211,8 @@ router.post('/register/office', admin, async (req, res) => {
         );
 
         res.status(200).json({ message: 'OK' });
-    } catch (err) {
-        res.status(500).json({ message: 'Server Error', err });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error });
     }
 });
 
@@ -238,8 +238,8 @@ router.put('/update/doctor', admin, async (req, res) => {
         );
 
         res.status(200).json({ message: 'OK' });
-    } catch (err) {
-        res.status(500).json({ message: 'Server Error', err });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error });
     }
 });
 
@@ -271,8 +271,8 @@ router.delete('/cancel', admin, async (req, res) => {
         );
 
         res.status(200).json({ message: 'OK - appointment deleted' });
-    } catch (err) {
-        res.status(500).json({ message: 'Server Error', err });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error });
     }
 });
 

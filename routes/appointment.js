@@ -29,8 +29,8 @@ router.post('/schedule/primaryAppointment', auth, async (req, res) => {
             [updatedAvailability.rows[0].doctor_id, patient.rows[0].patient_id]);
 
         res.status(200).json({ message: 'OK', appointment: appointment.rows[0] });
-    } catch (err) {
-        res.status(500).json({ message: 'Server Error', err });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error });
     }
 });
 
@@ -57,8 +57,8 @@ router.post('/schedule/specialistAppointment', auth, async (req, res) => {
             [availabilityID]);
 
         res.status(200).json({ message: 'OK', appointment: appointment.rows[0] });
-    } catch (err) {
-        res.status(500).json({ message: 'Server Error', err });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error });
     }
 });
 
@@ -93,8 +93,8 @@ router.delete('/cancel', auth, async (req, res) => {
 
 
         res.status(200).json({ message: 'OK - appointment deleted' });
-    } catch (err) {
-        res.status(500).json({ message: 'Server Error', err });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error });
     }
 });
 
@@ -113,8 +113,8 @@ router.get('/view/myAppointments', auth, async (req, res) => {
         }
 
         res.status(200).json({ message: 'OK', appointments: appointments.rows });
-    } catch (err) {
-        res.status(500).json({ message: 'Server Error', err });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error });
     }
 });
 
@@ -141,8 +141,8 @@ router.get('/view/appointmentsWithPatient', doc, async (req, res) => {
         }
 
         res.status(200).json({ message: 'OK', appointments: appointments.rows });
-    } catch (err) {
-        res.status(500).json({ message: 'Server Error', err });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error });
     }
 });
 
