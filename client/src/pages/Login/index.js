@@ -1,7 +1,7 @@
 import { useStoreState } from 'easy-peasy'
 import React from 'react'
 import { Redirect } from 'react-router-dom'
-import LoginComponent from '../../components/Auth/Login'
+import LoginComponent from '../../components/Auth/Patient/Login'
 
 const Login = () => {
 

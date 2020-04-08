@@ -12,11 +12,14 @@ const Login = () => {
 
     const login = useStoreActions(actions => actions.auth.loginPatient)
     const err = useStoreState(state => state.auth.loginErr)
-    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+    const onChange = e =>
+        setFormData({ ...formData, [e.target.name]: e.target.value });
 
     const onSubmit = async e => {
         e.preventDefault();
         const userLogin = { username, password }
+        console.log(userLogin);
+
         login(userLogin);
         setFormData({ username: '', password: '' })
     };

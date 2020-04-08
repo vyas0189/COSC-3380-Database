@@ -8,7 +8,7 @@ const db = require('../config/db');
 
 router.put('/update', auth, async (req, res) => {
     try {
-        await validate(updatePatient, req.body, req, res);
+        await updatePatient.validateAsync(req.body, { abortEarly: false });
         const {
             firstName, lastName, email, address, city, state, zip, phoneNumber, dob, gender,
         } = req.body;

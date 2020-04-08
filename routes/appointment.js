@@ -9,7 +9,7 @@ const db = require('../config/db');
 
 router.post('/schedule/primaryAppointment', auth, async (req, res) => {
     try {
-        await validate(schedulePrimaryAppointment, req.body, req, res);
+        await schedulePrimaryAppointment.validateAsync(req.body, { abortEarly: false });
         const {
             primaryAppointment, reason, availabilityID,
         } = req.body;
@@ -36,7 +36,7 @@ router.post('/schedule/primaryAppointment', auth, async (req, res) => {
 
 router.post('/schedule/specialistAppointment', auth, async (req, res) => {
     try {
-        await validate(scheduleSpecialistAppointment, req.body, req, res);
+        await scheduleSpecialistAppointment.validateAsync(req.body, { abortEarly: false });
         const {
             primaryAppointment, reason, availabilityID,
         } = req.body;
@@ -64,7 +64,7 @@ router.post('/schedule/specialistAppointment', auth, async (req, res) => {
 
 router.delete('/cancel', auth, async (req, res) => {
     try {
-        await validate(cancelAppointment, req.body, req, res);
+        await cancelAppointment.validateAsync(req.body, { abortEarly: false });
         const {
             appointmentID,
         } = req.body;
@@ -121,7 +121,7 @@ router.get('/view/myAppointments', auth, async (req, res) => {
 
 router.get('/view/appointmentsWithPatient', doc, async (req, res) => {
     try {
-        await validate(viewAppointmentsWithPatient, req.body, req, res);
+        await viewAppointmentsWithPatient.validateAsync(req.body, { abortEarly: false });
         const {
             patientID,
         } = req.body;

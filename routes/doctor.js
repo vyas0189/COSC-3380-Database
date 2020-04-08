@@ -12,7 +12,7 @@ const db = require('../config/db');
 
 router.put('/update', doc, async (req, res) => {
 	try {
-		await validate(updateDoctor, req.body, req, res);
+		await updateDoctor.validateAsync(req.body, { abortEarly: false });
 		const {
 			firstName,
 			lastName,
@@ -70,7 +70,7 @@ router.put('/update', doc, async (req, res) => {
 
 router.post('/order/test', doc, async (req, res) => {
 	try {
-		await validate(orderTest, req.body, req, res);
+		await orderTest.validateAsync(req.body, { abortEarly: false });
 		const {
 			patientID, scan, physical, blood,
 		} = req.body;
@@ -117,7 +117,7 @@ router.post('/order/test', doc, async (req, res) => {
 
 router.put('/update/diagnosis', doc, async (req, res) => {
 	try {
-		await validate(updateDiagnosis, req.body, req, res);
+		await updateDiagnosis.validateAsync(req.body, { abortEarly: false });
 		const { patientID, symptoms, condition } = req.body;
 
 		// const { userID } = req.user;

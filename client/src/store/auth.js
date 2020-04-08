@@ -9,6 +9,7 @@ const authModel = {
     user: null,
     err: null,
     loginErr: null,
+    registerErr: null,
 
     getCurrentPatient: thunk(async (action, _, { getState }) => {
         action.setError(null)
@@ -32,20 +33,23 @@ const authModel = {
         action.isLoading(false);
     }),
 
-    registerPatient: thunk(async (action, { username, password, role, email, firstName, lastName, address, address2, city, state, zip, phoneNumber, dob, gender }) => {
+    registerPatient: thunk(async (action, { username, password, role = 'patient', email, firstName, lastName, address, address2 = 'n/a', city, state, zip, phoneNumber, dob, gender }) => {
         action.setError(null)
         action.isLoading(true);
-
+        zip = parseInt(zip)
         try {
             const res = await axios.post('http://localhost:4000/api/auth/register/patient', { username, password, role, email, firstName, lastName, address, address2, city, state, zip, phoneNumber, dob, gender })
 
             if (res.status === 200 && res.data.message === 'OK') {
                 action.setToken(res.data.token);
                 action.setAuthenticated(true)
+                action.getCurrentPatient()
+
             }
         } catch (err) {
-            action.setAuthenticated(false)
-            action.setError(err.response.data.message)
+            console.log(err.response);
+
+            action.setRegisterError(err.response.data.message)
         }
         action.isLoading(false);
     }),
@@ -104,6 +108,10 @@ const authModel = {
 
     setLoginError: action((state, error) => {
         state.loginErr = error;
+    }),
+
+    setRegisterError: action((state, error) => {
+        state.registerErr = error;
     })
 }
 

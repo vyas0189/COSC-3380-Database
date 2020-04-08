@@ -37,7 +37,10 @@ router.get('/doctor/me', doc, async (req, res) => {
 
 router.post('/register/patient', async (req, res) => {
 	try {
-		await validate(registerPatient, req.body, req, res);
+		console.log(req.body);
+
+		// await validate(registerPatient, req.body, req, res);
+		await registerPatient.validateAsync(req.body, { abortEarly: false });
 		const {
 			username, password, role, firstName, lastName, email, address, city, state, zip, phoneNumber, dob, gender,
 		} = req.body;
@@ -70,15 +73,15 @@ router.post('/register/patient', async (req, res) => {
 
 		const token = jwt.sign(user, JWT_SECRET, { expiresIn: SESSION_EXPIRES });
 
-		res.status(200).json({ message: 'OK', token });
+		return res.status(200).json({ message: 'OK', token });
 	} catch (err) {
-		res.status(500).json({ message: 'Server Error' });
+		res.status(500).json({ message: 'Server Error', err });
 	}
 });
 
 router.post('/login/patient', async (req, res) => {
 	try {
-		await validate(loginPatient, req.body, req, res);
+		await loginPatient.validateAsync(req.body, { abortEarly: false });
 		const { username, password } = req.body;
 		const user = await db.query('SELECT * FROM db_user WHERE username = $1', [username]);
 
@@ -94,7 +97,7 @@ router.post('/login/patient', async (req, res) => {
 
 		const token = jwt.sign(currentUser, JWT_SECRET, { expiresIn: SESSION_EXPIRES });
 
-		res.status(200).json({ message: 'OK', token });
+		return res.status(200).json({ message: 'OK', token });
 	} catch (error) {
 		res.status(500).json({ message: 'Server Error' });
 	}
@@ -102,7 +105,7 @@ router.post('/login/patient', async (req, res) => {
 
 router.post('/login/doctor', async (req, res) => {
 	try {
-		await validate(loginDoctor, req.body, req, res);
+		await loginDoctor.validateAsync(req.body, { abortEarly: false });
 		const { username, password } = req.body;
 		const user = await db.query('SELECT * FROM db_user WHERE username = $1', [username]);
 
@@ -118,7 +121,7 @@ router.post('/login/doctor', async (req, res) => {
 		const currentUser = { userID: user.rows[0].user_id, role: user.rows[0].role };
 
 		const token = jwt.sign(currentUser, JWT_SECRET, { expiresIn: SESSION_EXPIRES });
-		res.status(200).json({ message: 'OK', token });
+		return res.status(200).json({ message: 'OK', token });
 	} catch (err) {
 		res.status(500).json({ message: 'Server Error' });
 	}
