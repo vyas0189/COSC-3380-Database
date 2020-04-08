@@ -3,7 +3,7 @@ import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 const Navbar = () => {
-    const logout = useStoreActions(actions => actions.auth.logoutPatient);
+    const logout = useStoreActions(actions => actions.auth.logout);
     const isAuthenticated = useStoreState(state => state.auth.isAuthenticated)
     const loading = useStoreState(state => state.auth.loading)
     const user = useStoreState(state => state.auth.user)
@@ -74,6 +74,8 @@ const Navbar = () => {
     const navLinks = () => {
         if (isAuthenticated) {
             if (user) {
+                console.log(user.role);
+
                 if (user.role === 'patient') {
                     return authLinks
                 } else if (user.role === 'doctor') {

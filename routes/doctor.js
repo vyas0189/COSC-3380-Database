@@ -1,7 +1,6 @@
 const { Router } = require('express');
 const { doc } = require('../middleware/auth');
 const {
-	validate,
 	updateDoctor,
 	updateDiagnosis,
 	orderTest,
@@ -153,7 +152,7 @@ router.put('/update/diagnosis', doc, async (req, res) => {
 
 		const update = await db.query(
 			'UPDATE patient SET patient_diagnosis = $1 WHERE patient_id = $2 RETURNING *',
-			[diagnosis.rows[0].diagnosis_id, patientID]
+			[diagnosis.rows[0].diagnosis_id, patientID],
 		);
 
 		if (update.rows.length === 0) {

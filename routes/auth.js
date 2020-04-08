@@ -2,7 +2,7 @@ const { Router } = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const {
-	validate, registerPatient, loginPatient, loginDoctor,
+	registerPatient, loginPatient, loginDoctor,
 } = require('../validation');
 const { auth, doc } = require('../middleware/auth');
 
@@ -75,7 +75,7 @@ router.post('/register/patient', async (req, res) => {
 
 		return res.status(200).json({ message: 'OK', token });
 	} catch (err) {
-		res.status(500).json({ message: 'Server Error', err });
+		res.status(500).json({ message: 'Enter the right Information', err });
 	}
 });
 
@@ -99,7 +99,7 @@ router.post('/login/patient', async (req, res) => {
 
 		return res.status(200).json({ message: 'OK', token });
 	} catch (error) {
-		res.status(500).json({ message: 'Server Error' });
+		res.status(500).json({ message: 'Enter the valid Username or Password', error });
 	}
 });
 
@@ -123,7 +123,7 @@ router.post('/login/doctor', async (req, res) => {
 		const token = jwt.sign(currentUser, JWT_SECRET, { expiresIn: SESSION_EXPIRES });
 		return res.status(200).json({ message: 'OK', token });
 	} catch (err) {
-		res.status(500).json({ message: 'Server Error' });
+		res.status(500).json({ message: 'Enter the valid Username or Password', error });
 	}
 });
 

@@ -2,7 +2,6 @@ const { Router } = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const {
-    validate,
     loginAdmin,
     registerDoctor,
     registerOffice,
@@ -20,7 +19,7 @@ const router = Router();
 router.get('/me', admin, async (req, res) => {
     try {
         const user = await db.query(
-            'SELECT * FROM db_user WHERE u.user_id = $1',
+            'SELECT * FROM db_user WHERE user_id = $1',
             [req.user.userID],
         );
         if (user.rows.length > 0) {
@@ -28,7 +27,7 @@ router.get('/me', admin, async (req, res) => {
         }
         return res.status(401).json({ message: 'User not found' });
     } catch (err) {
-        res.status(500).json({ message: 'Server Error' });
+        res.status(500).json({ message: 'Server Error', err });
     }
 });
 

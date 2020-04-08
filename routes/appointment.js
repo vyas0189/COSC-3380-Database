@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const { auth, doc } = require('../middleware/auth');
 const {
-    validate, schedulePrimaryAppointment, scheduleSpecialistAppointment, viewAppointmentsWithPatient, cancelAppointment,
+    schedulePrimaryAppointment, scheduleSpecialistAppointment, viewAppointmentsWithPatient, cancelAppointment,
 } = require('../validation');
 
 const router = Router();
