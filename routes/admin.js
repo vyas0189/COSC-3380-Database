@@ -8,6 +8,7 @@ const {
 	registerOffice,
 	updateDoctorAdmin,
 	cancelAppointmentAdmin,
+	registerAdmin,
 } = require('../validation');
 const { admin } = require('../middleware/auth');
 
@@ -28,6 +29,34 @@ router.get('/me', admin, async (req, res) => {
 		return res.status(401).json({ message: 'User not found' });
 	} catch (err) {
 		res.status(500).json({ message: 'Server Error' });
+	}
+});
+
+router.post('/create/admin', async (req, res) => {
+	try {
+		await validate(registerAdmin, req.body, req, res);
+
+		const { username, password, role } = req.body;
+
+		const hashedPassword = await bcrypt.hashSync(password, 10);
+
+		const dbUser = await db.query(
+			'INSERT INTO db_user(username, password, role) VALUES ($1, $2, $3) RETURNING user_id, username, role',
+			[username, hashedPassword, role]
+		);
+
+		const currentUser = {
+			userID: dbUser.rows[0].user_id,
+			role: dbUser.rows[0].role,
+		};
+
+		const token = jwt.sign(currentUser, JWT_SECRET, {
+			expiresIn: SESSION_EXPIRES,
+		});
+
+		res.status(200).json({ message: 'OK', token });
+	} catch (err) {
+		res.status(500).json({ message: 'Server Error', err });
 	}
 });
 
@@ -151,14 +180,7 @@ router.post('/register/doctor', admin, async (req, res) => {
 router.post('/register/office', admin, async (req, res) => {
 	try {
 		await validate(registerOffice, req.body, req, res);
-		const {
-			capacity,
-			address,
-			city,
-			state,
-			zip,
-			phoneNumber,
-		} = req.body;
+		const { capacity, address, city, state, zip, phoneNumber } = req.body;
 
 		let { address2 } = req.body;
 

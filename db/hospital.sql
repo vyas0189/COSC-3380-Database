@@ -28,7 +28,6 @@ CREATE TABLE IF NOT EXISTS patient
     patient_id               UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
     patient_first_name       VARCHAR(100)     NOT NULL,
     patient_last_name        VARCHAR(100)     NOT NULL,
-    patient_ssn              VARCHAR(100)     NOT NULL,
     patient_email            TEXT UNIQUE      NOT NULL,
     patient_phone_number     TEXT             NOT NULL,
     patient_gender           VARCHAR(7)       NOT NULL,
