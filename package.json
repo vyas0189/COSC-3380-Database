@@ -31,8 +31,8 @@
     "test": "cross-env NODE_ENV=test jest --testTimeout=10000",
     "dev": "cross-env NODE_ENV=development concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "prod": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
-    "eslint": "eslint ./config/ && eslint server.js",
-    "eslint-fix": "eslint ./config/ --fix && eslint server.js --fix"
+    "eslint": "eslint ./config/ && eslint ./middleware/ && eslint ./routes/ && eslint ./validation/ && eslint server.js",
+    "eslint-fix": "eslint ./config/ --fix && eslint ./middleware/ --fix && eslint ./routes/ --fix && eslint ./validation/ --fix && eslint server.js --fix"
   },
   "devDependencies": {
     "cross-env": "^7.0.2",

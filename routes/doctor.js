@@ -1,7 +1,6 @@
 const { Router } = require('express');
 const { doc } = require('../middleware/auth');
 const {
-	validate,
 	updateDoctor,
 	updateDiagnosis,
 	orderTest,
@@ -12,7 +11,7 @@ const db = require('../config/db');
 
 router.put('/update', doc, async (req, res) => {
 	try {
-		await validate(updateDoctor, req.body, req, res);
+		await updateDoctor.validateAsync(req.body, { abortEarly: false });
 		const {
 			firstName,
 			lastName,
@@ -63,14 +62,14 @@ router.put('/update', doc, async (req, res) => {
 		);
 
 		res.status(200).json({ message: 'OK' });
-	} catch (err) {
-		res.status(500).json({ message: 'Server Error', err });
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error });
 	}
 });
 
 router.post('/order/test', doc, async (req, res) => {
 	try {
-		await validate(orderTest, req.body, req, res);
+		await orderTest.validateAsync(req.body, { abortEarly: false });
 		const {
 			patientID, scan, physical, blood,
 		} = req.body;
@@ -110,14 +109,14 @@ router.post('/order/test', doc, async (req, res) => {
 		);
 
 		res.status(200).json({ message: 'OK' });
-	} catch (err) {
-		res.status(500).json({ message: 'Server Error', err });
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error });
 	}
 });
 
 router.put('/update/diagnosis', doc, async (req, res) => {
 	try {
-		await validate(updateDiagnosis, req.body, req, res);
+		await updateDiagnosis.validateAsync(req.body, { abortEarly: false });
 		const { patientID, symptoms, condition } = req.body;
 
 		// const { userID } = req.user;
@@ -153,7 +152,7 @@ router.put('/update/diagnosis', doc, async (req, res) => {
 
 		const update = await db.query(
 			'UPDATE patient SET patient_diagnosis = $1 WHERE patient_id = $2 RETURNING *',
-			[diagnosis.rows[0].diagnosis_id, patientID]
+			[diagnosis.rows[0].diagnosis_id, patientID],
 		);
 
 		if (update.rows.length === 0) {
@@ -166,8 +165,8 @@ router.put('/update/diagnosis', doc, async (req, res) => {
 		}
 
 		res.status(200).json({ message: 'OK' });
-	} catch (err) {
-		res.status(500).json({ message: 'Server Error', err });
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error });
 	}
 });
 

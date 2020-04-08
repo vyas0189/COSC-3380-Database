@@ -75,13 +75,13 @@ const condition = Joi.string().required();
 const capacity = Joi.number().required();
 
 module.exports = {
-	validate: async (schema, payload, req, res) => {
-		try {
-			await schema.validateAsync(payload, { abortEarly: false });
-		} catch (e) {
-			return res.status(500).json({ message: 'Unable to validate', e });
-		}
-	},
+	// validate: async (schema, payload, req, res) => {
+	// 	try {
+	// 		await schema.validateAsync(payload, { abortEarly: false });
+	// 	} catch (e) {
+	// 		return res.status(500).json({ message: 'Unable to validate', e });
+	// 	}
+	// },
 
 	// admin schemas
 
