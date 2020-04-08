@@ -16,11 +16,13 @@
     "express": "^4.17.1",
     "express-rate-limit": "^5.1.1",
     "express-session": "^1.17.0",
-    "helmet": "^3.21.2",
+    "helmet": "^3.22.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
-    "morgan": "^1.9.1",
-    "pg": "^7.18.2"
+    "morgan": "^1.10.0",
+    "pg": "^7.18.2",
+    "yarm": "^0.4.0",
+    "yarn": "^1.22.4"
   },
   "scripts": {
     "client": "cd client && yarn start",
@@ -37,12 +39,12 @@
   "devDependencies": {
     "cross-env": "^7.0.2",
     "eslint": "^6.8.0",
-    "eslint-config-airbnb": "^18.0.1",
-    "eslint-plugin-import": "^2.20.1",
+    "eslint-config-airbnb": "^18.1.0",
+    "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.18.3",
+    "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^1.7.0",
-    "jest": "^25.1.0",
+    "jest": "^25.2.7",
     "nodemon": "^2.0.2",
     "supertest": "^4.0.2"
   },
