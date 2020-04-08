@@ -1,4 +1,4 @@
-import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useStoreState } from 'easy-peasy';
 import React from 'react';
 import { Redirect, useLocation } from 'react-router-dom';
 import AdminLoginComponent from '../../components/Auth/Admin/Login';
@@ -9,8 +9,8 @@ const Login = () => {
 
     const location = useLocation()
     const isAuthenticated = useStoreState(state => state.auth.isAuthenticated)
-    const admin = useStoreActions(action => action.auth.getCurrentAdmin)
-    console.log(admin());
+    // const admin = useStoreActions(action => action.auth.getCurrentAdmin)
+    // console.log(admin());
 
     // return isAuthenticated ? <Redirect to='/dashboard' /> 
     if (isAuthenticated) {
