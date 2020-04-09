@@ -1,0 +1,34 @@
+body {
+	background-image: url('images/stethoscope.jpg');
+	background-repeat: no-repeat;
+}
+
+.header-1 {
+	font: Helvetica;
+	font-size: 100px;
+	margin: 50px 80px;
+	color: #143372;
+}
+
+.box-1 {
+	width: 45%;
+	text-align: center;
+	font: Helvetica;
+	font-size: 20px;
+	font-style: bold;
+	margin-top: -50px;
+	margin-left: 230px;
+	color: #143372;
+	box-sizing: border-box;
+}
+
+.footer {
+	width: 40%;
+	font: Helvetica;
+	font-size: 15px;
+	font-style: bold;
+	margin-top: 20px;
+	margin-left: 500px;
+	color: #143372;
+	box-sizing: border-box;
+}
