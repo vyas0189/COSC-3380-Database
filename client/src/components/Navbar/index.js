@@ -5,13 +5,13 @@ import logo from '../../assets/logo.png';
 import './Navbar.css';
 
 const Navbar = () => {
-    const logout = useStoreActions(actions => actions.auth.logout);
-    const isAuthenticated = useStoreState(state => state.auth.isAuthenticated)
-    const loading = useStoreState(state => state.auth.loading)
-    const user = useStoreState(state => state.auth.user)
-    const history = useHistory();
+	const logout = useStoreActions((actions) => actions.auth.logout);
+	const isAuthenticated = useStoreState((state) => state.auth.isAuthenticated);
+	const loading = useStoreState((state) => state.auth.loading);
+	const user = useStoreState((state) => state.auth.user);
+	const history = useHistory();
 
-    const logoutUser = () => {
+const logoutUser = () => {
         logout();
         history.push('/')
     }
@@ -97,10 +97,10 @@ const Navbar = () => {
         </ul>
     );
 
-    const navLinks = () => {
-        if (isAuthenticated) {
-            if (user) {
-                console.log(user.role);
+	const navLinks = () => {
+		if (isAuthenticated) {
+			if (user) {
+				console.log(user.role);
 
                 if (user.role === 'patient') {
                     return authLinks
@@ -154,4 +154,5 @@ const Navbar = () => {
     )
 }
 
-export default Navbar
+
+export default Navbar;
