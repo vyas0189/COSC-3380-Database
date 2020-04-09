@@ -1,7 +1,8 @@
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
-const Login = () => {
+
+const DoctorLoginComponent = () => {
 
     const [formData, setFormData] = useState({
         username: '',
@@ -10,20 +11,23 @@ const Login = () => {
 
     const { username, password } = formData;
 
-    const login = useStoreActions(actions => actions.auth.loginPatient)
+    const login = useStoreActions(actions => actions.auth.loginDoctor)
     const err = useStoreState(state => state.auth.loginErr)
-    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+    const onChange = e =>
+        setFormData({ ...formData, [e.target.name]: e.target.value });
 
     const onSubmit = async e => {
         e.preventDefault();
         const userLogin = { username, password }
+        console.log(userLogin);
+
         login(userLogin);
         setFormData({ username: '', password: '' })
     };
 
     return (
         <Fragment>
-            <h1 className='large text-primary'>Sign In</h1>
+            <h1 className='large text-primary'>Doctor Sign In</h1>
             <p className='lead'>
                 <i className='fas fa-user' /> Sign Into Your Account
       </p>
@@ -58,4 +62,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default DoctorLoginComponent

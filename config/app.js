@@ -16,8 +16,8 @@ const patient = require('../routes/patient');
 
 db.connect()
   .then(() => { console.log('Database connected!'); })
-  .catch(async (err) => {
-    console.error(err);
+  .catch(async (error) => {
+    console.error(error);
     await db.end();
   });
 

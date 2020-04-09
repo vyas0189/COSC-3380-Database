@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { auth } = require('../middleware/auth');
-const { updatePatient, validate } = require('../validation');
+const { updatePatient } = require('../validation');
 
 // registerPatient
 const router = Router();
@@ -8,7 +8,7 @@ const db = require('../config/db');
 
 router.put('/update', auth, async (req, res) => {
     try {
-        await validate(updatePatient, req.body, req, res);
+        await updatePatient.validateAsync(req.body, { abortEarly: false });
         const {
             firstName, lastName, email, address, city, state, zip, phoneNumber, dob, gender,
         } = req.body;
@@ -34,8 +34,8 @@ router.put('/update', auth, async (req, res) => {
 
 
         res.status(200).json({ message: 'OK' });
-    } catch (err) {
-        res.status(500).json({ message: 'Server Error', err });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error });
     }
 });
 

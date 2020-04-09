@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const { auth, doc } = require('../middleware/auth');
 const {
-    validate, schedulePrimaryAppointment, scheduleSpecialistAppointment, viewAppointmentsWithPatient, cancelAppointment,
+    schedulePrimaryAppointment, scheduleSpecialistAppointment, viewAppointmentsWithPatient, cancelAppointment,
 } = require('../validation');
 
 const router = Router();
@@ -9,7 +9,7 @@ const db = require('../config/db');
 
 router.post('/schedule/primaryAppointment', auth, async (req, res) => {
     try {
-        await validate(schedulePrimaryAppointment, req.body, req, res);
+        await schedulePrimaryAppointment.validateAsync(req.body, { abortEarly: false });
         const {
             primaryAppointment, reason, availabilityID,
         } = req.body;
@@ -29,14 +29,14 @@ router.post('/schedule/primaryAppointment', auth, async (req, res) => {
             [updatedAvailability.rows[0].doctor_id, patient.rows[0].patient_id]);
 
         res.status(200).json({ message: 'OK', appointment: appointment.rows[0] });
-    } catch (err) {
-        res.status(500).json({ message: 'Server Error', err });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error });
     }
 });
 
 router.post('/schedule/specialistAppointment', auth, async (req, res) => {
     try {
-        await validate(scheduleSpecialistAppointment, req.body, req, res);
+        await scheduleSpecialistAppointment.validateAsync(req.body, { abortEarly: false });
         const {
             primaryAppointment, reason, availabilityID,
         } = req.body;
@@ -57,14 +57,14 @@ router.post('/schedule/specialistAppointment', auth, async (req, res) => {
             [availabilityID]);
 
         res.status(200).json({ message: 'OK', appointment: appointment.rows[0] });
-    } catch (err) {
-        res.status(500).json({ message: 'Server Error', err });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error });
     }
 });
 
 router.delete('/cancel', auth, async (req, res) => {
     try {
-        await validate(cancelAppointment, req.body, req, res);
+        await cancelAppointment.validateAsync(req.body, { abortEarly: false });
         const {
             appointmentID,
         } = req.body;
@@ -93,8 +93,8 @@ router.delete('/cancel', auth, async (req, res) => {
 
 
         res.status(200).json({ message: 'OK - appointment deleted' });
-    } catch (err) {
-        res.status(500).json({ message: 'Server Error', err });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error });
     }
 });
 
@@ -113,15 +113,15 @@ router.get('/view/myAppointments', auth, async (req, res) => {
         }
 
         res.status(200).json({ message: 'OK', appointments: appointments.rows });
-    } catch (err) {
-        res.status(500).json({ message: 'Server Error', err });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error });
     }
 });
 
 
 router.get('/view/appointmentsWithPatient', doc, async (req, res) => {
     try {
-        await validate(viewAppointmentsWithPatient, req.body, req, res);
+        await viewAppointmentsWithPatient.validateAsync(req.body, { abortEarly: false });
         const {
             patientID,
         } = req.body;
@@ -141,8 +141,8 @@ router.get('/view/appointmentsWithPatient', doc, async (req, res) => {
         }
 
         res.status(200).json({ message: 'OK', appointments: appointments.rows });
-    } catch (err) {
-        res.status(500).json({ message: 'Server Error', err });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error });
     }
 });
 
