@@ -230,7 +230,7 @@ const RegisterComponent = () => {
             <p className='my-1'>
                 Already have an account? <Link to='/login'>Login</Link>
             </p>
-            {err ? <h1>{err}</h1> : null}
+
         </Fragment >
     )
 }

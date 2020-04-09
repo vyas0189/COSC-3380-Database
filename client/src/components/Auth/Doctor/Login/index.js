@@ -1,6 +1,5 @@
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import React, { Fragment, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 const DoctorLoginComponent = () => {
 
@@ -54,10 +53,6 @@ const DoctorLoginComponent = () => {
                 </div>
                 <input type='submit' className='btn btn-primary' value='Login' />
             </form>
-            <p className='my-1'>
-                Don't have an account? <Link to='/register'>Sign Up</Link>
-            </p>
-            {err ? <h1>{err}</h1> : null}
         </Fragment>
     )
 }

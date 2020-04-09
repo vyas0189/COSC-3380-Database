@@ -53,7 +53,7 @@ const Login = () => {
             <p className='my-1'>
                 Don't have an account? <Link to='/register'>Sign Up</Link>
             </p>
-            {err ? <h1>{err}</h1> : null}
+
         </Fragment>
     )
 }

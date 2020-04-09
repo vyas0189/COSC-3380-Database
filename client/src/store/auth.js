@@ -2,6 +2,7 @@ import axios from 'axios';
 import { action, thunk } from "easy-peasy";
 import { toast } from 'react-toastify';
 import setAuthToken from '../utils/setAuthToken';
+
 const authModel = {
     token: localStorage.getItem('token'),
     isAuthenticated: null,
@@ -67,8 +68,6 @@ const authModel = {
 
             if (res.status === 200) {
                 action.setAuthenticated(true)
-                console.log(res.data);
-
                 action.setUser(res.data.user)
             }
         } catch (err) {
@@ -79,7 +78,7 @@ const authModel = {
         action.isLoading(false);
     }),
 
-    registerPatient: thunk(async (action, { username, password, role = 'patient', email, firstName, lastName, address, address2 = 'n/a', city, state, zip, phoneNumber, dob, gender }) => {
+    registerPatient: thunk(async (action, { username, password, role = 'patient', email, firstName, lastName, address, address2, city, state, zip, phoneNumber, dob, gender }) => {
         action.setError(null)
         action.isLoading(true);
         zip = parseInt(zip)
@@ -88,12 +87,15 @@ const authModel = {
 
             if (res.status === 200 && res.data.message === 'OK') {
                 action.setToken(res.data.token);
+                setAuthToken(res.data.token);
                 action.setAuthenticated(true)
                 action.getCurrentPatient()
+                toast.success('Registered Successfully')
 
             }
         } catch (err) {
             action.setRegisterError(err.response.data.message)
+            toast.error(err.response.data.message)
         }
         action.isLoading(false);
     }),
