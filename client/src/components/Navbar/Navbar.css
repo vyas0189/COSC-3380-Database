@@ -1,0 +1,12 @@
+* {
+  font-family: 'Raleway', sans-serif;
+}
+
+img{
+    width: 13.4em;
+    height: 4.4em;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: white;
+}

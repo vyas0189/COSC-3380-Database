@@ -23,7 +23,7 @@ const App = () => {
   }, [user])
 
   return (
-    <section>
+    <>
       <Navbar />
       <Switch>
         <Route exact path="/" component={Home} />
@@ -34,7 +34,7 @@ const App = () => {
         <PrivateRoute exact path="/dashboard" component={Dashboard} />
 
       </Switch>
-    </section>
+    </>
   );
 }
 

@@ -1,0 +1,18 @@
+.prm {
+    background-color: rgb(117, 177, 197);
+    height: calc(100vh - 86.4px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.sheet {
+    background-color: white;
+    width: 500px;
+    border-radius: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}

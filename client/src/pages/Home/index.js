@@ -1,24 +1,27 @@
-import React from 'react'
+import { useStoreState } from 'easy-peasy';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import './Home.css';
-import logo from './logo.png';
+const Home = () => {
 
-console.log(logo); //logo192.png
+    const isAuth = useStoreState(state => state.auth.isAuthenticated);
 
-function Home() {
-
-    const homestyle = {
-        background: 'red', color: 'white', width: '110px'
-    }
-
-    return (
-        <div className ="home" >
-            <img src={logo} alt="Logo" />;
-            <logo192> </logo192>
-            <h1 style = {homestyle}>Home</h1>
-            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-            <h1>About Us:</h1>
-        </div>
-    )
+    return ( 
+		<header className = "masthead" >
+        	<div className = "container d-flex align-items-center" >
+        		<div className = "mx-auto text-center mainText" >
+        		<h1 className = "mx-auto my-0 text-uppercase" > Welcome to APlus Care! </h1> 
+				<h2 className = "text-black-90 mx-auto mt-2 mb-5" > We are a healthcare provider looking to connect patients with the care that they need.Please refer to our navigation bar to register or schedule an appointment. </h2>
+				{
+					<Link to = {
+            			isAuth ? '/schedule' : '/login'
+            		}
+            		className = "btn btn-primary-home js-scroll-trigger btn-home " > Schedule Now </Link>
+        		} 
+				</div>
+			</div>
+		</header>
+    );
 }
 
-export default Home
+export default Home;
