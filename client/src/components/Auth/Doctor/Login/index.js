@@ -1,4 +1,4 @@
-import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useStoreActions } from 'easy-peasy';
 import React, { Fragment, useState } from 'react';
 
 const DoctorLoginComponent = () => {
@@ -11,7 +11,6 @@ const DoctorLoginComponent = () => {
     const { username, password } = formData;
 
     const login = useStoreActions(actions => actions.auth.loginDoctor)
-    const err = useStoreState(state => state.auth.loginErr)
     const onChange = e =>
         setFormData({ ...formData, [e.target.name]: e.target.value });
 

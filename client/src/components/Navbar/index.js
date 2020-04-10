@@ -5,13 +5,13 @@ import logo from '../../assets/logo.png';
 import './Navbar.css';
 
 const Navbar = () => {
-	const logout = useStoreActions((actions) => actions.auth.logout);
-	const isAuthenticated = useStoreState((state) => state.auth.isAuthenticated);
-	const loading = useStoreState((state) => state.auth.loading);
-	const user = useStoreState((state) => state.auth.user);
-	const history = useHistory();
+    const logout = useStoreActions((actions) => actions.auth.logout);
+    const isAuthenticated = useStoreState((state) => state.auth.isAuthenticated);
+    const loading = useStoreState((state) => state.auth.loading);
+    const user = useStoreState((state) => state.auth.user);
+    const history = useHistory();
 
-const logoutUser = () => {
+    const logoutUser = () => {
         logout();
         history.push('/')
     }
@@ -97,10 +97,10 @@ const logoutUser = () => {
         </ul>
     );
 
-	const navLinks = () => {
-		if (isAuthenticated) {
-			if (user) {
-				console.log(user.role);
+    const navLinks = () => {
+        if (isAuthenticated) {
+            if (user) {
+                console.log(user.role);
 
                 if (user.role === 'patient') {
                     return authLinks
@@ -114,32 +114,11 @@ const logoutUser = () => {
         return guestLinks
     }
     return (
-        // <header className="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
-        //     <div className="container">
-
-        //         <div className="navbar-header">
-        //             <button className="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
-        //                 <span className="sr-only">Toggle navigation</span>
-        //                 <span className="icon-bar"></span>
-        //                 <span className="icon-bar"></span>
-        //                 <span className="icon-bar"></span>
-        //             </button>
-        //             <Link to='/'>
-        //                 <img src={logo} />
-        //             </Link>
-        //         </div>
-        //         <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
-        //             {!loading && (
-        //                 <>{navLinks()}</>
-        //             )}
-        //         </nav>
-        //     </div>
-        // </header>
 
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
 
             <Link to='/'>
-                <img src={logo} />
+                <img src={logo} alt="logo" />
             </Link>
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4"
                 aria-controls="navbarSupportedContent-4" aria-expanded="false" aria-label="Toggle navigation">

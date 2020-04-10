@@ -1,20 +1,26 @@
+import { useStoreState } from 'easy-peasy';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Home.css';
+const Home = () => {
 
-function Home() {
+	const isAuth = useStoreState(state => state.auth.isAuthenticated);
+
 	return (
-		<div>
-			<div class="header-1">Welcome to A Plus Care!</div>
-
-			<div class="box-1">
-				We are a healthcare provider looking to connect patients with the
-				care that they need. Please refer to our navigation bar to register or schedule an appointment.
+		<header className="masthead">
+			<div className="container d-flex align-items-center">
+				<div className="mx-auto text-center mainText">
+					<h1 className="mx-auto my-0 text-uppercase">Welcome to APlus Care!</h1>
+					<h2 className="text-black-90 mx-auto mt-2 mb-5">We are a healthcare provider looking to connect patients with the
+ 				care that they need. Please refer to our navigation bar to register or schedule an appointment.</h2>
+					{
+						<Link to={
+							isAuth ? '/schedule' : '/register'
+						} className="btn btn-primary-home js-scroll-trigger">Schedule Now</Link>
+					}
+				</div>
 			</div>
-
-			<div class="footer">
-				<p>&copy; MW Team 9 DB Group</p>
-			</div>
-		</div>
+		</header>
 	);
 }
 

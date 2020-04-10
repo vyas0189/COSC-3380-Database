@@ -1,4 +1,4 @@
-import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useStoreActions } from 'easy-peasy';
 import React, { useState } from 'react';
 import './Login.css';
 
@@ -12,7 +12,6 @@ const AdminLoginComponent = () => {
     const { username, password } = formData;
 
     const login = useStoreActions(actions => actions.auth.loginAdmin)
-    const err = useStoreState(state => state.auth.loginErr)
     const onChange = e =>
         setFormData({ ...formData, [e.target.name]: e.target.value });
 
