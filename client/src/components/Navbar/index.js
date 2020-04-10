@@ -44,7 +44,7 @@ const Navbar = () => {
                 </Link>
             </li>
             <li className="nav-item active">
-                <Link to='/doctorProfile'>Profile</Link>
+                <Link className="nav-link" to='/doctorProfile'>Profile</Link>
             </li>
             <li className="nav-item">
                 <i className="nav-link" onClick={logoutUser} >
