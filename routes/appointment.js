@@ -108,10 +108,6 @@ router.get('/view/myAppointments', auth, async (req, res) => {
         const appointments = await db.query('SELECT * FROM appointment WHERE appointment_patient = $1',
             [patient.rows[0].patient_id]);
 
-        if (appointments.rows.length === 0) {
-            return res.status(401).json({ message: 'You do not have any appointments scheduled.' });
-        }
-
         res.status(200).json({ message: 'OK', appointments: appointments.rows });
     } catch (error) {
         res.status(500).json({ message: 'Server Error', error });
@@ -135,10 +131,6 @@ router.get('/view/appointmentsWithPatient', doc, async (req, res) => {
 
         const appointments = await db.query('SELECT * FROM appointment WHERE appointment_patient = $1',
             [patientID]);
-
-        if (appointments.rows.length === 0) {
-            return res.status(401).json({ message: 'That patient does not have any appointments scheduled' });
-        }
 
         res.status(200).json({ message: 'OK', appointments: appointments.rows });
     } catch (error) {

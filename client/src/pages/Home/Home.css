@@ -1,34 +1,80 @@
-body {
-	background-image: url('images/stethoscope.jpg');
+.masthead {
+	position: relative;
+	width: 100%;
+	height: calc(100vh - 86.4px);
+	min-height: 35rem;
+	padding: 2rem 0;
+	background:linear-gradient(rgba(17, 16, 16, 0.2), rgba(17, 1, 1, 0.2)), url('../../assets/stethoscope.jpg');
+	background-position: center 0;
 	background-repeat: no-repeat;
-}
+	background-attachment: scroll;
+	background-size: cover;
+  }
+  
+  .masthead h1 {
+	font-family: 'Varela Round';
+	font-size: 1.5rem;
+	line-height: 2.5rem;
+	letter-spacing: 0.8rem;
+	margin-top: .3em;
+  }
+  
+  .masthead h2 {
+	max-width: 20rem;
+	font-size: 1rem;
+  }
+  
+  @media (min-width: 768px) {
+	.masthead h1 {
+	  font-size: 4rem;
+	  line-height: 4rem;
+	}
+  }
+  
+  @media (min-width: 992px) {
+	.masthead {
+	  padding: 0;
+	  margin: 0;
+	}
+	.masthead h1 {
+	  font-size: 4.5rem;
+	  line-height: 6.5rem;
+	  letter-spacing: 0.8rem;
+	}
+	.masthead h2 {
+	  max-width: 50rem;
+	  font-size: 1.25rem;
+	}
 
-.header-1 {
-	font: Helvetica;
-	font-size: 100px;
-	margin: 50px 80px;
-	color: #143372;
-}
-
-.box-1 {
-	width: 45%;
-	text-align: center;
-	font: Helvetica;
-	font-size: 20px;
-	font-style: bold;
-	margin-top: -50px;
-	margin-left: 230px;
-	color: #143372;
-	box-sizing: border-box;
-}
-
-.footer {
-	width: 40%;
-	font: Helvetica;
-	font-size: 15px;
-	font-style: bold;
-	margin-top: 20px;
-	margin-left: 500px;
-	color: #143372;
-	box-sizing: border-box;
-}
+	.mainText {
+		margin-top: 3.3em;
+	}
+  }
+  
+  .btn {
+	box-shadow: 0 0.1875rem 0.1875rem 0 rgba(0, 0, 0, 0.1) !important;
+	padding: 1.25rem 2rem;
+	font-family: 'Varela Round';
+	font-size: 80%;
+	text-transform: uppercase;
+	letter-spacing: .15rem;
+	border: 0;
+  }
+  
+  .btn-primary-home {
+	background-color: #343a40;
+	color: white;
+  }
+  
+  .btn-primary-home:hover {
+	background-color: #4f837f;
+  }
+  
+  .btn-primary-home:focus {
+	background-color: #4f837f;
+	color: white;
+  }
+  
+  .btn-primary-home:active {
+	background-color: #467370 !important;
+  }

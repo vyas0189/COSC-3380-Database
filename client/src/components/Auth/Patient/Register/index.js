@@ -1,4 +1,4 @@
-import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useStoreActions } from 'easy-peasy';
 import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -22,8 +22,7 @@ const RegisterComponent = () => {
 
     const { username, password, email, firstName, lastName, address, address2, city, state, zip, phoneNumber, dob, gender } = formData;
 
-    const register = useStoreActions(actions => actions.auth.registerPatient)
-    const err = useStoreState(state => state.auth.registerErr)
+    const register = useStoreActions(actions => actions.auth.registerPatient);
     const onChange = e => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     }
@@ -32,7 +31,6 @@ const RegisterComponent = () => {
         e.preventDefault();
         const userRegister = { username, password, email, firstName, lastName, address, address2, city, state, zip, phoneNumber, dob, gender }
         register(userRegister);
-        // setFormData({ username: '', password: '', email: '', firstName: '', lastName: '', address: '', address2: '', city: '', state: '', zip: null, phoneNumber: '', dob: '', gender: '' })
     };
 
     return (
@@ -230,7 +228,7 @@ const RegisterComponent = () => {
             <p className='my-1'>
                 Already have an account? <Link to='/login'>Login</Link>
             </p>
-            {err ? <h1>{err}</h1> : null}
+
         </Fragment >
     )
 }

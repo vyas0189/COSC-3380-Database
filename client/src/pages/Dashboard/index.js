@@ -3,7 +3,6 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 const Dashboard = () => {
 
-    //   const user = useStoreActions(actions => actions.auth.getCurrentPatient)
     const user = useStoreState(state => state.auth.user);
     const isLoading = useStoreState(state => state.auth.loading)
     const isAuth = useStoreState(state => state.auth.isAuthenticated)
