@@ -4,5 +4,7 @@ import { toast } from 'react-toastify';
 import setAuthToken from '../utils/setAuthToken';
 
 export const patientModel = {
-
+    userLoading: false,
+    appointments: [],
+    
 }

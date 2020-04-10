@@ -74,7 +74,6 @@ const Navbar = () => {
 
             <li className="nav-item">
                 <Link className="nav-link" to="/">About Us
-                    <span className="sr-only">(current)</span>
                 </Link>
             </li>
 

@@ -15,8 +15,8 @@ const Home = () => {
  				care that they need. Please refer to our navigation bar to register or schedule an appointment.</h2>
 					{
 						<Link to={
-							isAuth ? '/schedule' : '/register'
-						} className="btn btn-primary-home js-scroll-trigger">Schedule Now</Link>
+							isAuth ? '/schedule' : '/login'
+						} className="btn btn-primary-home js-scroll-trigger btn-home ">Schedule Now</Link>
 					}
 				</div>
 			</div>
