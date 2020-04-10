@@ -4,7 +4,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const compression = require('compression');
-const { join } = require('path');
+const { join, resolve } = require('path');
 // const rateLimit = require('express-rate-limit');
 const db = require('./db');
 const admin = require('../routes/admin');
@@ -56,7 +56,7 @@ app.use('/api/patient', patient);
 if (isProduction) {
   app.use(express.static(join(__dirname, '../client/build')));
   app.get('*', (req, res) => {
-    res.sendFile(join(__dirname, '../client/build', 'index.html'));
+    res.sendFile(resolve(__dirname, '../client/build', 'index.html'));
   });
 }
 

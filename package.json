@@ -30,7 +30,7 @@
     "build": "yarn && cd client && yarn && yarn build",
     "test": "cross-env NODE_ENV=test jest --testTimeout=10000",
     "dev": "cross-env NODE_ENV=development concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
-    "prod": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+    "prod": "cross-env NODE_ENV=production concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "eslint": "eslint ./config/ && eslint ./middleware/ && eslint ./routes/ && eslint ./validation/ && eslint server.js",
     "eslint-fix": "eslint ./config/ --fix && eslint ./middleware/ --fix && eslint ./routes/ --fix && eslint ./validation/ --fix && eslint server.js --fix",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false yarn --prefix client && yarn build --prefix client"
