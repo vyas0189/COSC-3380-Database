@@ -132,9 +132,7 @@ INSERT
   OR
 UPDATE ON appointment FOR EACH ROW EXECUTE PROCEDURE deny_specialist_scheduling();
 -- 2) Deny doctor from updating diagnosis if patient doesn't have a primary care doctor
-  CREATE FUNCTION deny_update_diagnosis() RETURNS trigger AS $$ BEGIN IF (
-    NEW.patient_primary_doctor IS NULL
-  ) THEN RETURN NULL;
+  CREATE FUNCTION deny_update_diagnosis() RETURNS trigger AS $$ BEGIN IF (NEW.patient_primary_doctor IS NULL) THEN RETURN NULL;
 END IF;
 RETURN NEW;
 END $$ LANGUAGE plpgsql;
