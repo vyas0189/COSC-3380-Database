@@ -32,7 +32,7 @@ const AdminLoginComponent = () => {
                         <div className="container">
                             <div className="row">
                                 <div className="col-md-9 col-lg-8 mx-auto">
-                                    <h3 className="login-heading mb-4">Welcome back!</h3>
+                                    <h3 className="login-heading  mb-4">Welcome back!</h3>
                                     <form onSubmit={e => onSubmit(e)}>
                                         <div className="form-label-group">
                                             <input type="text" id="inputUsername" className="form-control" placeholder="Username"

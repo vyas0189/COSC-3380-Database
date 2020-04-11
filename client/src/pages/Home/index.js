@@ -16,7 +16,7 @@ const Home = () => {
 					{
 						<Link to={
 							isAuth ? '/schedule' : '/login'
-						} className="btn btn-primary-home js-scroll-trigger btn-home ">Schedule Now</Link>
+						} className="btn btn-primary-home js-scroll-trigger btn-home text-uppercase">Schedule Now</Link>
 					}
 				</div>
 			</div>
