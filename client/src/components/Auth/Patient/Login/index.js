@@ -8,7 +8,6 @@ const Login = () => {
 		username: '',
 		password: '',
 	});
-
 	const { username, password } = formData;
 
 	const login = useStoreActions((actions) => actions.auth.loginPatient);
@@ -23,6 +22,7 @@ const Login = () => {
 
 	return (
 		<Fragment>
+
 			<div className="container-fluid">
 				<div className="row no-gutter">
 					<div className="d-none d-md-flex col-md-4 col-lg-6 bg-patient-login"></div>

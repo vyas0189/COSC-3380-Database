@@ -29,11 +29,11 @@ router.put('/update', auth, async (req, res) => {
             [address, address2, city, state, zip, user.rows[0].patient_address]);
 
         // UPDATE PATIENT TABLE
-        await db.query('UPDATE patient SET patient_first_name = $1, patient_last_name = $2, patient_email = $3, patient_phone_number = $4, patient_gender = $5, patient_dob = $6 WHERE patient_user = $7',
+        const patient = await db.query('UPDATE patient SET patient_first_name = $1, patient_last_name = $2, patient_email = $3, patient_phone_number = $4, patient_gender = $5, patient_dob = $6 WHERE patient_user = $7 RETURNING *',
             [firstName, lastName, email, phoneNumber, gender, dob, userID]);
 
 
-        res.status(200).json({ message: 'OK' });
+        res.status(200).json({ message: 'OK', patient: patient.row[0] });
     } catch (error) {
         res.status(500).json({ message: 'Server Error', error });
     }

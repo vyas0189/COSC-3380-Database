@@ -41,7 +41,7 @@ router.post('/create/admin', async (req, res) => {
 
 		const dbUser = await db.query(
 			'INSERT INTO db_user(username, password, role) VALUES ($1, $2, $3) RETURNING user_id, username, role',
-			[username, hashedPassword, role]
+			[username, hashedPassword, role],
 		);
 
 		const currentUser = {
@@ -74,7 +74,7 @@ router.post('/login', async (req, res) => {
 		}
 		const validPassword = await bcrypt.compare(
 			password,
-			user.rows[0].password
+			user.rows[0].password,
 		);
 
 		if (!validPassword) {
@@ -121,7 +121,7 @@ router.post('/register/doctor', admin, async (req, res) => {
 
 		const user = await db.query(
 			'SELECT * FROM db_user u JOIN doctor d ON u.user_id = d.doctor_id WHERE u.username = $1 OR d.doctor_email = $2',
-			[username, email]
+			[username, email],
 		);
 
 		if (user.rows.length > 0) {
@@ -138,12 +138,12 @@ router.post('/register/doctor', admin, async (req, res) => {
 
 		const dbUser = await db.query(
 			'INSERT INTO db_user(username, password, role) VALUES ($1, $2, $3) RETURNING user_id, username, role',
-			[username, hashedPassword, role]
+			[username, hashedPassword, role],
 		);
 
 		const userAddress = await db.query(
 			'INSERT INTO address(address_name, address2_name, city, state, zip) VALUES($1, $2, $3, $4, $5) RETURNING *',
-			[address, address2, city, state, zip]
+			[address, address2, city, state, zip],
 		);
 
 		await db.query(
@@ -158,7 +158,7 @@ router.post('/register/doctor', admin, async (req, res) => {
 				specialty,
 				office,
 				dbUser.rows[0].user_id,
-			]
+			],
 		);
 
 		const currentUser = {
@@ -179,13 +179,15 @@ router.post('/register/doctor', admin, async (req, res) => {
 router.post('/register/office', admin, async (req, res) => {
 	try {
 		await registerOffice.validateAsync(req.body, { abortEarly: false });
-		const { capacity, address, city, state, zip, phoneNumber } = req.body;
+		const {
+			capacity, address, city, state, zip, phoneNumber,
+		} = req.body;
 
 		let { address2 } = req.body;
 
 		const alreadyExists = await db.query(
 			'SELECT * FROM office WHERE office_phone_number = $1',
-			[phoneNumber]
+			[phoneNumber],
 		);
 
 		if (alreadyExists.rows.length > 0) {
@@ -200,12 +202,12 @@ router.post('/register/office', admin, async (req, res) => {
 
 		const officeAddress = await db.query(
 			'INSERT INTO address(address_name, address2_name, city, state, zip) VALUES($1, $2, $3, $4, $5) RETURNING *',
-			[address, address2, city, state, zip]
+			[address, address2, city, state, zip],
 		);
 
 		await db.query(
 			'INSERT INTO office(office_capacity, office_address, office_phone_number) VALUES($1, $2, $3)',
-			[capacity, officeAddress.rows[0].address_id, phoneNumber]
+			[capacity, officeAddress.rows[0].address_id, phoneNumber],
 		);
 
 		res.status(200).json({ message: 'OK' });
@@ -217,11 +219,13 @@ router.post('/register/office', admin, async (req, res) => {
 router.put('/update/doctor', admin, async (req, res) => {
 	try {
 		await updateDoctorAdmin.validateAsync(req.body, { abortEarly: false });
-		const { doctorID, primary, specialty, office } = req.body;
+		const {
+			doctorID, primary, specialty, office,
+		} = req.body;
 
 		const doctor = await db.query(
 			'SELECT * FROM doctor WHERE doctor_id = $1',
-			[doctorID]
+			[doctorID],
 		);
 
 		if (doctor.rows.length === 0) {
@@ -230,7 +234,7 @@ router.put('/update/doctor', admin, async (req, res) => {
 
 		await db.query(
 			'UPDATE doctor SET doctor_primary = $1, doctor_specialty = $2, doctor_office = $3 WHERE doctor_id = $4',
-			[primary, specialty, office, doctorID]
+			[primary, specialty, office, doctorID],
 		);
 
 		res.status(200).json({ message: 'OK' });
@@ -248,7 +252,7 @@ router.delete('/cancel', admin, async (req, res) => {
 
 		const appointment = await db.query(
 			'SELECT * FROM appointment WHERE appointment_id = $1 AND appointment_patient = $2',
-			[appointmentID, patientID]
+			[appointmentID, patientID],
 		);
 
 		if (appointment.rows.length === 0) {
@@ -260,12 +264,12 @@ router.delete('/cancel', admin, async (req, res) => {
 		// setting taken condition to false
 		await db.query(
 			'UPDATE availability SET availability_taken = FALSE WHERE availability_id = $1',
-			[appointment.rows[0].appointment_availability]
+			[appointment.rows[0].appointment_availability],
 		);
 
 		await db.query(
 			'DELETE FROM appointment WHERE appointment_id = $1 AND appointment_patient = $2',
-			[appointmentID, patientID]
+			[appointmentID, patientID],
 		);
 
 		res.status(200).json({ message: 'OK - appointment deleted' });
@@ -281,7 +285,7 @@ router.get('/view/weeklyNewUsers', admin, async (req, res) => {
 
 		const newUsers = await db.query(
 			'SELECT * from db_user WHERE created_at::date >= $1 AND created_at::date <= $2',
-			[weekStartDate, weekEndDate]
+			[weekStartDate, weekEndDate],
 		);
 
 		res.status(200).json({ message: 'OK', newUsers: newUsers.rows });
@@ -297,7 +301,7 @@ router.get('/view/weeklyUpdatedUsers', admin, async (req, res) => {
 
 		const updatedUsers = await db.query(
 			'SELECT * FROM db_user WHERE updated_at::date >= $1 AND updated_at::date <= $2',
-			[weekStartDate, weekEndDate]
+			[weekStartDate, weekEndDate],
 		);
 
 		res.status(200).json({ message: 'OK', updatedUsers: updatedUsers.rows });

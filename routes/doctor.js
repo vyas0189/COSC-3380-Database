@@ -116,12 +116,6 @@ router.put('/update/diagnosis', doc, async (req, res) => {
 		await updateDiagnosis.validateAsync(req.body, { abortEarly: false });
 		const { patientID, symptoms, condition } = req.body;
 
-		// const { userID } = req.user;
-		// const user = await db.query(
-		// 	'SELECT user_id FROM db_user WHERE user_id = $1',
-		// 	[userID],
-		// );
-
 		const patient = await db.query(
 			'SELECT * FROM patient WHERE patient_id = $1',
 			[patientID]
