@@ -199,12 +199,7 @@ const authModel = {
         state.loginErr = null;
         state.loginErr = null;
         state.registerErr = null;
-<<<<<<< HEAD
-        // toast.POSITION.TOP_CENTER; 
-        toast.success('You have successfully Logged out!', { position: toast.POSITION.TOP_CENTER })
-=======
         toast.success('You have Successfully Logged out!', { position: toast.POSITION.TOP_CENTER })
->>>>>>> ec928ce79d8bbe383f0918aa8bc78f46bc1045d3
     }),
 
     isLoading: action((state, loading) => {
