@@ -44,6 +44,11 @@ const NavbarComponent = () => {
                     Dashboard
                 </Link>
             </li>
+            <li className="nav-item">
+                <Link className="nav-link" to='/doctorSchedule'>
+                    Schedule
+                </Link>
+            </li>
             <li className="nav-item active">
                 <Link className="nav-link" to='/doctorProfile'>Profile</Link>
             </li>
