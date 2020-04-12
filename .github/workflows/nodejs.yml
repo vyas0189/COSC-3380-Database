@@ -26,5 +26,5 @@ jobs:
       - run: yarn build --if-present
       - run: yarn test
         env:
-          CI: ""
+          CI: false
           SKIP_PREFLIGHT_CHECK: true
