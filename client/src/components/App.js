@@ -10,6 +10,7 @@ import Register from '../pages/Register';
 import setAuthToken from '../utils/setAuthToken';
 import Navbar from './Navbar';
 import PrivateRoute from './ProtectedRoute';
+import NotFoundPage from '../pages/NotFound';
 
 
 toast.configure();
@@ -32,6 +33,7 @@ const App = () => {
         <Route exact path="/login/doctor" component={Login} />
         <Route exact path="/login/admin" component={Login} />
         <PrivateRoute exact path="/dashboard" component={Dashboard} />
+        <Route component={NotFoundPage} />
 
       </Switch>
     </>
