@@ -1,32 +1,31 @@
 import { useStoreActions } from 'easy-peasy';
 import React, { Fragment, useState } from 'react';
-import { Link } from 'react-router-dom';
 import './Login.css';
 
 
 const DoctorLoginComponent = () => {
 
-    const [formData, setFormData] = useState({
-        username: '',
-        password: ''
-    });
+	const [formData, setFormData] = useState({
+		username: '',
+		password: ''
+	});
 
-    const { username, password } = formData;
+	const { username, password } = formData;
 
-    const login = useStoreActions(actions => actions.auth.loginDoctor)
-    const onChange = e =>
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+	const login = useStoreActions(actions => actions.auth.loginDoctor)
+	const onChange = e =>
+		setFormData({ ...formData, [e.target.name]: e.target.value });
 
-    const onSubmit = async e => {
-        e.preventDefault();
-        const userLogin = { username, password }
-        console.log(userLogin);
+	const onSubmit = async e => {
+		e.preventDefault();
+		const userLogin = { username, password }
+		console.log(userLogin);
 
-        login(userLogin);
-        setFormData({ username: '', password: '' })
-    };
+		login(userLogin);
+		setFormData({ username: '', password: '' })
+	};
 
-    return (
+	return (
 		<Fragment>
 			<div className="container-fluid">
 				<div className="row no-gutter">
@@ -71,13 +70,12 @@ const DoctorLoginComponent = () => {
 													Password
 												</label>
 											</div>
-
 											<button
 												className="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2"
 												type="submit"
 											>
 												Sign in
-											</button>										
+											</button>
 										</form>
 									</div>
 								</div>
