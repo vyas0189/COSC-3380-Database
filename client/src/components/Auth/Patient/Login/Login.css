@@ -8,7 +8,7 @@
 	min-height: calc(100vh - 86.4px);
 }
 
-.bg-image {
+.bg-patient-login {
 	background-image: url('../../../../assets/patient/patient-login.jpeg');
 	background-size: cover;
 	background-position: center;

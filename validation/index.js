@@ -45,16 +45,12 @@ const primary = Joi.boolean().required();
 const specialty = Joi.string().max(20).required();
 const office = Joi.string().guid().required();
 const doctorID = Joi.string().guid().required();
-// const doctorEmail = Joi.string().email().min(8).max(245)
-//     .lowercase()
-//     .trim()
-//     .required();
+const availabilityDate = Joi.date().required();
+const officeID = Joi.string().guid().required();
+const taken = Joi.boolean().required();
 
 // appointment schema
 
-// const date = Joi.date().required();
-
-// const endTime = Joi.string().regex(/^(1[0-2]|0?[1-9]):([0-5][0-9])([ ])([AaPp][Mm])$/).required();
 const primaryAppointment = Joi.boolean().required();
 const reason = Joi.string().required();
 const availabilityID = Joi.string().guid().required();
@@ -205,6 +201,14 @@ module.exports = {
 		scan,
 		physical,
 		blood,
+	}),
+	addAvailability: Joi.object().keys({
+		officeID,
+		availabilityDate,
+	}),
+	updateAvailability: Joi.object().keys({
+		availabilityID,
+		taken,
 	}),
 
 	// appointment schemas
