@@ -23,9 +23,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: unset CI
       - run: yarn build --if-present
       - run: yarn test
         env:
-          CI: " "
+          CI: "false"
           SKIP_PREFLIGHT_CHECK: true
