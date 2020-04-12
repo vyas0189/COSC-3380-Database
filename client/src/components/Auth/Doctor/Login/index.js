@@ -19,7 +19,6 @@ const DoctorLoginComponent = () => {
 	const onSubmit = async e => {
 		e.preventDefault();
 		const userLogin = { username, password }
-		console.log(userLogin);
 
 		login(userLogin);
 		setFormData({ username: '', password: '' })

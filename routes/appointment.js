@@ -92,7 +92,7 @@ router.delete('/cancel', auth, async (req, res) => {
             [appointmentID, patient.rows[0].patient_id]);
 
 
-        res.status(200).json({ message: 'OK - appointment deleted' });
+        res.status(200).json({ message: 'OK' });
     } catch (error) {
         res.status(500).json({ message: 'Server Error', error });
     }
@@ -101,12 +101,10 @@ router.delete('/cancel', auth, async (req, res) => {
 router.get('/view/myAppointments', auth, async (req, res) => {
     try {
         const { userID } = req.user;
-
         const patient = await db.query('SELECT patient_id FROM patient WHERE patient_user = $1',
             [userID]);
 
-        const appointments = await db.query('SELECT * FROM appointment WHERE appointment_patient = $1',
-            [patient.rows[0].patient_id]);
+        const appointments = await db.query('SELECT * FROM appointment app JOIN (SELECT * FROM availability av JOIN doctor d on av.doctor_id = d.doctor_id JOIN (SELECT * FROM office JOIN address a on office.office_address = a.address_id) AS o ON av.office_id = o.office_id) as info ON app.appointment_availability = info.availability_id WHERE appointment_patient = $1', [patient.rows[0].patient_id]);
 
         res.status(200).json({ message: 'OK', appointments: appointments.rows });
     } catch (error) {

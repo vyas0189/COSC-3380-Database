@@ -1,10 +1,11 @@
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import React from 'react';
+import { Navbar } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import './Navbar.css';
 
-const Navbar = () => {
+const NavbarComponent = () => {
     const logout = useStoreActions((actions) => actions.auth.logout);
     const isAuthenticated = useStoreState((state) => state.auth.isAuthenticated);
     const loading = useStoreState((state) => state.auth.loading);
@@ -44,7 +45,7 @@ const Navbar = () => {
                 </Link>
             </li>
             <li className="nav-item active">
-                <Link to='/doctorProfile'>Profile</Link>
+                <Link className="nav-link" to='/doctorProfile'>Profile</Link>
             </li>
             <li className="nav-item">
                 <i className="nav-link" onClick={logoutUser} >
@@ -99,8 +100,6 @@ const Navbar = () => {
     const navLinks = () => {
         if (isAuthenticated) {
             if (user) {
-                console.log(user.role);
-
                 if (user.role === 'patient') {
                     return authLinks
                 } else if (user.role === 'doctor') {
@@ -114,23 +113,23 @@ const Navbar = () => {
     }
     return (
 
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
 
             <Link to='/'>
                 <img src={logo} alt="logo" />
             </Link>
-            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4"
-                aria-controls="navbarSupportedContent-4" aria-expanded="false" aria-label="Toggle navigation">
+            {/* <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
-            </button>
+            </button> */}
 
-            <div className="collapse navbar-collapse" id="navbarSupportedContent-4">
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            <Navbar.Collapse id="responsive-navbar-nav">
                 {!loading && navLinks()}
-            </div>
-        </nav>
+            </Navbar.Collapse>
+        </Navbar>
 
     )
 }
 
 
-export default Navbar;
+export default NavbarComponent;
