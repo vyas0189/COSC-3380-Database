@@ -1,6 +1,5 @@
 import { useStoreState } from 'easy-peasy';
 import React from 'react';
-import { Link } from 'react-router-dom';
 import './AboutUs.css';
 
 const AboutUs = () => {
@@ -33,4 +32,4 @@ const AboutUs = () => {
 	);
 };
 
-export default Home;
+export default AboutUs;
