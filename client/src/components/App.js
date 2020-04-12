@@ -7,6 +7,7 @@ import AboutUs from '../pages/AboutUs';
 import Dashboard from '../pages/Dashboard';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
+import NotFoundPage from '../pages/NotFound';
 import Register from '../pages/Register';
 import setAuthToken from '../utils/setAuthToken';
 import Navbar from './Navbar';
@@ -33,6 +34,7 @@ const App = () => {
         <Route exact path="/login/doctor" component={Login} />
         <Route exact path="/login/admin" component={Login} />
         <PrivateRoute exact path="/dashboard" component={Dashboard} />
+        <Route component={NotFoundPage} />
 
       </Switch>
     </>
