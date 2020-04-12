@@ -8,8 +8,8 @@
 	min-height: calc(100vh - 86.4px);
 }
 
-.bg-doctor-image {
-	background-image: url('../../../../assets/doctor/doctor-login2.jpg');
+.bg-doctor-login {
+	background-image: url('../../../../assets/doctor/doctor-login.jpg');
 	background-size: cover;
 	background-position: center;
 }

@@ -1,43 +1,53 @@
 import { useStoreState } from 'easy-peasy';
 import React from 'react';
+import { Link } from 'react-router-dom';
+import './Patient.css';
 
 const PatientDashboardComponent = () => {
+	const patient = useStoreState((state) => state.auth.user);
+	console.log(patient);
 
-    const patient = useStoreState(state => state.auth.user);
-    console.log(patient);
+	return (
+		<div className="container-fluid">
+			<div className="row no-gutter">
+				<div className="d-none d-md-flex col-md-4 col-lg-6 bg-patient-dashboard"></div>
+				<div className="col-md-8 col-lg-6">
+					<div className="login d-flex align-items-center py-5">
+						<div className="container">
+							<div className="row">
+								<div className="col-md-9 col-lg-8 mx-auto">
+									<div className="welcome text-center">
+										<h1>
+											Welcome, {patient.patient_first_name}{' '}
+											{patient.patient_last_name}.
+										</h1>
+										<h2>How can we help you today?</h2>
+									</div>
+									<div className="body text-center">
+										<h3>Appointment History</h3>
+										<h3>Upcoming Appointment</h3>
+										{patient.patient_primary_doctor ? (
+											<button className="btn btn-lg btn-primary btn-login text-uppercase font-weight-bold mb-2">
+												{' '}
+												Schedule An Appointment with a Primary
+												Doctor
+											</button>
+										) : (
+											<button className="btn btn-lg btn-primary btn-login text-uppercase font-weight-bold mb-2">
+												{' '}
+												Schedule An Appointment with a Primary
+												Doctor
+											</button>
+										)}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+};
 
-    return (
-        <div>
-            <h1>Welcome {patient.patient_first_name} {patient.patient_last_name}</h1>
-            <h2>Appointment History</h2>
-            <h2>Upcoming Appointment</h2>
-            {
-                patient.patient_primary_doctor ?
-                    <button className="btn btn-success"> Schedule An Appointment with Primary Doctor</button> :
-                    <button className="btn btn-success"> Schedule An Appointment with Primary Doctor</button>
-            }
-        </div>
-    )
-}
-
-export default PatientDashboardComponent
-
-
-// user_id(pin):"08190c99-39be-4a0d-bd3d-f183cd86339a"
-// username(pin):"vyas0"
-// password(pin):"$2a$10$./i.LzEXUcT0uXG468lk2Oy6EQ6eYfYgMnDnmUzBdsqEUXRCdPJCC"
-// role(pin):"patient"
-// created_at(pin):"2020-04-09T05:09:28.745Z"
-// updated_at(pin):"2020-04-09T05:09:28.745Z"
-// patient_id(pin):"6329a3c4-c152-4ff0-8edb-40d234703849"
-// patient_first_name(pin):"Vyas"
-// patient_last_name(pin):"Ramankulangara"
-// patient_email(pin):"vyas0189@gmail.com"
-// patient_phone_number(pin):"2815699763"
-// patient_gender(pin):"M"
-// patient_address(pin):"fc178f80-6c76-4da3-b72b-74fe407d32a0"
-// patient_dob(pin):"1993-01-06T06:00:00.000Z"
-// patient_user(pin):"08190c99-39be-4a0d-bd3d-f183cd86339a"
-// patient_diagnosis(pin):null
-// patient_primary_doctor(pin):null
-// patient_doctor_specialty(pin):null
+export default PatientDashboardComponent;
