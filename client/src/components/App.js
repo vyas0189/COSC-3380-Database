@@ -6,11 +6,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import Dashboard from '../pages/Dashboard';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
+import NotFoundPage from '../pages/NotFound';
 import Register from '../pages/Register';
 import setAuthToken from '../utils/setAuthToken';
 import Navbar from './Navbar';
 import PrivateRoute from './ProtectedRoute';
-import NotFoundPage from '../pages/NotFound';
 
 
 toast.configure();
