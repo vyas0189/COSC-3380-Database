@@ -6,55 +6,38 @@ import 'react-toastify/dist/ReactToastify.css';
 import Dashboard from '../pages/Dashboard';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
+import NotFoundPage from '../pages/NotFound';
 import Register from '../pages/Register';
 import setAuthToken from '../utils/setAuthToken';
 import Navbar from './Navbar';
 import PrivateRoute from './ProtectedRoute';
-import NotFoundPage from '../pages/NotFound';
 
 
 toast.configure();
 const App = () => {
 
-    const user = useStoreActions(actions => actions.auth.getCurrentPatient)
+  const user = useStoreActions(actions => actions.auth.getCurrentPatient)
 
-    useEffect(() => {
-        setAuthToken(localStorage.token)
-        user();
-    }, [user])
+  useEffect(() => {
+    setAuthToken(localStorage.token)
+    user();
+  }, [user])
 
-    return ( <
-        >
-        <
-        Navbar / >
-        <
-        Switch >
-        <
-        Route exact path = "/"
-        component = { Home }
-        /> <
-        Route exact path = "/login"
-        component = { Login }
-        /> <
-        Route exact path = "/register"
-        component = { Register }
-        /> <
-        Route exact path = "/login/doctor"
-        component = { Login }
-        /> <
-        Route exact path = "/login/admin"
-        component = { Login }
-        /> <
-        PrivateRoute exact path = "/dashboard"
-        component = { Dashboard }
-        /> <
-        Route component = { NotFoundPage }
-        />
+  return (
+    <>
+      <Navbar />
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/register" component={Register} />
+        <Route exact path="/login/doctor" component={Login} />
+        <Route exact path="/login/admin" component={Login} />
+        <PrivateRoute exact path="/dashboard" component={Dashboard} />
+        <Route component={NotFoundPage} />
 
-        <
-        /Switch> <
-        />
-    );
+      </Switch>
+    </>
+  );
 }
 
 export default App;
