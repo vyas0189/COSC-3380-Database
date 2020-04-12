@@ -8,8 +8,8 @@
 	min-height: calc(100vh - 86.4px);
 }
 
-.bg-patient-dashboard {
-	background-image: url('../../../assets/dashboard.jpg');
+.bg-aboutUs {
+	background-image: url('../../assets/UH.png');
 	background-size: 120%;
     background-position: center;
     

@@ -8,7 +8,7 @@
 	min-height: calc(100vh - 86.4px);
 }
 
-.bg-image {
+.bg-admin-login {
 	background-image: url('../../../../assets/admin/admin-login.png');
 	background-size: cover;
 	background-position: center;
