@@ -71,7 +71,7 @@ const condition = Joi.string().required();
 
 const capacity = Joi.number().required();
 
-//report schema
+// report schema
 
 const weekStartDate = Joi.date().required();
 const weekEndDate = Joi.date().required();

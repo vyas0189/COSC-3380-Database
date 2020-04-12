@@ -41,9 +41,6 @@ router.get('/doctor/me', doc, async (req, res) => {
 
 router.post('/register/patient', async (req, res) => {
 	try {
-		console.log(req.body);
-
-		// await validate(registerPatient, req.body, req, res);
 		await registerPatient.validateAsync(req.body, { abortEarly: false });
 		const {
 			username,
@@ -142,11 +139,13 @@ router.post('/login/patient', async (req, res) => {
 			role: user.rows[0].role,
 		};
 
-		const token = jwt.sign(currentUser, JWT_SECRET, {
-			expiresIn: SESSION_EXPIRES,
-		});
 
-		return res.status(200).json({ message: 'OK', token });
+		if (user.rows[0].role === 'patient') {
+			const token = jwt.sign(currentUser, JWT_SECRET, { expiresIn: SESSION_EXPIRES });
+			return res.status(200).json({ message: 'OK', token });
+		}
+
+		res.status(500).json({ message: 'Enter the valid Username or Password' });
 	} catch (error) {
 		res.status(500).json({ message: 'Invalid username or password.', error });
 	}
@@ -176,15 +175,15 @@ router.post('/login/doctor', async (req, res) => {
 				.status(401)
 				.json({ message: 'Invalid username or password' });
 		}
-		const currentUser = {
-			userID: user.rows[0].user_id,
-			role: user.rows[0].role,
-		};
 
-		const token = jwt.sign(currentUser, JWT_SECRET, {
-			expiresIn: SESSION_EXPIRES,
-		});
-		return res.status(200).json({ message: 'OK', token });
+
+
+		const currentUser = { userID: user.rows[0].user_id, role: user.rows[0].role };
+		if (user.rows[0].role === 'doctor') {
+			const token = jwt.sign(currentUser, JWT_SECRET, { expiresIn: SESSION_EXPIRES });
+			return res.status(200).json({ message: 'OK', token });
+		}
+		res.status(500).json({ message: 'Enter the valid Username or Password' });
 	} catch (error) {
 		res.status(500).json({ message: 'Invalid username or password.', error });
 	}

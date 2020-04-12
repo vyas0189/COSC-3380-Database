@@ -1,53 +1,119 @@
-import { useStoreState } from 'easy-peasy';
-import React from 'react';
+import { useStoreActions, useStoreState } from 'easy-peasy';
+import moment from 'moment';
+import React, { useEffect } from 'react';
+import { Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import './Patient.css';
+import Loading from '../../Loading';
 
 const PatientDashboardComponent = () => {
-	const patient = useStoreState((state) => state.auth.user);
-	console.log(patient);
+    const patient = useStoreState(state => state.auth.user);
+    const getAppointment = useStoreActions(actions => actions.patient.getAppointments)
+    const patientToken = useStoreState(state => state.auth.token);
+    const appointmentLoading = useStoreState(state => state.patient.appointmentLoading);
+    const appointments = useStoreState(state => state.patient.appointments);
+    const token = useStoreState(state => state.auth.token);
+    const cancelAppointment = useStoreActions(actions => actions.patient.cancelAppointment)
 
-	return (
-		<div className="container-fluid">
-			<div className="row no-gutter">
-				<div className="d-none d-md-flex col-md-4 col-lg-6 bg-patient-dashboard"></div>
-				<div className="col-md-8 col-lg-6">
-					<div className="login d-flex align-items-center py-5">
-						<div className="container">
-							<div className="row">
-								<div className="col-md-9 col-lg-8 mx-auto">
-									<div className="welcome text-center">
-										<h1>
-											Welcome, {patient.patient_first_name}{' '}
-											{patient.patient_last_name}.
-										</h1>
-										<h2>How can we help you today?</h2>
-									</div>
-									<div className="body text-center">
-										<h3>Appointment History</h3>
-										<h3>Upcoming Appointment</h3>
-										{patient.patient_primary_doctor ? (
-											<button className="btn btn-lg btn-primary btn-login text-uppercase font-weight-bold mb-2">
-												{' '}
-												Schedule An Appointment with a Primary
-												Doctor
-											</button>
-										) : (
-											<button className="btn btn-lg btn-primary btn-login text-uppercase font-weight-bold mb-2">
-												{' '}
-												Schedule An Appointment with a Primary
-												Doctor
-											</button>
-										)}
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	);
-};
+    useEffect(() => {
 
-export default PatientDashboardComponent;
+        getAppointment(patientToken)
+
+    }, []);
+
+    const UpcomingAppointment = () => {
+
+        return (<Table striped bordered hover >
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Doctor</th>
+                    <th>Office</th>
+                    <th>Cancel</th>
+                </tr>
+            </thead>
+            <tbody>
+                {
+                    appointments.map((appointment, idx) => {
+                        return (moment(appointment.availability_date).isAfter(new Date) ? (
+                            <tr key={idx}>
+                                <td>{idx + 1}</td>
+                                <td>{moment(appointment.availability_date).format('MM/DD/YYYY')}</td>
+                                <td>{moment(appointment.availability_from_time, 'hh:mm:ss').format('hh:mm A')}</td>
+                                <td>{`${appointment.doctor_first_name} ${appointment.doctor_last_name}`}</td>
+                                <td>{`${appointment.address_name} ${appointment.address2_name ? appointment.address2_name : ''}, ${appointment.city} ${appointment.state} ${appointment.zip}`}</td>
+                                <td>
+                                    <p onClick={(e) => {
+                                        e.preventDefault()
+                                        cancelAppointment({ token, appointmentID: appointment.appointment_id })
+                                    }}>Cancel</p>
+                                </td>
+                            </tr>
+                        ) : null
+                        )
+                    })
+
+                }
+            </tbody>
+        </Table >
+        )
+    }
+
+    const pastAppointment = () => {
+        return (<Table striped bordered hover >
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Doctor</th>
+                    <th>Office</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {
+                    appointments.map((appointment, idx) => {
+                        return (moment(appointment.availability_date).isBefore(new Date) ? (
+                            <tr key={idx}>
+                                <td>{idx + 1}</td>
+                                <td>{moment(appointment.availability_date).format('MM/DD/YYYY')}</td>
+                                <td>{moment(appointment.availability_from_time, 'hh:mm:ss').format('hh:mm A')}</td>
+                                <td>{`${appointment.doctor_first_name} ${appointment.doctor_last_name}`}</td>
+                                <td>{`${appointment.address_name} ${appointment.address2_name ? appointment.address2_name : ''}, ${appointment.city} ${appointment.state} ${appointment.zip}`}</td>
+                            </tr>
+                        ) : null
+                        )
+                    })
+
+                }
+            </tbody>
+        </Table >
+        )
+    }
+    return (
+        <div>
+            <h1>Welcome {patient.patient_first_name} {patient.patient_last_name}</h1>
+            {
+                appointmentLoading ? <Loading /> :
+                    (
+                        appointments.length <= 0 ? <h3>No Appointments</h3> :
+                            (
+                                <>
+                                    <h2>Upcoming Appointment</h2>
+                                    {UpcomingAppointment()}
+                                    <h2>Appointment History</h2>
+                                    {pastAppointment()}
+                                </>
+                            )
+                    )
+            }
+
+            <Link to="/schedule">Schedule An Appointment</Link>
+
+        </div>
+    )
+}
+
+export default PatientDashboardComponent
