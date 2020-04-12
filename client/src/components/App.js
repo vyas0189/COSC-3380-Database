@@ -3,6 +3,8 @@ import React, { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import DoctorSchedule from '../components/Schedule/Doctor';
+import PatientSchedule from '../components/Schedule/Patient';
 import AboutUs from '../pages/AboutUs';
 import Dashboard from '../pages/Dashboard';
 import Home from '../pages/Home';
@@ -34,6 +36,8 @@ const App = () => {
         <Route exact path="/login/doctor" component={Login} />
         <Route exact path="/login/admin" component={Login} />
         <PrivateRoute exact path="/dashboard" component={Dashboard} />
+        <PrivateRoute exact path="/doctorSchedule" component={DoctorSchedule} />
+        <PrivateRoute exact path="/patientSchedule" component={PatientSchedule} />
         <Route component={NotFoundPage} />
 
       </Switch>
