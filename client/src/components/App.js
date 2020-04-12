@@ -9,7 +9,7 @@ import Login from '../pages/Login';
 import NotFoundPage from '../pages/NotFound';
 import Register from '../pages/Register';
 import setAuthToken from '../utils/setAuthToken';
-import Navbar from './Navbar';
+import NavbarComponent from './Navbar';
 import PrivateRoute from './ProtectedRoute';
 
 
@@ -25,7 +25,7 @@ const App = () => {
 
   return (
     <>
-      <Navbar />
+      <NavbarComponent />
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/login" component={Login} />

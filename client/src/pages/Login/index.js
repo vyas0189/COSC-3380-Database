@@ -4,24 +4,24 @@ import { Redirect, useLocation } from 'react-router-dom';
 import AdminLoginComponent from '../../components/Auth/Admin/Login';
 import DoctorLoginComponent from '../../components/Auth/Doctor/Login';
 import LoginComponent from '../../components/Auth/Patient/Login';
+import Loading from '../../components/Loading';
 
 const Login = () => {
 
     const location = useLocation()
     const isAuthenticated = useStoreState(state => state.auth.isAuthenticated)
-    // const admin = useStoreActions(action => action.auth.getCurrentAdmin)
-    // console.log(admin());
+    const loading = useStoreState((state) => state.auth.loading);
 
-    // return isAuthenticated ? <Redirect to='/dashboard' /> 
+
     if (isAuthenticated) {
-        return <Redirect to='/dashboard' />
+        return loading ? <Loading /> : <Redirect to='/dashboard' />
     }
     if (location.pathname === '/login/doctor') {
-        return <DoctorLoginComponent />
+        return loading ? <Loading /> : <DoctorLoginComponent />
     } else if (location.pathname === '/login/admin') {
-        return <AdminLoginComponent />
+        return loading ? <Loading /> : <AdminLoginComponent />
     } else {
-        return <LoginComponent />
+        return loading ? <Loading /> : <LoginComponent />
     }
 
 

@@ -34,6 +34,31 @@ const authModel = {
         action.isLoading(false);
     }),
 
+    updatePatientProfile: thunk(async (action, { firstName, lastName, email, address, address2, city, state, zip, phoneNumber, dob, gender, }, { getState }) => {
+        action.setError(null)
+        action.setLoading(true)
+
+        try {
+            if (!address2.length) {
+                address2 = 'n/a'
+            }
+            const res = await axios.put('http://localhost:4000/api/patient/update', { firstName, lastName, email, address, city, state, zip, phoneNumber, dob, gender }, {
+                headers: {
+                    'jwt_token': getState().token
+                }
+            })
+
+            if (res.status === 200) {
+                action.setUser(res.data.patient)
+                toast.success('Profile Updated!')
+            }
+        } catch (error) {
+            action.setError(error.response.data.message)
+            toast.error(error.response.data.message)
+        }
+        action.isLoading(false);
+    }),
+
     getCurrentDoctor: thunk(async (action, _, { getState }) => {
         action.setError(null)
         action.isLoading(true)
@@ -78,11 +103,15 @@ const authModel = {
         action.isLoading(false);
     }),
 
-    registerPatient: thunk(async (action, { username, password, role = 'patient', email, firstName, lastName, address, address2, city, state, zip, phoneNumber, dob, gender }) => {
+    registerPatient: thunk(async (action, { username, password, role, email, firstName, lastName, address, address2, city, state, zip, phoneNumber, dob, gender }) => {
         action.setError(null)
         action.isLoading(true);
         zip = parseInt(zip)
         try {
+            if (!address2.length) {
+                address2 = 'n/a'
+            }
+            role = 'patient';
             const res = await axios.post('http://localhost:4000/api/auth/register/patient', { username, password, role, email, firstName, lastName, address, address2, city, state, zip, phoneNumber, dob, gender })
 
             if (res.status === 200 && res.data.message === 'OK') {
@@ -170,7 +199,6 @@ const authModel = {
         state.loginErr = null;
         state.loginErr = null;
         state.registerErr = null;
-        // toast.POSITION.TOP_CENTER; 
         toast.success('You have Successfully Logged out!', { position: toast.POSITION.TOP_CENTER })
     }),
 
