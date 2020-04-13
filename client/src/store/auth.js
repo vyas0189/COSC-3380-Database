@@ -16,13 +16,13 @@ const authModel = {
         action.setError(null)
         action.isLoading(true)
         try {
-            const res = await axios.get('/auth/patient/me', {
+            const res = await axios.get('http://localhost:4000/api/auth/patient/me', {
                 headers: {
                     'jwt_token': getState().token
                 }
             });
 
-            if (res.status === 200 && res.data.message === 'OK') {
+            if (res.status === 200) {
                 action.setAuthenticated(true)
                 action.setUser(res.data.user)
             }
@@ -42,13 +42,13 @@ const authModel = {
             if (!address2.length) {
                 address2 = 'n/a'
             }
-            const res = await axios.put('/patient/update', { firstName, lastName, email, address, city, state, zip, phoneNumber, dob, gender }, {
+            const res = await axios.put('http://localhost:4000/api/patient/update', { firstName, lastName, email, address, city, state, zip, phoneNumber, dob, gender }, {
                 headers: {
                     'jwt_token': getState().token
                 }
             })
 
-            if (res.status === 200 && res.data.message === 'OK') {
+            if (res.status === 200) {
                 action.setUser(res.data.patient)
                 toast.success('Profile Updated!')
             }
@@ -63,13 +63,13 @@ const authModel = {
         action.setError(null)
         action.isLoading(true)
         try {
-            const res = await axios.get('/auth/doctor/me', {
+            const res = await axios.get('http://localhost:4000/api/auth/doctor/me', {
                 headers: {
                     'jwt_token': getState().token
                 }
             });
 
-            if (res.status === 200 && res.data.message === 'OK') {
+            if (res.status === 200) {
                 action.setAuthenticated(true)
                 action.setUser(res.data.user)
             }
@@ -85,13 +85,13 @@ const authModel = {
         action.setError(null)
         action.isLoading(true)
         try {
-            const res = await axios.get('/admin/me', {
+            const res = await axios.get('http://localhost:4000/api/admin/me', {
                 headers: {
                     'jwt_token': getState().token
                 }
             });
 
-            if (res.status === 200 && res.data.message === 'OK') {
+            if (res.status === 200) {
                 action.setAuthenticated(true)
                 action.setUser(res.data.user)
             }
@@ -112,7 +112,7 @@ const authModel = {
                 address2 = 'n/a'
             }
             role = 'patient';
-            const res = await axios.post('/auth/register/patient', { username, password, role, email, firstName, lastName, address, address2, city, state, zip, phoneNumber, dob, gender })
+            const res = await axios.post('http://localhost:4000/api/auth/register/patient', { username, password, role, email, firstName, lastName, address, address2, city, state, zip, phoneNumber, dob, gender })
 
             if (res.status === 200 && res.data.message === 'OK') {
                 action.setToken(res.data.token);
@@ -134,7 +134,7 @@ const authModel = {
         action.setLoginError(null)
         action.isLoading(true);
         try {
-            const res = await axios.post('/auth/login/patient', { username, password });
+            const res = await axios.post('http://localhost:4000/api/auth/login/patient', { username, password });
             if (res.status === 200 && res.data.message === 'OK') {
                 action.setToken(res.data.token);
                 action.setAuthenticated(true);
@@ -154,7 +154,7 @@ const authModel = {
         action.setLoginError(null)
         action.isLoading(true);
         try {
-            const res = await axios.post('/auth/login/doctor', { username, password });
+            const res = await axios.post('http://localhost:4000/api/auth/login/doctor', { username, password });
             if (res.status === 200 && res.data.message === 'OK') {
                 action.setToken(res.data.token);
                 action.setAuthenticated(true);
@@ -174,7 +174,7 @@ const authModel = {
         action.setLoginError(null)
         action.isLoading(true);
         try {
-            const res = await axios.post('/auth/login/doctor', { username, password });
+            const res = await axios.post('http://localhost:4000/api/auth/login/doctor', { username, password });
             if (res.status === 200 && res.data.message === 'OK') {
                 action.setToken(res.data.token);
                 action.setAuthenticated(true);
