@@ -1,234 +1,500 @@
 import axios from 'axios';
-import { action, thunk } from "easy-peasy";
+import { action, thunk } from 'easy-peasy';
 import { toast } from 'react-toastify';
 import setAuthToken from '../utils/setAuthToken';
 
 const authModel = {
-    token: localStorage.getItem('token'),
-    isAuthenticated: null,
-    loading: false,
-    user: null,
-    err: null,
-    loginErr: null,
-    registerErr: null,
+	token: localStorage.getItem('token'),
+	isAuthenticated: null,
+	loading: false,
+	user: null,
+	err: null,
+	loginErr: null,
+	registerErr: null,
 
-    getCurrentPatient: thunk(async (action, _, { getState }) => {
-        action.setError(null)
-        action.isLoading(true)
-        try {
-            const res = await axios.get('/api/auth/patient/me', {
-                headers: {
-                    'jwt_token': getState().token
-                }
-            });
+	getCurrentPatient: thunk(async (action, _, { getState }) => {
+		action.setError(null);
+		action.isLoading(true);
+		try {
+			const res = await axios.get('/api/auth/patient/me', {
+				headers: {
+					jwt_token: getState().token,
+				},
+			});
 
-            if (res.status === 200) {
-                action.setAuthenticated(true)
-                action.setUser(res.data.user)
-            }
-        } catch (err) {
-            action.setAuthenticated(false)
-            action.setUser(null)
-            action.setError(err.response.data.message)
-        }
-        action.isLoading(false);
-    }),
+			if (res.status === 200) {
+				action.setAuthenticated(true);
+				action.setUser(res.data.user);
+			}
+		} catch (err) {
+			action.setAuthenticated(false);
+			action.setUser(null);
+			action.setError(err.response.data.message);
+		}
+		action.isLoading(false);
+	}),
 
-    updatePatientProfile: thunk(async (action, { firstName, lastName, email, address, address2, city, state, zip, phoneNumber, dob, gender, }, { getState }) => {
-        action.setError(null)
-        action.setLoading(true)
+	updatePatientProfile: thunk(
+		async (
+			action,
+			{
+				firstName,
+				lastName,
+				email,
+				address,
+				address2,
+				city,
+				state,
+				zip,
+				phoneNumber,
+				dob,
+				gender,
+			},
+			{ getState }
+		) => {
+			action.setError(null);
+			action.setLoading(true);
 
-        try {
-            if (!address2.length) {
-                address2 = 'n/a'
-            }
-            const res = await axios.put('/api/patient/update', { firstName, lastName, email, address, city, state, zip, phoneNumber, dob, gender }, {
-                headers: {
-                    'jwt_token': getState().token
-                }
-            })
+			try {
+				if (!address2.length) {
+					address2 = 'n/a';
+				}
+				const res = await axios.put(
+					'/api/patient/update',
+					{
+						firstName,
+						lastName,
+						email,
+						address,
+						city,
+						state,
+						zip,
+						phoneNumber,
+						dob,
+						gender,
+					},
+					{
+						headers: {
+							jwt_token: getState().token,
+						},
+					}
+				);
 
-            if (res.status === 200) {
-                action.setUser(res.data.patient)
-                toast.success('Profile Updated!')
-            }
-        } catch (error) {
-            action.setError(error.response.data.message)
-            toast.error(error.response.data.message)
-        }
-        action.isLoading(false);
-    }),
+				if (res.status === 200) {
+					action.setUser(res.data.patient);
+					toast.success('Profile Updated!');
+				}
+			} catch (error) {
+				action.setError(error.response.data.message);
+				toast.error(error.response.data.message);
+			}
+			action.isLoading(false);
+		}
+	),
 
-    getCurrentDoctor: thunk(async (action, _, { getState }) => {
-        action.setError(null)
-        action.isLoading(true)
-        try {
-            const res = await axios.get('/api/auth/doctor/me', {
-                headers: {
-                    'jwt_token': getState().token
-                }
-            });
+	getCurrentDoctor: thunk(async (action, _, { getState }) => {
+		action.setError(null);
+		action.isLoading(true);
+		try {
+			const res = await axios.get('/api/auth/doctor/me', {
+				headers: {
+					jwt_token: getState().token,
+				},
+			});
 
-            if (res.status === 200) {
-                action.setAuthenticated(true)
-                action.setUser(res.data.user)
-            }
-        } catch (err) {
-            action.setAuthenticated(false)
-            action.setUser(null)
-            action.setError(err.response.data.message)
-        }
-        action.isLoading(false);
-    }),
+			if (res.status === 200) {
+				action.setAuthenticated(true);
+				action.setUser(res.data.user);
+			}
+		} catch (err) {
+			action.setAuthenticated(false);
+			action.setUser(null);
+			action.setError(err.response.data.message);
+		}
+		action.isLoading(false);
+	}),
 
-    getCurrentAdmin: thunk(async (action, _, { getState }) => {
-        action.setError(null)
-        action.isLoading(true)
-        try {
-            const res = await axios.get('/api/admin/me', {
-                headers: {
-                    'jwt_token': getState().token
-                }
-            });
+	getCurrentAdmin: thunk(async (action, _, { getState }) => {
+		action.setError(null);
+		action.isLoading(true);
+		try {
+			const res = await axios.get('/api/admin/me', {
+				headers: {
+					jwt_token: getState().token,
+				},
+			});
 
-            if (res.status === 200) {
-                action.setAuthenticated(true)
-                action.setUser(res.data.user)
-            }
-        } catch (err) {
-            action.setAuthenticated(false)
-            action.setUser(null)
-            action.setError(err.response.data.message)
-        }
-        action.isLoading(false);
-    }),
+			if (res.status === 200) {
+				action.setAuthenticated(true);
+				action.setUser(res.data.user);
+			}
+		} catch (err) {
+			action.setAuthenticated(false);
+			action.setUser(null);
+			action.setError(err.response.data.message);
+		}
+		action.isLoading(false);
+	}),
 
-    registerPatient: thunk(async (action, { username, password, role, email, firstName, lastName, address, address2, city, state, zip, phoneNumber, dob, gender }) => {
-        action.setError(null)
-        action.isLoading(true);
-        zip = parseInt(zip)
-        try {
-            if (!address2.length) {
-                address2 = 'n/a'
-            }
-            role = 'patient';
-            const res = await axios.post('/api/auth/register/patient', { username, password, role, email, firstName, lastName, address, address2, city, state, zip, phoneNumber, dob, gender })
+	registerPatient: thunk(
+		async (
+			action,
+			{
+				username,
+				password,
+				role,
+				email,
+				firstName,
+				lastName,
+				address,
+				address2,
+				city,
+				state,
+				zip,
+				phoneNumber,
+				dob,
+				gender,
+			}
+		) => {
+			action.setError(null);
+			action.isLoading(true);
+			zip = parseInt(zip);
+			try {
+				if (!address2.length) {
+					address2 = 'n/a';
+				}
+				role = 'patient';
+				const res = await axios.post('/api/auth/register/patient', {
+					username,
+					password,
+					role,
+					email,
+					firstName,
+					lastName,
+					address,
+					address2,
+					city,
+					state,
+					zip,
+					phoneNumber,
+					dob,
+					gender,
+				});
 
-            if (res.status === 200 && res.data.message === 'OK') {
-                action.setToken(res.data.token);
-                setAuthToken(res.data.token);
-                action.setAuthenticated(true)
-                action.getCurrentPatient()
-                toast.success('Registered Successfully')
+				if (res.status === 200 && res.data.message === 'OK') {
+					action.setToken(res.data.token);
+					setAuthToken(res.data.token);
+					action.setAuthenticated(true);
+					toast.success('Registered Successfully');
+				}
+			} catch (err) {
+				action.setRegisterError(err.response.data.message);
+				toast.error(err.response.data.message);
+			}
+			action.isLoading(false);
+		}
+	),
 
-            }
-        } catch (err) {
-            action.setRegisterError(err.response.data.message)
-            toast.error(err.response.data.message)
-        }
-        action.isLoading(false);
-    }),
+	registerDoctor: thunk(
+		async (
+			action,
+			{
+				username,
+				password,
+				role,
+				email,
+				firstName,
+				lastName,
+				address,
+				address2,
+				city,
+				state,
+				zip,
+				phoneNumber,
+				primary,
+				office,
+				speciality,
+			}
+		) => {
+			action.setError(null);
+			action.isLoading(true);
+			zip = parseInt(zip);
+			try {
+				if (!address2.length) {
+					address2 = 'n/a';
+				}
+				role = 'doctor';
+				const res = await axios.post('/api/admin/register/doctor', {
+					username,
+					password,
+					role,
+					email,
+					firstName,
+					lastName,
+					address,
+					address2,
+					city,
+					state,
+					zip,
+					phoneNumber,
+					primary,
+					office,
+					speciality,
+				});
 
-    loginPatient: thunk(async (action, { username, password }) => {
-        action.setError(null)
-        action.setLoginError(null)
-        action.isLoading(true);
-        try {
-            const res = await axios.post('/api/auth/login/patient', { username, password });
-            if (res.status === 200 && res.data.message === 'OK') {
-                action.setToken(res.data.token);
-                action.setAuthenticated(true);
-                setAuthToken(res.data.token);
-                toast.success('Logged in Successfully')
-                action.getCurrentPatient()
-            }
-        } catch (err) {
-            action.setLoginError(err.response.data.message)
-            toast.error(err.response.data.message)
-        }
-        action.isLoading(false);
-    }),
+				if (res.status === 200 && res.data.message === 'OK') {
+					action.setToken(res.data.token);
+					setAuthToken(res.data.token);
+					action.setAuthenticated(true);
+					toast.success('Registered Successfully');
+				}
+			} catch (err) {
+				action.setRegisterError(err.response.data.message);
+				toast.error(err.response.data.message);
+			}
+			action.isLoading(false);
+		}
+	),
 
-    loginDoctor: thunk(async (action, { username, password }) => {
-        action.setError(null)
-        action.setLoginError(null)
-        action.isLoading(true);
-        try {
-            const res = await axios.post('/api/auth/login/doctor', { username, password });
-            if (res.status === 200 && res.data.message === 'OK') {
-                action.setToken(res.data.token);
-                action.setAuthenticated(true);
-                setAuthToken(res.data.token);
-                toast.success('Logged in Successfully')
-                action.getCurrentDoctor()
-            }
-        } catch (err) {
-            action.setLoginError(err.response.data.message)
-            toast.error(err.response.data.message)
-        }
-        action.isLoading(false);
-    }),
+	updateDoctorProfile: thunk(
+		async (
+			action,
+			{ doctorID, primary, specialty, office },
+			{ getState }
+		) => {
+			action.setError(null);
+			action.setLoading(true);
 
-    loginAdmin: thunk(async (action, { username, password }) => {
-        action.setError(null)
-        action.setLoginError(null)
-        action.isLoading(true);
-        try {
-            const res = await axios.post('/api/auth/login/doctor', { username, password });
-            if (res.status === 200 && res.data.message === 'OK') {
-                action.setToken(res.data.token);
-                action.setAuthenticated(true);
-                setAuthToken(res.data.token);
-                toast.success('Logged in Successfully')
-                action.getCurrentAdmin()
-            }
-        } catch (err) {
-            action.setLoginError(err.response.data.message);
-            toast.error(err.response.data.message)
-        }
-        action.isLoading(false);
-    }),
+			try {
+				const res = await axios.put(
+					'/api/admin/update/doctor',
+					{ doctorID, primary, specialty, office },
+					{
+						headers: {
+							jwt_token: getState().token,
+						},
+					}
+				);
 
-    logout: action(state => {
-        localStorage.removeItem('token')
-        state.token = null;
-        state.isAuthenticated = null;
-        state.loading = false;
-        state.user = null;
-        state.err = null;
-        state.loginErr = null;
-        state.loginErr = null;
-        state.registerErr = null;
-        toast.success('You have Successfully Logged out!', { position: toast.POSITION.TOP_CENTER })
-    }),
+				if (res.status === 200) {
+					action.setUser(res.data.doctor);
+					toast.success('Profile Updated!');
+				}
+			} catch (error) {
+				action.setError(error.response.data.message);
+				toast.error(error.response.data.message);
+			}
+			action.isLoading(false);
+		}
+	),
 
-    isLoading: action((state, loading) => {
-        state.loading = loading;
-    }),
+	viewNewUsers: thunk(
+		async (action, { weekStartDate, weekEndDate }, { getState }) => {
+			action.setError(null);
+			action.setLoading(true);
 
-    setUser: action((state, user) => {
-        state.user = user;
-    }),
+			try {
+				const res = await axios.get(
+					'/api/admin/view/weeklyNewUsers',
+					{ weekStartDate, weekEndDate },
+					{
+						headers: {
+							jwt_token: getState().token,
+						},
+					}
+				);
 
-    setToken: action((state, token) => {
-        state.token = token;
-    }),
-    setAuthenticated: action((state, authenticated) => {
-        state.isAuthenticated = authenticated;
-    }),
+				// if (res.status === 200) {
 
-    setError: action((state, error) => {
-        state.err = error;
-    }),
+				//     //don't know what to do here
+				//     action.setUser(res.data.patient)
+				//     toast.success('Profile Updated!')
+				// }
+			} catch (error) {
+				action.setError(error.response.data.message);
+				toast.error(error.response.data.message);
+			}
+			action.isLoading(false);
+		}
+	),
 
-    setLoginError: action((state, error) => {
-        state.loginErr = error;
-    }),
+	viewUpdateUsers: thunk(
+		async (action, { weekStartDate, weekEndDate }, { getState }) => {
+			action.setError(null);
+			action.setLoading(true);
 
-    setRegisterError: action((state, error) => {
-        state.registerErr = error;
-    })
+			try {
+				const res = await axios.get(
+					'/api/admin/view/weeklyUpdatedUsers',
+					{ weekStartDate, weekEndDate },
+					{
+						headers: {
+							jwt_token: getState().token,
+						},
+					}
+				);
 
-}
+				// if (res.status === 200) {
+
+				//     //don't know what to do here
+				//     action.setUser(res.data.patient)
+				//     toast.success('Profile Updated!')
+				// }
+			} catch (error) {
+				action.setError(error.response.data.message);
+				toast.error(error.response.data.message);
+			}
+			action.isLoading(false);
+		}
+	),
+
+	registerOffice: thunk(
+		async (
+			action,
+			{ capacity, address, address2, city, state, zip, phoneNumber }
+		) => {
+			action.setError(null);
+			action.isLoading(true);
+			zip = parseInt(zip);
+			try {
+				if (!address2.length) {
+					address2 = 'n/a';
+				}
+
+				const res = await axios.post('/api/admin/register/office', {
+					capacity,
+					address,
+					address2,
+					city,
+					state,
+					zip,
+					phoneNumber,
+				});
+
+				if (res.status === 200 && res.data.message === 'OK') {
+					action.setToken(res.data.token);
+					setAuthToken(res.data.token);
+					action.setAuthenticated(true);
+					toast.success('Registered Successfully');
+				}
+			} catch (err) {
+				action.setRegisterError(err.response.data.message);
+				toast.error(err.response.data.message);
+			}
+			action.isLoading(false);
+		}
+	),
+
+	loginPatient: thunk(async (action, { username, password }) => {
+		action.setError(null);
+		action.setLoginError(null);
+		action.isLoading(true);
+		try {
+			const res = await axios.post('/api/auth/login/patient', {
+				username,
+				password,
+			});
+			if (res.status === 200 && res.data.message === 'OK') {
+				action.setToken(res.data.token);
+				action.setAuthenticated(true);
+				setAuthToken(res.data.token);
+				toast.success('Logged in Successfully');
+				action.getCurrentPatient();
+			}
+		} catch (err) {
+			action.setLoginError(err.response.data.message);
+			toast.error(err.response.data.message);
+		}
+		action.isLoading(false);
+	}),
+
+	loginDoctor: thunk(async (action, { username, password }) => {
+		action.setError(null);
+		action.setLoginError(null);
+		action.isLoading(true);
+		try {
+			const res = await axios.post('/api/auth/login/doctor', {
+				username,
+				password,
+			});
+			if (res.status === 200 && res.data.message === 'OK') {
+				action.setToken(res.data.token);
+				action.setAuthenticated(true);
+				setAuthToken(res.data.token);
+				toast.success('Logged in Successfully');
+				action.getCurrentDoctor();
+			}
+		} catch (err) {
+			action.setLoginError(err.response.data.message);
+			toast.error(err.response.data.message);
+		}
+		action.isLoading(false);
+	}),
+
+	loginAdmin: thunk(async (action, { username, password }) => {
+		action.setError(null);
+		action.setLoginError(null);
+		action.isLoading(true);
+		try {
+			const res = await axios.post('/api/admin/login', {
+				username,
+				password,
+			});
+			if (res.status === 200 && res.data.message === 'OK') {
+				action.setToken(res.data.token);
+				action.setAuthenticated(true);
+				setAuthToken(res.data.token);
+				toast.success('Logged in Successfully');
+				action.getCurrentAdmin();
+			}
+		} catch (err) {
+			action.setLoginError(err.response.data.message);
+			toast.error(err.response.data.message);
+		}
+		action.isLoading(false);
+	}),
+
+	logout: action((state) => {
+		localStorage.removeItem('token');
+		state.token = null;
+		state.isAuthenticated = null;
+		state.loading = false;
+		state.user = null;
+		state.err = null;
+		state.loginErr = null;
+		state.loginErr = null;
+		state.registerErr = null;
+		toast.success('You have Successfully Logged out!', {
+			position: toast.POSITION.TOP_CENTER,
+		});
+	}),
+
+	isLoading: action((state, loading) => {
+		state.loading = loading;
+	}),
+
+	setUser: action((state, user) => {
+		state.user = user;
+	}),
+
+	setToken: action((state, token) => {
+		state.token = token;
+	}),
+	setAuthenticated: action((state, authenticated) => {
+		state.isAuthenticated = authenticated;
+	}),
+
+	setError: action((state, error) => {
+		state.err = error;
+	}),
+
+	setLoginError: action((state, error) => {
+		state.loginErr = error;
+	}),
+
+	setRegisterError: action((state, error) => {
+		state.registerErr = error;
+	}),
+};
 
 export default authModel;
