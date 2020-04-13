@@ -23,13 +23,23 @@ db.connect()
 
 const app = express();
 
+app.use(cors({
+  credentials: true,
+  origin: [
+    'http://localhost:8080',
+    'https://apluscare.herokuapp.com',
+  ],
+}));
 // const limiter = rateLimit({
 //   windowMs: 1 * 60 * 1000,
 //   max: 15,
 //   message:
 //     { message: 'Too many accounts created from this IP, please try again after an hour' },
 // });
-
+// app.use((req, res, next) => {
+//   res.header('Access-Control-Allow-Origin', '*');
+//   next();
+// });
 app.use(compression());
 app.use(helmet());
 app.use(morgan('common'));
@@ -37,10 +47,9 @@ app.use(morgan('common'));
 
 const isProduction = process.env.NODE_ENV === 'production';
 // const origin = {
-//   origin: isProduction ? 'https://www.example.com' : '*',
+//   origin: '*',
 // };
 
-app.use(cors());
 app.use(express.json({ extended: false }));
 
 app.get('/api', (req, res) => {

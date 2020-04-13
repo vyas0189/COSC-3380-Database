@@ -5,7 +5,7 @@ const {
 } = process.env;
 
 const isProduction = NODE_ENV === 'production';
-const connectionString = `postgresql://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}`;
+const connectionString = `postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}`;
 
 const db = new Pool({
   connectionString: isProduction ? DATABASE_URL : connectionString,
