@@ -10,7 +10,7 @@
 
 .bg-aboutUs {
 	background-image: url('../../assets/UH.png');
-	background-size: cover;
+	background-size: 120%;
     background-position: center;
     
 }
