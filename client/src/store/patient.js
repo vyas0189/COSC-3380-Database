@@ -12,7 +12,7 @@ const patientModel = {
         action.setLoading(true)
 
         try {
-            const res = await axios.get('http://localhost:4000/api/appointment/view/myAppointments', {
+            const res = await axios.get('/api/appointment/view/myAppointments', {
                 headers: {
                     'jwt_token': payload
                 }
@@ -31,7 +31,7 @@ const patientModel = {
         action.setLoading(true)
 
         try {
-            const res = await axios.post('http://localhost:4000/api/appointment/schedule/primaryAppointment', { primaryAppointment, reason, availabilityID }, {
+            const res = await axios.post('/api/appointment/schedule/primaryAppointment', { primaryAppointment, reason, availabilityID }, {
                 headers: {
                     'jwt_token': token
                 }
@@ -52,7 +52,7 @@ const patientModel = {
         action.setLoading(true)
 
         try {
-            const res = await axios.post('http://localhost:4000/api/appointment/schedule/specialistAppointment', { primaryAppointment, reason, availabilityID }, {
+            const res = await axios.post('/api/appointment/schedule/specialistAppointment', { primaryAppointment, reason, availabilityID }, {
                 headers: {
                     'jwt_token': token
                 }
@@ -73,7 +73,7 @@ const patientModel = {
         action.setLoading(true)
 
         try {
-            const res = await axios.delete('http://localhost:4000/api/appointment/cancel', {
+            const res = await axios.delete('/api/appointment/cancel', {
                 headers: {
                     'jwt_token': token
                 },
