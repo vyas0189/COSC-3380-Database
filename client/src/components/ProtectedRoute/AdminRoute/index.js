@@ -1,12 +1,14 @@
-import { useStore } from 'easy-peasy'
+import { useStoreState } from 'easy-peasy'
 import React from 'react'
 import { Redirect, Route } from 'react-router-dom'
 
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
 
-    const isAuthenticated = useStore(state => state.auth.isAuthenticated)
-    const isAdmin = useStore(state => state.auth.isAdmin)
+    const isAuthenticated = useStoreState(state => state.auth.isAuthenticated)
+    const isAdmin = useStoreState(state => state.auth.isAdmin)
+    console.log(isAdmin, isAuthenticated);
+
     return (
         <Route
             {...rest}
