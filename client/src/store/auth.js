@@ -22,7 +22,7 @@ const authModel = {
                 }
             });
 
-            if (res.status === 200) {
+            if (res.status === 200 && res.data.message === 'OK') {
                 action.setAuthenticated(true)
                 action.setUser(res.data.user)
             }
@@ -48,7 +48,7 @@ const authModel = {
                 }
             })
 
-            if (res.status === 200) {
+            if (res.status === 200 && res.data.message === 'OK') {
                 action.setUser(res.data.patient)
                 toast.success('Profile Updated!')
             }
@@ -69,7 +69,7 @@ const authModel = {
                 }
             });
 
-            if (res.status === 200) {
+            if (res.status === 200 && res.data.message === 'OK') {
                 action.setAuthenticated(true)
                 action.setUser(res.data.user)
             }
@@ -91,7 +91,7 @@ const authModel = {
                 }
             });
 
-            if (res.status === 200) {
+            if (res.status === 200 && res.data.message === 'OK') {
                 action.setAuthenticated(true)
                 action.setUser(res.data.user)
             }

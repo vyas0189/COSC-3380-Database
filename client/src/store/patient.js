@@ -17,7 +17,7 @@ const patientModel = {
                     'jwt_token': payload
                 }
             });
-            if (res.status === 200) {
+            if (res.status === 200 && res.data.message === 'OK') {
                 action.setAppointments(res.data.appointments)
             }
         } catch (error) {
@@ -36,7 +36,7 @@ const patientModel = {
                     'jwt_token': token
                 }
             });
-            if (res.status === 200) {
+            if (res.status === 200 && res.data.message === 'OK') {
                 toast.success('Appointment Scheduled!');
             }
 
@@ -57,7 +57,7 @@ const patientModel = {
                     'jwt_token': token
                 }
             });
-            if (res.status === 200) {
+            if (res.status === 200 && res.data.message === 'OK') {
                 toast.success('Appointment Scheduled!');
             }
 
@@ -81,7 +81,7 @@ const patientModel = {
                     appointmentID
                 }
             });
-            if (res.status === 200) {
+            if (res.status === 200 && res.data.message === 'OK') {
                 toast.success('Appointment Canceled!');
                 action.getAppointments(token)
             }
