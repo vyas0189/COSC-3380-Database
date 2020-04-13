@@ -1,10 +1,8 @@
 import { useStoreActions, useStoreState } from 'easy-peasy';
-import React, { Fragment, useState, useEffect } from 'react';
-import moment from 'moment';
-import { Table } from 'react-bootstrap';
+import React, { Fragment, useEffect, useState } from 'react';
+import Loading from '../../../components/Loading';
 // import { Link } from 'react-router-dom';
 // import Loading from '../../Loading';
-
 import './RegisterDoctor.css';
 
 const RegisterComponent = () => {
@@ -18,6 +16,7 @@ const RegisterComponent = () => {
 
 	const offices = useStoreState((state) => state.admin.offices);
 	const token = useStoreState((state) => state.auth.token);
+	const loading = useStoreState(state => state.auth.loading);
 
 	useEffect(() => {
 		getOffices(adminToken);
@@ -59,6 +58,8 @@ const RegisterComponent = () => {
 	} = formData;
 
 	const onChange = (e) => {
+		console.log(e.target.name, e.target.value);
+
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
@@ -84,100 +85,101 @@ const RegisterComponent = () => {
 	};
 
 	return (
-		<Fragment>
-			<div className="container-fluid">
-				<div className="row no-gutter">
-					<div className="d-none d-md-flex col-md-4 col-lg-6 bg-admin-dashboard"></div>
-					<div className="col-md-8 col-lg-6">
-						<div className="login d-flex align-items-center py-5">
-							<div className="container">
-								<div className="row">
-									<div className="col-md-9 col-lg-4 mx-auto">
-										<h3 className="login-heading mb-4">Register</h3>
-										<form
-											className="form"
-											onSubmit={(e) => onSubmit(e)}
-										>
-											<div className="form-group">
-												<input
-													type="text"
-													placeholder="Username"
-													name="username"
-													value={username}
-													onChange={(e) => onChange(e)}
-													required
-												/>
-											</div>
-											<div className="form-group">
-												<input
-													type="password"
-													placeholder="Password"
-													name="password"
-													value={password}
-													onChange={(e) => onChange(e)}
-													minLength="6"
-												/>
-											</div>
-											<div className="form-group">
-												<input
-													type="text"
-													placeholder="Email"
-													name="email"
-													value={email}
-													onChange={(e) => onChange(e)}
-													required
-												/>
-											</div>
-											<div className="form-group">
-												<input
-													type="text"
-													placeholder="First Name"
-													name="firstName"
-													value={firstName}
-													onChange={(e) => onChange(e)}
-													required
-												/>
-											</div>
-											<div className="form-group">
-												<input
-													type="text"
-													placeholder="Last Name"
-													name="lastName"
-													value={lastName}
-													onChange={(e) => onChange(e)}
-													required
-												/>
-											</div>
-											<div className="form-group">
-												<input
-													type="text"
-													placeholder="Primary Address"
-													name="address"
-													value={address}
-													onChange={(e) => onChange(e)}
-													required
-												/>
-											</div>
-											<div className="form-group">
-												<input
-													type="text"
-													placeholder="Secondary Address (APT#)"
-													name="address2"
-													value={address2}
-													onChange={(e) => onChange(e)}
-												/>
-											</div>
-											<div className="form-group">
-												<input
-													type="text"
-													placeholder="City"
-													name="city"
-													value={city}
-													onChange={(e) => onChange(e)}
-													required
-												/>
-											</div>
-											<div className="form-group">
+		loading ? <Loading /> :
+			<Fragment>
+				<div className="container-fluid">
+					<div className="row no-gutter">
+						<div className="d-none d-md-flex col-md-4 col-lg-6 bg-admin-dashboard"></div>
+						<div className="col-md-8 col-lg-6">
+							<div className="login d-flex align-items-center py-5">
+								<div className="container">
+									<div className="row">
+										<div className="col-md-9 col-lg-4 mx-auto">
+											<h3 className="login-heading mb-4">Register</h3>
+											<form
+												className="form"
+												onSubmit={(e) => onSubmit(e)}
+											>
+												<div className="form-group">
+													<input
+														type="text"
+														placeholder="Username"
+														name="username"
+														value={username}
+														onChange={(e) => onChange(e)}
+														required
+													/>
+												</div>
+												<div className="form-group">
+													<input
+														type="password"
+														placeholder="Password"
+														name="password"
+														value={password}
+														onChange={(e) => onChange(e)}
+														minLength="6"
+													/>
+												</div>
+												<div className="form-group">
+													<input
+														type="text"
+														placeholder="Email"
+														name="email"
+														value={email}
+														onChange={(e) => onChange(e)}
+														required
+													/>
+												</div>
+												<div className="form-group">
+													<input
+														type="text"
+														placeholder="First Name"
+														name="firstName"
+														value={firstName}
+														onChange={(e) => onChange(e)}
+														required
+													/>
+												</div>
+												<div className="form-group">
+													<input
+														type="text"
+														placeholder="Last Name"
+														name="lastName"
+														value={lastName}
+														onChange={(e) => onChange(e)}
+														required
+													/>
+												</div>
+												<div className="form-group">
+													<input
+														type="text"
+														placeholder="Primary Address"
+														name="address"
+														value={address}
+														onChange={(e) => onChange(e)}
+														required
+													/>
+												</div>
+												<div className="form-group">
+													<input
+														type="text"
+														placeholder="Secondary Address (APT#)"
+														name="address2"
+														value={address2}
+														onChange={(e) => onChange(e)}
+													/>
+												</div>
+												<div className="form-group">
+													<input
+														type="text"
+														placeholder="City"
+														name="city"
+														value={city}
+														onChange={(e) => onChange(e)}
+														required
+													/>
+												</div>
+
 												<div className="form-group">
 													<select
 														name="state"
@@ -261,37 +263,34 @@ const RegisterComponent = () => {
 														required
 													/>
 												</div>
-												<Table striped bordered hover>
-													<thead>
-														<tr>
-															<th>#</th>
-															<th>Address</th>
-															<th>City</th>
-															<th>State</th>
-															<th>Zip</th>
-														</tr>
-													</thead>
-													<tbody>
-														<tbody>
-															{offices.map((office, idx) => {
-																return (
-																	<tr key={idx}>
-																		<td>{idx + 1}</td>
-																		<td>{`${
-																			office.address_name
+												<div className="form-group">
+													<select
+														name="office"
+														value={office}
+														key={office}
+														onChange={(e) => onChange(e)}
+													>
+
+														<option value="Office">
+															Office
+														</option>
+														{offices.map((office, idx) => {
+															return (
+																<option value={office.office_id}>
+																	{`${
+																		office.address_name
 																		} ${
-																			office.address2_name
-																				? office.address2_name
-																				: ''
+																		office.address2_name
+																			? office.address2_name
+																			: ''
 																		}, ${office.city} ${
-																			office.state
-																		} ${office.zip}`}</td>
-																	</tr>
-																);
-															})}
-														</tbody>
-													</tbody>
-												</Table>
+																		office.state
+																		} ${office.zip}`}
+																</option>
+															);
+														})}
+													</select>
+												</div>
 												<div className="form-group">
 													<select
 														name="primary"
@@ -330,21 +329,21 @@ const RegisterComponent = () => {
 														</option>
 													</select>
 												</div>
-											</div>
-											<input
-												type="submit"
-												className="btn btn-sm btn-primary btn-register text-uppercase font-weight-bold mb-2"
-												value="Register"
-											/>
-										</form>
+
+												<input
+													type="submit"
+													className="btn btn-sm btn-primary btn-register text-uppercase font-weight-bold mb-2"
+													value="Register"
+												/>
+											</form>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</Fragment>
+			</Fragment>
 	);
 };
 

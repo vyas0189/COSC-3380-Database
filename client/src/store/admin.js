@@ -3,7 +3,7 @@ import { action, thunk } from 'easy-peasy';
 import { toast } from 'react-toastify';
 
 const adminModel = {
-	officeLoading: false,
+	loading: false,
 	offices: [],
 	officeErr: null,
 
@@ -119,7 +119,7 @@ const adminModel = {
 	),
 
 	setLoading: action((state, loading) => {
-		state.officeLoading = loading;
+		state.loading = loading;
 	}),
 
 	setOffices: action((state, offices) => {

@@ -214,7 +214,7 @@ const authModel = {
 				phoneNumber,
 				primary,
 				office,
-				speciality,
+				specialty,
 			}
 		) => {
 			action.setError(null);
@@ -240,7 +240,7 @@ const authModel = {
 					phoneNumber,
 					primary,
 					office,
-					speciality,
+					specialty,
 				});
 
 				if (res.status === 200 && res.data.message === 'OK') {
@@ -292,7 +292,7 @@ const authModel = {
 			}
 			action.isLoading(false);
 		}
-	),	
+	),
 
 	loginPatient: thunk(async (action, { username, password }) => {
 		action.setError(null);
