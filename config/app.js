@@ -36,11 +36,11 @@ app.use(morgan('common'));
 // app.use(limiter);
 
 const isProduction = process.env.NODE_ENV === 'production';
-const origin = {
-  origin: isProduction ? 'https://apluscare.herokuapp.com/' : '*',
-};
+// const origin = {
+//   origin: isProduction ? 'https://apluscare.herokuapp.com/' : '*',
+// };
 
-app.use(cors(origin));
+app.use(cors());
 app.use(express.json({ extended: false }));
 
 app.get('/api', (req, res) => {
