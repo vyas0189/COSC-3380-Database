@@ -36,13 +36,16 @@ app.use(morgan('common'));
 // app.use(limiter);
 
 const isProduction = process.env.NODE_ENV === 'production';
-const origin = {
-  origin: '*',
-};
+// const origin = {
+//   origin: '*',
+// };
 
-app.use(cors(origin));
+app.use(cors());
 app.use(express.json({ extended: false }));
-
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
 app.get('/api', (req, res) => {
   res.json({ welcome: 'Hospital' });
 });
