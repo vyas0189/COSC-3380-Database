@@ -1,9 +1,7 @@
-import { useStoreState } from 'easy-peasy';
 import React from 'react';
 import './AboutUs.css';
 
 const AboutUs = () => {
-	const isAuth = useStoreState((state) => state.auth.isAuthenticated);
 
 	return (
 		<div className="container-fluid">

@@ -1,6 +1,5 @@
 import { useStoreState } from 'easy-peasy';
 import React from 'react';
-import { Link } from 'react-router-dom';
 import './Doctor.css';
 
 const DoctorDashboardComponent = () => {
