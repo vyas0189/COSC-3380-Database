@@ -74,12 +74,8 @@ const NavbarComponent = () => {
         <ul className="navbar-nav ml-auto">
 
             <li className="nav-item">
-                <Link className="nav-link" to="/">About Us
+                <Link className="nav-link" to="/aboutus">About Us
                 </Link>
-            </li>
-
-            <li className="nav-item">
-                <Link className="nav-link" to="/">Contact Us</Link>
             </li>
 
             <li className="nav-item dropdown">
