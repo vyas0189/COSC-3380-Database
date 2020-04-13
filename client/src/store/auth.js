@@ -11,6 +11,7 @@ const authModel = {
 	err: null,
 	loginErr: null,
 	registerErr: null,
+	isAdmin: false,
 
 	getCurrentPatient: thunk(async (action, _, { getState }) => {
 		action.setError(null);
@@ -53,7 +54,7 @@ const authModel = {
 			{ getState }
 		) => {
 			action.setError(null);
-			action.setLoading(true);
+			action.isLoading(true);
 
 			try {
 				if (!address2.length) {
@@ -263,7 +264,7 @@ const authModel = {
 			{ getState }
 		) => {
 			action.setError(null);
-			action.setLoading(true);
+			action.isLoading(true);
 
 			try {
 				const res = await axios.put(
@@ -291,7 +292,7 @@ const authModel = {
 	viewNewUsers: thunk(
 		async (action, { weekStartDate, weekEndDate }, { getState }) => {
 			action.setError(null);
-			action.setLoading(true);
+			action.isLoading(true);
 
 			try {
 				const res = await axios.get(
@@ -321,7 +322,7 @@ const authModel = {
 	viewUpdateUsers: thunk(
 		async (action, { weekStartDate, weekEndDate }, { getState }) => {
 			action.setError(null);
-			action.setLoading(true);
+			action.isLoading(true);
 
 			try {
 				const res = await axios.get(
@@ -389,6 +390,8 @@ const authModel = {
 		action.setError(null);
 		action.setLoginError(null);
 		action.isLoading(true);
+		action.setAdmin(false)
+
 		try {
 			const res = await axios.post('/api/auth/login/patient', {
 				username,
@@ -399,6 +402,7 @@ const authModel = {
 				action.setAuthenticated(true);
 				setAuthToken(res.data.token);
 				toast.success('Logged in Successfully');
+				action.setAdmin(false)
 				action.getCurrentPatient();
 			}
 		} catch (err) {
@@ -412,12 +416,14 @@ const authModel = {
 		action.setError(null);
 		action.setLoginError(null);
 		action.isLoading(true);
+		action.setAdmin(false)
 		try {
 			const res = await axios.post('/api/auth/login/doctor', {
 				username,
 				password,
 			});
 			if (res.status === 200 && res.data.message === 'OK') {
+				action.setAdmin(false)
 				action.setToken(res.data.token);
 				action.setAuthenticated(true);
 				setAuthToken(res.data.token);
@@ -435,6 +441,8 @@ const authModel = {
 		action.setError(null);
 		action.setLoginError(null);
 		action.isLoading(true);
+		action.setAdmin(false)
+
 		try {
 			const res = await axios.post('/api/admin/login', {
 				username,
@@ -445,6 +453,7 @@ const authModel = {
 				action.setAuthenticated(true);
 				setAuthToken(res.data.token);
 				toast.success('Logged in Successfully');
+				action.setAdmin(true)
 				action.getCurrentAdmin();
 			}
 		} catch (err) {
@@ -464,6 +473,7 @@ const authModel = {
 		state.loginErr = null;
 		state.loginErr = null;
 		state.registerErr = null;
+		state.isAdmin = false;
 		toast.success('You have Successfully Logged out!', {
 			position: toast.POSITION.TOP_CENTER,
 		});
@@ -495,6 +505,10 @@ const authModel = {
 	setRegisterError: action((state, error) => {
 		state.registerErr = error;
 	}),
+
+	setAdmin: action((state, isAdmin) => {
+		state.isAdmin = isAdmin;
+	})
 };
 
 export default authModel;
