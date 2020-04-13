@@ -74,14 +74,9 @@ const NavbarComponent = () => {
         <ul className="navbar-nav ml-auto">
 
             <li className="nav-item">
-                <Link className="nav-link" to="/">About Us
+                <Link className="nav-link" to="/aboutus">About Us
                 </Link>
             </li>
-
-            <li className="nav-item">
-                <Link className="nav-link" to="/">Contact Us</Link>
-            </li>
-
             <li className="nav-item dropdown">
                 <a className="nav-link dropdown-toggle" href="/#" id="navbarDropdownMenuLink-4" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
@@ -130,6 +125,5 @@ const NavbarComponent = () => {
 
     )
 }
-
 
 export default NavbarComponent;

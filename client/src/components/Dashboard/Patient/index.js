@@ -117,6 +117,7 @@ const PatientDashboardComponent = () => {
 }
 
 export default PatientDashboardComponent
+<<<<<<< HEAD
 
 
 // appointment_id(pin):"54639a21-6dbc-4e44-b93b-4fb813d11d97"
@@ -151,3 +152,5 @@ export default PatientDashboardComponent
 // city(pin):"TestUserCity"
 // state(pin):"TX"
 // zip(pin):333
+=======
+>>>>>>> d509be409b92d72b33b74d94f1441349ced88b0f
