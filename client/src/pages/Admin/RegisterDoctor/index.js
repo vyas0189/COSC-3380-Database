@@ -1,9 +1,28 @@
-import { useStoreActions } from 'easy-peasy';
-import React, { Fragment, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useStoreActions, useStoreState } from 'easy-peasy';
+import React, { Fragment, useState, useEffect } from 'react';
+import moment from 'moment';
+import { Table } from 'react-bootstrap';
+// import { Link } from 'react-router-dom';
+// import Loading from '../../Loading';
+
 import './RegisterDoctor.css';
 
 const RegisterComponent = () => {
+	const register = useStoreActions((actions) => actions.auth.registerDoctor);
+
+	const admin = useStoreState((state) => state.auth.user);
+	const getOffices = useStoreActions((actions) => actions.admin.getOffices);
+
+	const adminToken = useStoreState((state) => state.auth.token);
+	const officeLoading = useStoreState((state) => state.admin.officeLoading);
+
+	const offices = useStoreState((state) => state.admin.offices);
+	const token = useStoreState((state) => state.auth.token);
+
+	useEffect(() => {
+		getOffices(adminToken);
+	}, []);
+
 	const [formData, setFormData] = useState({
 		username: '',
 		password: '',
@@ -39,7 +58,6 @@ const RegisterComponent = () => {
 		specialty,
 	} = formData;
 
-	const register = useStoreActions((actions) => actions.auth.registerDoctor);
 	const onChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
@@ -242,18 +260,39 @@ const RegisterComponent = () => {
 														onChange={(e) => onChange(e)}
 														required
 													/>
-												</div>												
-												<div className="form-group">
-													<input
-														type="office"
-														placeholder="Office"
-														name="primary"
-														value={primary}
-														onChange={(e) => onChange(e)}
-														required
-													/>
 												</div>
-                                                <div className="form-group">
+												<Table striped bordered hover>
+													<thead>
+														<tr>
+															<th>#</th>
+															<th>Address</th>
+															<th>City</th>
+															<th>State</th>
+															<th>Zip</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tbody>
+															{offices.map((office, idx) => {
+																return (
+																	<tr key={idx}>
+																		<td>{idx + 1}</td>
+																		<td>{`${
+																			office.address_name
+																		} ${
+																			office.address2_name
+																				? office.address2_name
+																				: ''
+																		}, ${office.city} ${
+																			office.state
+																		} ${office.zip}`}</td>
+																	</tr>
+																);
+															})}
+														</tbody>
+													</tbody>
+												</Table>
+												<div className="form-group">
 													<select
 														name="primary"
 														value={primary}
@@ -263,14 +302,10 @@ const RegisterComponent = () => {
 														<option value="primary">
 															Primary Doctor
 														</option>
-														<option value="Yes">
-															Yes
-														</option>
-														<option value="No">
-                                                            No
-														</option>														
+														<option value="Yes">Yes</option>
+														<option value="No">No</option>
 													</select>
-												</div>												
+												</div>
 												<div className="form-group">
 													<select
 														name="specialty"

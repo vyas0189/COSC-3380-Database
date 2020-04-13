@@ -257,98 +257,6 @@ const authModel = {
 		}
 	),
 
-	updateDoctorProfile: thunk(
-		async (
-			action,
-			{ doctorID, primary, specialty, office },
-			{ getState }
-		) => {
-			action.setError(null);
-			action.isLoading(true);
-
-			try {
-				const res = await axios.put(
-					'/api/admin/update/doctor',
-					{ doctorID, primary, specialty, office },
-					{
-						headers: {
-							jwt_token: getState().token,
-						},
-					}
-				);
-
-				if (res.status === 200) {
-					action.setUser(res.data.doctor);
-					toast.success('Profile Updated!');
-				}
-			} catch (error) {
-				action.setError(error.response.data.message);
-				toast.error(error.response.data.message);
-			}
-			action.isLoading(false);
-		}
-	),
-
-	viewNewUsers: thunk(
-		async (action, { weekStartDate, weekEndDate }, { getState }) => {
-			action.setError(null);
-			action.isLoading(true);
-
-			try {
-				const res = await axios.get(
-					'/api/admin/view/weeklyNewUsers',
-					{ weekStartDate, weekEndDate },
-					{
-						headers: {
-							jwt_token: getState().token,
-						},
-					}
-				);
-
-				// if (res.status === 200) {
-
-				//     //don't know what to do here
-				//     action.setUser(res.data.patient)
-				//     toast.success('Profile Updated!')
-				// }
-			} catch (error) {
-				action.setError(error.response.data.message);
-				toast.error(error.response.data.message);
-			}
-			action.isLoading(false);
-		}
-	),
-
-	viewUpdateUsers: thunk(
-		async (action, { weekStartDate, weekEndDate }, { getState }) => {
-			action.setError(null);
-			action.isLoading(true);
-
-			try {
-				const res = await axios.get(
-					'/api/admin/view/weeklyUpdatedUsers',
-					{ weekStartDate, weekEndDate },
-					{
-						headers: {
-							jwt_token: getState().token,
-						},
-					}
-				);
-
-				// if (res.status === 200) {
-
-				//     //don't know what to do here
-				//     action.setUser(res.data.patient)
-				//     toast.success('Profile Updated!')
-				// }
-			} catch (error) {
-				action.setError(error.response.data.message);
-				toast.error(error.response.data.message);
-			}
-			action.isLoading(false);
-		}
-	),
-
 	registerOffice: thunk(
 		async (
 			action,
@@ -384,7 +292,7 @@ const authModel = {
 			}
 			action.isLoading(false);
 		}
-	),
+	),	
 
 	loginPatient: thunk(async (action, { username, password }) => {
 		action.setError(null);
