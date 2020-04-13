@@ -12,12 +12,12 @@ const patientModel = {
         action.setLoading(true)
 
         try {
-            const res = await axios.get('/appointment/view/myAppointments', {
+            const res = await axios.get('http://localhost:4000/api/appointment/view/myAppointments', {
                 headers: {
                     'jwt_token': payload
                 }
             });
-            if (res.status === 200 && res.data.message === 'OK') {
+            if (res.status === 200) {
                 action.setAppointments(res.data.appointments)
             }
         } catch (error) {
@@ -31,12 +31,12 @@ const patientModel = {
         action.setLoading(true)
 
         try {
-            const res = await axios.post('/appointment/schedule/primaryAppointment', { primaryAppointment, reason, availabilityID }, {
+            const res = await axios.post('http://localhost:4000/api/appointment/schedule/primaryAppointment', { primaryAppointment, reason, availabilityID }, {
                 headers: {
                     'jwt_token': token
                 }
             });
-            if (res.status === 200 && res.data.message === 'OK') {
+            if (res.status === 200) {
                 toast.success('Appointment Scheduled!');
             }
 
@@ -52,12 +52,12 @@ const patientModel = {
         action.setLoading(true)
 
         try {
-            const res = await axios.post('/appointment/schedule/specialistAppointment', { primaryAppointment, reason, availabilityID }, {
+            const res = await axios.post('http://localhost:4000/api/appointment/schedule/specialistAppointment', { primaryAppointment, reason, availabilityID }, {
                 headers: {
                     'jwt_token': token
                 }
             });
-            if (res.status === 200 && res.data.message === 'OK') {
+            if (res.status === 200) {
                 toast.success('Appointment Scheduled!');
             }
 
@@ -73,7 +73,7 @@ const patientModel = {
         action.setLoading(true)
 
         try {
-            const res = await axios.delete('/appointment/cancel', {
+            const res = await axios.delete('http://localhost:4000/api/appointment/cancel', {
                 headers: {
                     'jwt_token': token
                 },
@@ -81,7 +81,7 @@ const patientModel = {
                     appointmentID
                 }
             });
-            if (res.status === 200 && res.data.message === 'OK') {
+            if (res.status === 200) {
                 toast.success('Appointment Canceled!');
                 action.getAppointments(token)
             }
