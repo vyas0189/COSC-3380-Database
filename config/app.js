@@ -29,7 +29,10 @@ const app = express();
 //   message:
 //     { message: 'Too many accounts created from this IP, please try again after an hour' },
 // });
-
+// app.use((req, res, next) => {
+//   res.header('Access-Control-Allow-Origin', '*');
+//   next();
+// });
 app.use(compression());
 app.use(helmet());
 app.use(morgan('common'));
@@ -40,12 +43,15 @@ const isProduction = process.env.NODE_ENV === 'production';
 //   origin: '*',
 // };
 
-app.use(cors());
+app.use(cors({
+  credentials: true,
+  origin: [
+    'http://localhost:3000',
+    'https://apluscare.herokuapp.com',
+  ],
+}));
 app.use(express.json({ extended: false }));
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  next();
-});
+
 app.get('/api', (req, res) => {
   res.json({ welcome: 'Hospital' });
 });
