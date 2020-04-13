@@ -23,6 +23,13 @@ db.connect()
 
 const app = express();
 
+app.use(cors({
+  credentials: true,
+  origin: [
+    'http://localhost:8080',
+    'http://your-production-website.com',
+  ],
+}));
 // const limiter = rateLimit({
 //   windowMs: 1 * 60 * 1000,
 //   max: 15,
@@ -43,13 +50,6 @@ const isProduction = process.env.NODE_ENV === 'production';
 //   origin: '*',
 // };
 
-app.use(cors({
-  credentials: true,
-  origin: [
-    'http://localhost:3000',
-    'https://apluscare.herokuapp.com',
-  ],
-}));
 app.use(express.json({ extended: false }));
 
 app.get('/api', (req, res) => {
