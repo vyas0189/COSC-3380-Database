@@ -27,7 +27,7 @@ app.use(cors({
   credentials: true,
   origin: [
     'http://localhost:8080',
-    'http://your-production-website.com',
+    'https://apluscare.herokuapp.com',
   ],
 }));
 // const limiter = rateLimit({
