@@ -1,11 +1,10 @@
 import { useStoreState } from 'easy-peasy';
 import React from 'react';
-import './Doctor.css';
+import './AddAvailability.css';
 
 const DoctorDashboardComponent = () => {
-	const doctor = useStoreState((state) => state.auth.user);
-	console.log(doctor);
-
+	const admin = useStoreState((state) => state.auth.user);
+	
 	return (
 		<div className="container-fluid">
 			<div className="row no-gutter">
@@ -16,11 +15,7 @@ const DoctorDashboardComponent = () => {
 							<div className="row">
 								<div className="col-md-9 col-lg-8 mx-auto">
 									<div className="welcome text-center">
-										<h1>
-											Welcome, Dr. {doctor.doctor_first_name}{' '}
-											{doctor.doctor_last_name}.
-										</h1>
-										<h2>How can we help you today?</h2>
+										<h1>Add Availability</h1>										
 									</div>
 									<div className="body text-center"></div>
 								</div>

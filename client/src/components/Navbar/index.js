@@ -48,9 +48,29 @@ const NavbarComponent = () => {
 					Dashboard
 				</Link>
 			</li>
-			<li className="nav-item active">
-				<Link className="nav-link" to="/doctorProfile">
-					Profile
+			<li className="nav-item">
+				<Link className="nav-link" to="/addAvailability">
+					Add Availability
+				</Link>
+			</li>
+			<li className="nav-item">
+				<Link className="nav-link" to="/orderTest">
+					Order Test
+				</Link>
+			</li>
+			<li className="nav-item">
+				<Link className="nav-link" to="/updateAvailability">
+					Update Availability
+				</Link>
+			</li>
+			<li className="nav-item">
+				<Link className="nav-link" to="/updateDiagnosis">
+					Update Diagnosis
+				</Link>
+			</li>
+			<li className="nav-item">
+				<Link className="nav-link" to="/updateDoctor">
+					Update Doctor
 				</Link>
 			</li>
 			<li className="nav-item">
@@ -79,7 +99,7 @@ const NavbarComponent = () => {
 				</Link>
 			</li>
 			<li className="nav-item">
-				<Link className="nav-link" to="/updateDoctor">
+				<Link className="nav-link" to="/adminUpdateDoctor">
 					Update Doctor
 				</Link>
 			</li>
