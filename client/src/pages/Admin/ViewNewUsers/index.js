@@ -1,30 +1,45 @@
-import { useStoreActions } from 'easy-peasy';
-import React, { Fragment, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useStoreActions, useStoreState } from 'easy-peasy';
+import React, { Fragment, useEffect, useState } from 'react';
+import Loading from '../../../components/Loading';
 import './ViewNewUsers.css';
 
 const RegisterComponent = () => {
+	const admin = useStoreState((state) => state.auth.user);
+	const token = useStoreState((state) => state.auth.token);
+	const loading = useStoreState((state) => state.auth.loading);
+	const getNewUsers = useStoreActions((actions) => actions.auth.getNewUsers);
+	const newUsersLoading = useStoreState(
+		(state) => state.admin.newUsersLoading
+	);
+	const adminToken = useStoreState((state) => state.auth.token);
+	const newUsers = useStoreState((state) => state.admin.newUsers);
+
+	useEffect(() => {
+		getNewUsers(adminToken);
+	}, []);
+
 	const [formData, setFormData] = useState({
-		weekStartDate: '',
-		weekEndDate: '',
+		startDate: '',
+		endDate: '',
 	});
 
-	const { weekStartDate, weekEndDate } = formData;
+	const { startDate, endDate } = formData;
 
-	const register = useStoreActions(
-		(actions) => actions.auth.viewNewUsers
-	);
 	const onChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
 	const onSubmit = async (e) => {
 		e.preventDefault();
-		const userRegister = {
-			weekStartDate,
-			weekEndDate,
-		};
-		register(userRegister);
+
+		return (
+			<div className="form-group">
+				{newUsers.map(
+					(newUser, idx) =>
+						`${newUser.username} - ${newUser.role} - ${newUser.created_at}`
+				)}
+			</div>
+		);
 	};
 
 	return (
@@ -48,8 +63,8 @@ const RegisterComponent = () => {
 												<input
 													type="text"
 													placeholder="Start Date"
-													name="weekStartDate"
-													value={weekStartDate}
+													name="startDate"
+													value={startDate}
 													onChange={(e) => onChange(e)}
 													required
 												/>
@@ -59,8 +74,8 @@ const RegisterComponent = () => {
 												<input
 													type="text"
 													placeholder="End Date"
-													name="weekEndDate"
-													value={weekEndDate}
+													name="endDate"
+													value={endDate}
 													onChange={(e) => onChange(e)}
 													required
 												/>

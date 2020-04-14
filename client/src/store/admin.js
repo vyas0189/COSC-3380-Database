@@ -4,15 +4,26 @@ import { toast } from 'react-toastify';
 
 const adminModel = {
 	loading: false,
+
+	//offices
 	offices: [],
 	officeErr: null,
+	//doctors
+	doctors: [],
+	doctorErr: null,
+	//newUsers
+	newUsers: [],
+	newUserErr: null,
+	//updatedUsers
+	updatedUsers: [],
+	updatedUserErr: null,
 
 	getOffices: thunk(async (action, payload) => {
 		action.setOfficesError(null);
 		action.setLoading(true);
 
 		try {
-			const res = await axios.get('/api/admin/view/offices', {
+			const res = await axios.get('/api/admin/get/offices', {
 				headers: {
 					jwt_token: payload,
 				},
@@ -22,6 +33,25 @@ const adminModel = {
 			}
 		} catch (error) {
 			action.setOfficesError(error.response.data.message);
+		}
+		action.setLoading(false);
+	}),
+
+	getDoctors: thunk(async (action, payload) => {
+		action.setDoctorsError(null);
+		action.setLoading(true);
+
+		try {
+			const res = await axios.get('/api/admin/get/doctors', {
+				headers: {
+					jwt_token: payload,
+				},
+			});
+			if (res.status === 200) {
+				action.setDoctors(res.data.doctors);
+			}
+		} catch (error) {
+			action.setDoctorsError(error.response.data.message);
 		}
 		action.setLoading(false);
 	}),
@@ -58,65 +88,43 @@ const adminModel = {
 		}
 	),
 
-	viewNewUsers: thunk(
-		async (action, { weekStartDate, weekEndDate }, { getState }) => {
-			action.setError(null);
-			action.isLoading(true);
+	getNewUsers: thunk(async (action, payload) => {
+		action.setNewUsersError(null);
+		action.setLoading(true);
 
-			try {
-				const res = await axios.get(
-					'/api/admin/view/weeklyNewUsers',
-					{ weekStartDate, weekEndDate },
-					{
-						headers: {
-							jwt_token: getState().token,
-						},
-					}
-				);
-
-				// if (res.status === 200) {
-
-				//     //don't know what to do here
-				//     action.setUser(res.data.patient)
-				//     toast.success('Profile Updated!')
-				// }
-			} catch (error) {
-				action.setError(error.response.data.message);
-				toast.error(error.response.data.message);
+		try {
+			const res = await axios.get('/api/admin/get/newUsers', {
+				headers: {
+					jwt_token: payload,
+				},
+			});
+			if (res.status === 200) {
+				action.setNewUsers(res.data.newUsers);
 			}
-			action.isLoading(false);
+		} catch (error) {
+			action.setNewUsersError(error.response.data.message);
 		}
-	),
+		action.setLoading(false);
+	}),
 
-	viewUpdatedUsers: thunk(
-		async (action, { weekStartDate, weekEndDate }, { getState }) => {
-			action.setError(null);
-			action.isLoading(true);
+	getUpdatedUsers: thunk(async (action, payload) => {
+		action.setUpdatedUsersError(null);
+		action.setLoading(true);
 
-			try {
-				const res = await axios.get(
-					'/api/admin/view/weeklyUpdatedUsers',
-					{ weekStartDate, weekEndDate },
-					{
-						headers: {
-							jwt_token: getState().token,
-						},
-					}
-				);
-
-				// if (res.status === 200) {
-
-				//     //don't know what to do here
-				//     action.setUser(res.data.patient)
-				//     toast.success('Profile Updated!')
-				// }
-			} catch (error) {
-				action.setError(error.response.data.message);
-				toast.error(error.response.data.message);
+		try {
+			const res = await axios.get('/api/admin/get/updatedUsers', {
+				headers: {
+					jwt_token: payload,
+				},
+			});
+			if (res.status === 200) {
+				action.setUpdatedUsers(res.data.updatedUsers);
 			}
-			action.isLoading(false);
+		} catch (error) {
+			action.setUpdatedUsersError(error.response.data.message);
 		}
-	),
+		action.setLoading(false);
+	}),
 
 	setLoading: action((state, loading) => {
 		state.loading = loading;
@@ -128,6 +136,30 @@ const adminModel = {
 
 	setOfficesError: action((state, error) => {
 		state.officeErr = error;
+	}),
+
+	setDoctors: action((state, doctors) => {
+		state.doctors = doctors;
+	}),
+
+	setDoctorsError: action((state, error) => {
+		state.doctorErr = error;
+	}),
+
+	setNewUsers: action((state, newUsers) => {
+		state.newUsers = newUsers;
+	}),
+
+	setNewUsersError: action((state, error) => {
+		state.newUserErr = error;
+	}),
+
+	setUpdatedUsers: action((state, updatedUsers) => {
+		state.updatedUsers = updatedUsers;
+	}),
+
+	setUpdatedUsersError: action((state, error) => {
+		state.updatedUserErr = error;
 	}),
 };
 export default adminModel;

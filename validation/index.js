@@ -73,8 +73,8 @@ const capacity = Joi.number().required();
 
 // report schema
 
-const weekStartDate = Joi.date().required();
-const weekEndDate = Joi.date().required();
+const startDate = Joi.date().required();
+const endDate = Joi.date().required();
 
 module.exports = {
 	// validate: async (schema, payload, req, res) => {
@@ -132,9 +132,9 @@ module.exports = {
 		zip,
 		phoneNumber,
 	}),
-	generateWeeklyReport: Joi.object().keys({
-		weekStartDate,
-		weekEndDate,
+	generateReport: Joi.object().keys({
+		startDate,
+		endDate,
 	}),
 
 	// patient schemas
