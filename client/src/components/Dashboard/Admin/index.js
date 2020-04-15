@@ -4,7 +4,6 @@ import './Admin.css';
 
 const AdminDashboardComponent = () => {
 	const admin = useStoreState((state) => state.auth.user);
-	console.log(admin);
 
 	return (
 		<div className="container-fluid">

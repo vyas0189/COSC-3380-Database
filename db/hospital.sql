@@ -140,12 +140,21 @@ CREATE TRIGGER SPECIALIST_APPOINTMENT_NO_PRIMARY_CARE_DOCTOR
     FOR EACH ROW
 EXECUTE PROCEDURE deny_specialist_scheduling();
 -- 2) Deny doctor from updating diagnosis if patient doesn't have a primary care doctor
-  CREATE FUNCTION deny_update_diagnosis() RETURNS trigger AS $$ BEGIN IF (NEW.patient_primary_doctor IS NULL) THEN RETURN NULL;
-END IF;
-RETURN NEW;
-END $$ LANGUAGE plpgsql;
-CREATE TRIGGER UPDATE_DIAGNOSIS_NO_PRIMARY_DOCTOR BEFORE
-UPDATE OF patient_diagnosis ON patient FOR EACH ROW EXECUTE PROCEDURE deny_update_diagnosis();
+CREATE FUNCTION deny_update_diagnosis() RETURNS trigger AS
+$$
+BEGIN
+    IF (NEW.patient_primary_doctor IS NULL) THEN
+        RETURN NULL;
+    END IF;
+    RETURN NEW;
+END
+$$ LANGUAGE plpgsql;
+CREATE TRIGGER UPDATE_DIAGNOSIS_NO_PRIMARY_DOCTOR
+    BEFORE
+        UPDATE OF patient_diagnosis
+    ON patient
+    FOR EACH ROW
+EXECUTE PROCEDURE deny_update_diagnosis();
 
 
 SELECT *
@@ -159,8 +168,3 @@ FROM appointment app
                              ON av.office_id = o.office_id) as info
               ON app.appointment_availability = info.availability_id
 WHERE appointment_patient = '31a248c0-2d15-4fe0-81b9-df1ccfed9ef0';
-
-SELECT * FROM appointment WHERE appointment_patient = '31a248c0-2d15-4fe0-81b9-df1ccfed9ef0';
-SELECT * FROM availability;
-SELECT * FROM office WHERE office_id = 'b9fee75b-5fa2-4b3a-9e81-97ebb8eb4350';
-SELECT * FROM office;

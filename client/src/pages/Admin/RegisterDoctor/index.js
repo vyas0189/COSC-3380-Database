@@ -6,7 +6,11 @@ import Loading from '../../../components/Loading';
 import './RegisterDoctor.css';
 
 const RegisterComponent = () => {
+<<<<<<< HEAD
 	const register = useStoreActions((actions) => actions.admin.registerDoctor);
+=======
+	const register = useStoreActions((actions) => actions.auth.registerDoctor);
+>>>>>>> ad822ac373e23a780f384f66ad9affcb1e568fb5
 
 	const admin = useStoreState((state) => state.auth.user);
 	const getOffices = useStoreActions((actions) => actions.admin.getOffices);
@@ -20,7 +24,11 @@ const RegisterComponent = () => {
 
 	useEffect(() => {
 		getOffices(adminToken);
+<<<<<<< HEAD
 	}, []);
+=======
+	}, [offices]);
+>>>>>>> ad822ac373e23a780f384f66ad9affcb1e568fb5
 
 	const [formData, setFormData] = useState({
 		username: '',
@@ -58,8 +66,11 @@ const RegisterComponent = () => {
 	} = formData;
 
 	const onChange = (e) => {
+<<<<<<< HEAD
 		console.log(e.target.name, e.target.value);
 
+=======
+>>>>>>> ad822ac373e23a780f384f66ad9affcb1e568fb5
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 

@@ -104,7 +104,7 @@ router.get('/view/myAppointments', auth, async (req, res) => {
         const patient = await db.query('SELECT patient_id FROM patient WHERE patient_user = $1',
             [userID]);
 
-        const appointments = await db.query('SELECT * FROM appointment app JOIN (SELECT * FROM availability av JOIN doctor d on av.doctor_id = d.doctor_id JOIN (SELECT * FROM office JOIN address a on office.office_address = a.address_id) AS o ON av.office_id = o.office_id) as info ON app.appointment_availability = info.availability_id WHERE appointment_patient = $1', [patient.rows[0].patient_id]);
+        const appointments = await db.query('SELECT * FROM appointment app JOIN (SELECT * FROM availability av JOIN doctor d on av.doctor_id = d.doctor_id JOIN (SELECT * FROM office JOIN address a on office.office_address = a.address_id) AS o ON av.office_id = o.office_id) as info ON app.appointment_availability = info.availability_id WHERE appointment_patient = $1 ORDER BY availability_date', [patient.rows[0].patient_id]);
 
         res.status(200).json({ message: 'OK', appointments: appointments.rows });
     } catch (error) {
@@ -112,6 +112,16 @@ router.get('/view/myAppointments', auth, async (req, res) => {
     }
 });
 
+router.get('/appointmentDetails/:doctorID', auth, async (req, res) => {
+    try {
+        const { doctorID } = req.params;
+
+        const appointmentDetails = await db.query('SELECT * FROM doctor doc LEFT JOIN test t on doc.doctor_id = t.test_doctor LEFT JOIN diagnosis d ON d.diagnosis_id = doc.doctor_diagnosis WHERE doc.doctor_id = $1', [doctorID]);
+        res.status(200).json({ message: 'OK', appointmentDetails: appointmentDetails.rows });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error });
+    }
+});
 
 router.get('/view/appointmentsWithPatient', doc, async (req, res) => {
     try {
