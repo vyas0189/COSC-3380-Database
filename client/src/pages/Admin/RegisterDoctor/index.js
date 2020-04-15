@@ -82,6 +82,23 @@ const RegisterComponent = () => {
 			specialty,
 		};
 		register(userRegister);
+		setFormData({
+			username: '',
+			password: '',
+			role: '',
+			email: '',
+			firstName: '',
+			lastName: '',
+			address: '',
+			address2: '',
+			city: '',
+			state: '',
+			zip: '',
+			phoneNumber: '',
+			primary: '',
+			office: '',
+			specialty: '',
+		})
 	};
 
 	return (
@@ -301,8 +318,8 @@ const RegisterComponent = () => {
 														<option value="primary">
 															Primary Doctor
 														</option>
-														<option value="Yes">Yes</option>
-														<option value="No">No</option>
+														<option value="true">Yes</option>
+														<option value="false">No</option>
 													</select>
 												</div>
 												<div className="form-group">
