@@ -4,7 +4,6 @@ import './Doctor.css';
 
 const DoctorDashboardComponent = () => {
 	const doctor = useStoreState((state) => state.auth.user);
-	console.log(doctor);
 
 	return (
 		<div className="container-fluid">
