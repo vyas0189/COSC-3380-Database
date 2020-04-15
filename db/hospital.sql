@@ -155,16 +155,3 @@ CREATE TRIGGER UPDATE_DIAGNOSIS_NO_PRIMARY_DOCTOR
     ON patient
     FOR EACH ROW
 EXECUTE PROCEDURE deny_update_diagnosis();
-
-
-SELECT *
-FROM appointment app
-         JOIN (SELECT *
-               FROM availability av
-                        JOIN doctor d on av.doctor_id = d.doctor_id
-                        JOIN (SELECT *
-                              FROM office
-                                       JOIN address a on office.office_address = a.address_id) AS o
-                             ON av.office_id = o.office_id) as info
-              ON app.appointment_availability = info.availability_id
-WHERE appointment_patient = '31a248c0-2d15-4fe0-81b9-df1ccfed9ef0';
