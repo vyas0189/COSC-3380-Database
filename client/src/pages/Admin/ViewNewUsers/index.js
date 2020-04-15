@@ -28,24 +28,22 @@ const RegisterComponent = () => {
 
 	const onSubmit = async (e) => {
 		e.preventDefault();
-		
+
 		return (
 			<div className="form-group">
-					{newUsers.map(
-						(newUser, idx) =>
-							`${newUser.username} - ${newUser.role} - ${newUser.created_at}`
-					)}
+				{newUsers.map(
+					(newUser, idx) =>
+						`${newUser.username} - ${newUser.role} - ${newUser.created_at}`
+				)}
 			</div>
-				
 		);
-		
 	};
 
 	return (
 		<Fragment>
 			<div className="container-fluid">
 				<div className="row no-gutter">
-					<div className="d-none d-md-flex col-md-4 col-lg-6 bg-admin-dashboard"></div>
+					{/* <div className="d-none d-md-flex col-md-4 col-lg-6 bg-admin-dashboard"></div> */}
 					<div className="col-md-8 col-lg-6">
 						<div className="login d-flex align-items-center py-5">
 							<div className="container">
@@ -60,7 +58,7 @@ const RegisterComponent = () => {
 										>
 											<div className="form-group">
 												<input
-													type="text"
+													type="date"
 													placeholder="Start Date"
 													name="startDate"
 													value={startDate}
@@ -71,7 +69,7 @@ const RegisterComponent = () => {
 
 											<div className="form-group">
 												<input
-													type="text"
+													type="date"
 													placeholder="End Date"
 													name="endDate"
 													value={endDate}

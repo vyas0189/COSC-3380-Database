@@ -18,6 +18,104 @@ const adminModel = {
 	updatedUsers: [],
 	updatedUserErr: null,
 
+	registerDoctor: thunk(
+		async (
+			action,
+			{
+				username,
+				password,
+				role,
+				email,
+				firstName,
+				lastName,
+				address,
+				address2,
+				city,
+				state,
+				zip,
+				phoneNumber,
+				primary,
+				office,
+				specialty,
+			}
+		) => {
+			action.setError(null);
+			action.isLoading(true);
+			zip = parseInt(zip);
+			try {
+				if (!address2.length) {
+					address2 = 'n/a';
+				}
+				role = 'doctor';
+				const res = await axios.post('/api/admin/register/doctor', {
+					username,
+					password,
+					role,
+					email,
+					firstName,
+					lastName,
+					address,
+					address2,
+					city,
+					state,
+					zip,
+					phoneNumber,
+					primary,
+					office,
+					specialty,
+				});
+
+				if (res.status === 200 && res.data.message === 'OK') {
+					action.setToken(res.data.token);
+					setAuthToken(res.data.token);
+					action.setAuthenticated(true);
+					toast.success('Registered Successfully');
+				}
+			} catch (err) {
+				action.setRegisterError(err.response.data.message);
+				toast.error(err.response.data.message);
+			}
+			action.isLoading(false);
+		}
+	),
+
+	registerOffice: thunk(
+		async (
+			action,
+			{ capacity, address, address2, city, state, zip, phoneNumber }
+		) => {
+			action.setError(null);
+			action.isLoading(true);
+			zip = parseInt(zip);
+			try {
+				if (!address2.length) {
+					address2 = 'n/a';
+				}
+
+				const res = await axios.post('/api/admin/register/office', {
+					capacity,
+					address,
+					address2,
+					city,
+					state,
+					zip,
+					phoneNumber,
+				});
+
+				if (res.status === 200 && res.data.message === 'OK') {
+					action.setToken(res.data.token);
+					setAuthToken(res.data.token);
+					action.setAuthenticated(true);
+					toast.success('Registered Successfully');
+				}
+			} catch (err) {
+				action.setRegisterError(err.response.data.message);
+				toast.error(err.response.data.message);
+			}
+			action.isLoading(false);
+		}
+	),
+
 	getOffices: thunk(async (action, payload) => {
 		action.setOfficesError(null);
 		action.setLoading(true);
@@ -156,9 +254,7 @@ const adminModel = {
 			}
 			action.isLoading(false);
 		}
-	),
-
-	
+	),	
 
 	setLoading: action((state, loading) => {
 		state.loading = loading;

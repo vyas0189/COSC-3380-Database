@@ -337,9 +337,7 @@ router.get('/get/offices', doc, async (req, res) => {
 
 router.get('/get/patients', doc, async (req, res) => {
 	try {
-		const patients = await db.query(
-			'SELECT * FROM patient'
-		);
+		const patients = await db.query('SELECT * FROM patient');
 
 		res.status(200).json({
 			message: 'OK',
