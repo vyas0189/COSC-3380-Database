@@ -14,31 +14,6 @@ const NavbarComponent = () => {
 
 	const logoutUser = () => {
 		logout();
-<<<<<<< HEAD
-		history.push('/');
-	};
-	const authLinks = (
-		<ul className="navbar-nav ml-auto">
-			<li className="nav-item">
-				<Link className="nav-link" to="/dashboard">
-					Dashboard
-				</Link>
-			</li>
-			<li className="nav-item">
-				<Link className="nav-link" to="/schedule">
-					Schedule
-				</Link>
-			</li>
-			<li className="nav-item">
-				<Link className="nav-link" to="/profile">
-					Profile
-				</Link>
-			</li>
-			<li className="nav-item">
-				<i className="nav-link" onClick={logoutUser}>
-					Logout
-				</i>
-=======
 		history.push('/')
 	}
 	const authLinks = (
@@ -58,7 +33,6 @@ const NavbarComponent = () => {
 				<i className="nav-link" onClick={logoutUser} >
 					Logout
                 </i>
->>>>>>> ad822ac373e23a780f384f66ad9affcb1e568fb5
 			</li>
 		</ul>
 	);
@@ -66,7 +40,6 @@ const NavbarComponent = () => {
 	const doctorLinks = (
 		<ul className="navbar-nav ml-auto">
 			<li className="nav-item">
-<<<<<<< HEAD
 				<Link className="nav-link" to="/dashboard">
 					Dashboard
 				</Link>
@@ -148,75 +121,6 @@ const NavbarComponent = () => {
 				</i>
 			</li>
 		</ul>
-	);
-
-	const guestLinks = (
-		<ul className="navbar-nav ml-auto">
-			<li className="nav-item">
-				<Link className="nav-link" to="/aboutus">
-					About Us
-				</Link>
-			</li>
-
-			<li className="nav-item dropdown">
-				<a
-					className="nav-link dropdown-toggle"
-					href="/#"
-					id="navbarDropdownMenuLink-4"
-					data-toggle="dropdown"
-					aria-haspopup="true"
-					aria-expanded="false"
-				>
-					<i className="fas fa-user"></i> Profile{' '}
-				</a>
-
-				<div
-					className="dropdown-menu dropdown-menu-right dropdown-info"
-					aria-labelledby="navbarDropdownMenuLink-4"
-				>
-					<Link className="dropdown-item" to="/login">
-						Login
-					</Link>
-					<Link className="dropdown-item" to="/login/doctor">
-						Employee Login
-					</Link>
-					<Link className="dropdown-item" to="/register">
-						Register
-					</Link>
-				</div>
-			</li>
-		</ul>
-	);
-
-=======
-				<Link className="nav-link" to='/dashboard'>
-					Dashboard
-                </Link>
-			</li>
-			<li className="nav-item active">
-				<Link className="nav-link" to='/doctorProfile'>Profile</Link>
-			</li>
-			<li className="nav-item">
-				<i className="nav-link" onClick={logoutUser} >
-					Logout
-                </i>
-			</li>
-		</ul>
-	);
-
-	const adminLinks = (
-		<ul className="navbar-nav ml-auto">
-			<li className="nav-item">
-				<Link className="nav-link" to='/dashboard'>
-					Dashboard
-                </Link>
-			</li>
-			<li className="nav-item">
-				<i className="nav-link" onClick={logoutUser} >
-					Logout
-                </i>
-			</li>
-		</ul>
 	)
 
 	const guestLinks = (
@@ -242,38 +146,18 @@ const NavbarComponent = () => {
 		</ul>
 	);
 
->>>>>>> ad822ac373e23a780f384f66ad9affcb1e568fb5
 	const navLinks = () => {
 		if (isAuthenticated) {
 			if (user) {
 				if (user.role === 'patient') {
-<<<<<<< HEAD
-					return authLinks;
-				} else if (user.role === 'doctor') {
-					return doctorLinks;
-=======
 					return authLinks
 				} else if (user.role === 'doctor') {
 					return doctorLinks
->>>>>>> ad822ac373e23a780f384f66ad9affcb1e568fb5
 				} else if (user.role === 'admin') {
 					return adminLinks;
 				}
 			}
 		}
-<<<<<<< HEAD
-		return guestLinks;
-	};
-	return (
-		<Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-			<Link to="/">
-				<img src={logo} alt="logo" />
-			</Link>
-<<<<<<< HEAD
-			{/* <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon"></span>
-            </button> */}
-=======
 		return guestLinks
 	}
 	return (
@@ -283,22 +167,14 @@ const NavbarComponent = () => {
 			<Link to='/'>
 				<img src={logo} alt="logo" />
 			</Link>
->>>>>>> ad822ac373e23a780f384f66ad9affcb1e568fb5
-=======
->>>>>>> 6902a3462d0001f0c4c79d220fe72e1afde669d9
 
 			<Navbar.Toggle aria-controls="responsive-navbar-nav" />
 			<Navbar.Collapse id="responsive-navbar-nav">
 				{!loading && navLinks()}
 			</Navbar.Collapse>
 		</Navbar>
-<<<<<<< HEAD
-	);
-};
-=======
 
 	)
 }
->>>>>>> ad822ac373e23a780f384f66ad9affcb1e568fb5
 
 export default NavbarComponent;

@@ -26,11 +26,8 @@ import Register from '../pages/Register';
 import setAuthToken from '../utils/setAuthToken';
 import NavbarComponent from './Navbar';
 import PrivateRoute from './ProtectedRoute';
-<<<<<<< HEAD
 import AdminRoute from './ProtectedRoute/AdminRoute';
-=======
 import PatientScheduleComponent from './Schedule/Patient';
->>>>>>> ad822ac373e23a780f384f66ad9affcb1e568fb5
 
 toast.configure();
 const App = () => {
@@ -105,38 +102,10 @@ const App = () => {
 				/>
 				<PrivateRoute exact path="/updateDoctor" component={UpdateDoctor} />
 
-<<<<<<< HEAD
 				<Route component={NotFoundPage} />
 			</Switch>
 		</>
 	);
 };
-=======
-  const user = useStoreActions(actions => actions.auth.getCurrentPatient)
-
-  useEffect(() => {
-    setAuthToken(localStorage.token)
-    user();
-  }, [user])
-
-  return (
-    <>
-      <NavbarComponent />
-      <Switch>
-        <Route exact path="/" component={Home} />
-        <Route exact path="/aboutus" component={AboutUs} />
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/register" component={Register} />
-        <Route exact path="/login/doctor" component={Login} />
-        <Route exact path="/login/admin" component={Login} />
-        <PrivateRoute exact path="/dashboard" component={Dashboard} />
-        <PrivateRoute exact path="/patient/schedule" component={PatientScheduleComponent} />
-        <Route component={NotFoundPage} />
-
-      </Switch>
-    </>
-  );
-}
->>>>>>> ad822ac373e23a780f384f66ad9affcb1e568fb5
 
 export default App;
