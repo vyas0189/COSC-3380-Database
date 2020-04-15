@@ -56,38 +56,6 @@ const adminModel = {
 		action.setLoading(false);
 	}),
 
-	updateDoctorProfile: thunk(
-		async (
-			action,
-			{ doctorID, primary, specialty, office },
-			{ getState }
-		) => {
-			action.setError(null);
-			action.isLoading(true);
-
-			try {
-				const res = await axios.put(
-					'/api/admin/update/doctor',
-					{ doctorID, primary, specialty, office },
-					{
-						headers: {
-							jwt_token: getState().token,
-						},
-					}
-				);
-
-				if (res.status === 200) {
-					action.setUser(res.data.doctor);
-					toast.success('Profile Updated!');
-				}
-			} catch (error) {
-				action.setError(error.response.data.message);
-				toast.error(error.response.data.message);
-			}
-			action.isLoading(false);
-		}
-	),
-
 	getNewUsers: thunk(async (action, payload) => {
 		action.setNewUsersError(null);
 		action.setLoading(true);
@@ -125,6 +93,72 @@ const adminModel = {
 		}
 		action.setLoading(false);
 	}),
+
+	addAvailability: thunk(
+		async (
+			action,
+			{ officeID, availabilityDate },
+			{ getState }
+		) => {
+			action.setError(null);
+			action.isLoading(true);
+
+			try {
+				const res = await axios.put(
+					'/api/doctor/add/availability',
+					{ officeID, availabilityDate },
+					{
+						headers: {
+							jwt_token: getState().token,
+						},
+					}
+				);
+
+				if (res.status === 200) {
+					action.setUser(res.data.doctor);
+					toast.success('Availability added!');
+				}
+			} catch (error) {
+				action.setError(error.response.data.message);
+				toast.error(error.response.data.message);
+			}
+			action.isLoading(false);
+		}
+	),
+
+	updateDoctorProfile: thunk(
+		async (
+			action,
+			{ doctorID, primary, specialty, office },
+			{ getState }
+		) => {
+			action.setError(null);
+			action.isLoading(true);
+
+			try {
+				const res = await axios.put(
+					'/api/admin/update/doctor',
+					{ doctorID, primary, specialty, office },
+					{
+						headers: {
+							jwt_token: getState().token,
+						},
+					}
+				);
+
+				if (res.status === 200) {
+					action.setUser(res.data.doctor);
+					toast.success('Profile Updated!');
+				}
+			} catch (error) {
+				action.setError(error.response.data.message);
+				toast.error(error.response.data.message);
+			}
+			action.isLoading(false);
+		}
+	),
+
+	
 
 	setLoading: action((state, loading) => {
 		state.loading = loading;

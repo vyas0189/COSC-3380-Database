@@ -53,14 +53,15 @@ const NavbarComponent = () => {
 					Add Availability
 				</Link>
 			</li>
-			<li className="nav-item">
-				<Link className="nav-link" to="/orderTest">
-					Order Test
-				</Link>
-			</li>
+
 			<li className="nav-item">
 				<Link className="nav-link" to="/updateAvailability">
 					Update Availability
+				</Link>
+			</li>
+			<li className="nav-item">
+				<Link className="nav-link" to="/updateDoctor">
+					Update Doctor
 				</Link>
 			</li>
 			<li className="nav-item">
@@ -69,8 +70,8 @@ const NavbarComponent = () => {
 				</Link>
 			</li>
 			<li className="nav-item">
-				<Link className="nav-link" to="/updateDoctor">
-					Update Doctor
+				<Link className="nav-link" to="/orderTest">
+					Order Test
 				</Link>
 			</li>
 			<li className="nav-item">

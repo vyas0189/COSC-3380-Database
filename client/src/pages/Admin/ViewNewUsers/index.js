@@ -5,13 +5,10 @@ import './ViewNewUsers.css';
 
 const RegisterComponent = () => {
 	const admin = useStoreState((state) => state.auth.user);
-	const token = useStoreState((state) => state.auth.token);
-	const loading = useStoreState((state) => state.auth.loading);
-	const getNewUsers = useStoreActions((actions) => actions.auth.getNewUsers);
-	const newUsersLoading = useStoreState(
-		(state) => state.admin.newUsersLoading
-	);
+
+	const getNewUsers = useStoreActions((actions) => actions.admin.getNewUsers);
 	const adminToken = useStoreState((state) => state.auth.token);
+
 	const newUsers = useStoreState((state) => state.admin.newUsers);
 
 	useEffect(() => {
@@ -31,15 +28,17 @@ const RegisterComponent = () => {
 
 	const onSubmit = async (e) => {
 		e.preventDefault();
-
+		
 		return (
 			<div className="form-group">
-				{newUsers.map(
-					(newUser, idx) =>
-						`${newUser.username} - ${newUser.role} - ${newUser.created_at}`
-				)}
+					{newUsers.map(
+						(newUser, idx) =>
+							`${newUser.username} - ${newUser.role} - ${newUser.created_at}`
+					)}
 			</div>
+				
 		);
+		
 	};
 
 	return (

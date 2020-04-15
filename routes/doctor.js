@@ -320,4 +320,34 @@ router.put('/update/availability', doc, async (req, res) => {
 	}
 });
 
+router.get('/get/offices', doc, async (req, res) => {
+	try {
+		const offices = await db.query(
+			'SELECT * FROM address INNER JOIN office ON (address.address_id = office.office_address)'
+		);
+
+		res.status(200).json({
+			message: 'OK',
+			offices: offices.rows,
+		});
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error });
+	}
+});
+
+router.get('/get/patients', doc, async (req, res) => {
+	try {
+		const patients = await db.query(
+			'SELECT * FROM patient'
+		);
+
+		res.status(200).json({
+			message: 'OK',
+			offices: patients.rows,
+		});
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error });
+	}
+});
+
 module.exports = router;

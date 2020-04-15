@@ -11,7 +11,7 @@ const RegisterComponent = () => {
 	);
 	const admin = useStoreState((state) => state.auth.user);
 	const token = useStoreState((state) => state.auth.token);
-	const loading = useStoreState(state => state.auth.loading);
+	const loading = useStoreState((state) => state.auth.loading);
 	const adminToken = useStoreState((state) => state.auth.token);
 
 	//offices
@@ -42,6 +42,7 @@ const RegisterComponent = () => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
+	//doesn't work here - register not a function???
 	const onSubmit = async (e) => {
 		e.preventDefault();
 		const userRegister = {
