@@ -6,7 +6,7 @@ import Loading from '../../../components/Loading';
 import './RegisterDoctor.css';
 
 const RegisterComponent = () => {
-	const register = useStoreActions((actions) => actions.auth.registerDoctor);
+	const register = useStoreActions((actions) => actions.admin.registerDoctor);
 
 	const admin = useStoreState((state) => state.auth.user);
 	const getOffices = useStoreActions((actions) => actions.admin.getOffices);

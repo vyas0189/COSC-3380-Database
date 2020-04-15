@@ -1,6 +1,5 @@
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import React, { Fragment, useEffect, useState } from 'react';
-import Loading from '../../../components/Loading';
 import './ViewNewUsers.css';
 
 const RegisterComponent = () => {
@@ -36,61 +35,47 @@ const RegisterComponent = () => {
 						`${newUser.username} - ${newUser.role} - ${newUser.created_at}`
 				)}
 			</div>
+
 		);
+
 	};
 
 	return (
 		<Fragment>
-			<div className="container-fluid">
-				<div className="row no-gutter">
-					{/* <div className="d-none d-md-flex col-md-4 col-lg-6 bg-admin-dashboard"></div> */}
-					<div className="col-md-8 col-lg-6">
-						<div className="login d-flex align-items-center py-5">
-							<div className="container">
-								<div className="row">
-									<div className="col-md-9 col-lg-4 mx-auto">
-										<h3 className="login-heading mb-4">
-											View New Users
-										</h3>
-										<form
-											className="form"
-											onSubmit={(e) => onSubmit(e)}
-										>
-											<div className="form-group">
-												<input
-													type="date"
-													placeholder="Start Date"
-													name="startDate"
-													value={startDate}
-													onChange={(e) => onChange(e)}
-													required
-												/>
-											</div>
 
-											<div className="form-group">
-												<input
-													type="date"
-													placeholder="End Date"
-													name="endDate"
-													value={endDate}
-													onChange={(e) => onChange(e)}
-													required
-												/>
-											</div>
-
-											<input
-												type="submit"
-												className="btn btn-sm btn-primary btn-register text-uppercase font-weight-bold mb-2"
-												value="View"
-											/>
-										</form>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+			<form
+				className="form"
+				onSubmit={(e) => onSubmit(e)}
+			>
+				<div className="form-group">
+					<input
+						type="date"
+						placeholder="Start Date"
+						name="startDate"
+						value={startDate}
+						onChange={(e) => onChange(e)}
+						required
+					/>
 				</div>
-			</div>
+
+				<div className="form-group">
+					<input
+						type="date"
+						placeholder="End Date"
+						name="endDate"
+						value={endDate}
+						onChange={(e) => onChange(e)}
+						required
+					/>
+				</div>
+
+				<input
+					type="submit"
+					className="btn btn-sm btn-primary btn-register text-uppercase font-weight-bold mb-2"
+					value="View"
+				/>
+			</form>
+
 		</Fragment>
 	);
 };

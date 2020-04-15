@@ -13,7 +13,7 @@ router.get('/patient/me', auth, async (req, res) => {
 	try {
 		const user = await db.query(
 			'SELECT * FROM db_user u JOIN patient p ON u.user_id = p.patient_user WHERE u.user_id = $1',
-			[req.user.userID]
+			[req.user.userID],
 		);
 		if (user.rows.length > 0) {
 			return res.status(200).json({ message: 'OK', user: user.rows[0] });
@@ -28,7 +28,7 @@ router.get('/doctor/me', doc, async (req, res) => {
 	try {
 		const user = await db.query(
 			'SELECT * FROM db_user u JOIN doctor d ON u.user_id = d.doctor_user WHERE u.user_id = $1',
-			[req.user.userID]
+			[req.user.userID],
 		);
 		if (user.rows.length > 0) {
 			return res.status(200).json({ message: 'OK', user: user.rows[0] });
@@ -62,7 +62,7 @@ router.post('/register/patient', async (req, res) => {
 
 		let user = await db.query(
 			'SELECT user_id FROM db_user u JOIN patient p ON u.user_id = p.patient_user WHERE u.username = $1 OR p.patient_email = $2',
-			[username, email]
+			[username, email],
 		);
 
 		if (user.rows.length > 0) {
@@ -79,12 +79,12 @@ router.post('/register/patient', async (req, res) => {
 
 		const dbUser = await db.query(
 			'INSERT INTO db_user(username, password, role) VALUES ($1, $2, $3) RETURNING user_id, username, role',
-			[username, hashedPassword, role]
+			[username, hashedPassword, role],
 		);
 
 		const userAddress = await db.query(
 			'INSERT INTO address(address_name, address2_name, city, state, zip) VALUES($1, $2, $3, $4, $5) RETURNING *',
-			[address, address2, city, state, zip]
+			[address, address2, city, state, zip],
 		);
 
 		await db.query(
@@ -98,14 +98,12 @@ router.post('/register/patient', async (req, res) => {
 				userAddress.rows[0].address_id,
 				dob,
 				dbUser.rows[0].user_id,
-			]
+			],
 		);
 
 		user = { userID: dbUser.rows[0].user_id, role: dbUser.rows[0].role };
 
-		const token = jwt.sign(user, JWT_SECRET, { expiresIn: SESSION_EXPIRES });
-
-		return res.status(200).json({ message: 'OK', token });
+		return res.status(200).json({ message: 'OK' });
 	} catch (error) {
 		res.status(500).json({ message: 'Enter the right Information', error });
 	}
@@ -126,7 +124,7 @@ router.post('/login/patient', async (req, res) => {
 		}
 		const validPassword = await bcrypt.compare(
 			password,
-			user.rows[0].password
+			user.rows[0].password,
 		);
 
 		if (!validPassword) {
@@ -167,7 +165,7 @@ router.post('/login/doctor', async (req, res) => {
 
 		const validPassword = await bcrypt.compare(
 			password,
-			user.rows[0].password
+			user.rows[0].password,
 		);
 
 		if (!validPassword) {
@@ -175,7 +173,6 @@ router.post('/login/doctor', async (req, res) => {
 				.status(401)
 				.json({ message: 'Invalid username or password' });
 		}
-
 
 
 		const currentUser = { userID: user.rows[0].user_id, role: user.rows[0].role };

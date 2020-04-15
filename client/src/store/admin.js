@@ -39,7 +39,7 @@ const adminModel = {
 				specialty,
 			}
 		) => {
-			action.setError(null);
+			action.setDoctorsError(null);
 			action.isLoading(true);
 			zip = parseInt(zip);
 			try {
@@ -66,13 +66,10 @@ const adminModel = {
 				});
 
 				if (res.status === 200 && res.data.message === 'OK') {
-					action.setToken(res.data.token);
-					setAuthToken(res.data.token);
-					action.setAuthenticated(true);
 					toast.success('Registered Successfully');
 				}
 			} catch (err) {
-				action.setRegisterError(err.response.data.message);
+				action.setDoctorsError(err.response.data.message);
 				toast.error(err.response.data.message);
 			}
 			action.isLoading(false);
@@ -84,7 +81,7 @@ const adminModel = {
 			action,
 			{ capacity, address, address2, city, state, zip, phoneNumber }
 		) => {
-			action.setError(null);
+			action.setOfficesError(null);
 			action.isLoading(true);
 			zip = parseInt(zip);
 			try {
@@ -103,13 +100,11 @@ const adminModel = {
 				});
 
 				if (res.status === 200 && res.data.message === 'OK') {
-					action.setToken(res.data.token);
-					setAuthToken(res.data.token);
-					action.setAuthenticated(true);
+					action.getOffices();
 					toast.success('Registered Successfully');
 				}
 			} catch (err) {
-				action.setRegisterError(err.response.data.message);
+				action.setOfficesError(err.response.data.message);
 				toast.error(err.response.data.message);
 			}
 			action.isLoading(false);
@@ -254,7 +249,7 @@ const adminModel = {
 			}
 			action.isLoading(false);
 		}
-	),	
+	),
 
 	setLoading: action((state, loading) => {
 		state.loading = loading;
@@ -291,5 +286,8 @@ const adminModel = {
 	setUpdatedUsersError: action((state, error) => {
 		state.updatedUserErr = error;
 	}),
+	isLoading: action((state, loading) => {
+		state.loading = loading
+	})
 };
 export default adminModel;

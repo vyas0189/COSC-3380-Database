@@ -1,6 +1,5 @@
 import { useStoreActions } from 'easy-peasy';
 import React, { Fragment, useState } from 'react';
-import { Link } from 'react-router-dom';
 import './RegisterOffice.css';
 
 const RegisterComponent = () => {
@@ -24,7 +23,7 @@ const RegisterComponent = () => {
 		phoneNumber,
 	} = formData;
 
-	const register = useStoreActions((actions) => actions.auth.registerOffice);
+	const register = useStoreActions((actions) => actions.admin.registerOffice);
 	const onChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
