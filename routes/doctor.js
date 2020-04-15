@@ -30,7 +30,7 @@ router.put('/update', doc, async (req, res) => {
 		const { userID } = req.user;
 		const user = await db.query(
 			'SELECT user_id FROM db_user WHERE user_id = $1',
-			[userID]
+			[userID],
 		);
 
 		if (!user.rows.length) {
@@ -43,7 +43,7 @@ router.put('/update', doc, async (req, res) => {
 
 		const doctorAddressID = await db.query(
 			'SELECT doctor_address FROM doctor WHERE doctor_user = $1',
-			[userID]
+			[userID],
 		);
 
 		await db.query(
@@ -55,12 +55,12 @@ router.put('/update', doc, async (req, res) => {
 				state,
 				zip,
 				doctorAddressID.rows[0].doctor_address,
-			]
+			],
 		);
 
 		await db.query(
 			'UPDATE doctor SET doctor_first_name = $1, doctor_last_name = $2, doctor_email = $3, doctor_phone_number = $4, doctor_office = $5 WHERE doctor_user = $6',
-			[firstName, lastName, email, phoneNumber, office, userID]
+			[firstName, lastName, email, phoneNumber, office, userID],
 		);
 
 		res.status(200).json({ message: 'OK' });
@@ -72,18 +72,20 @@ router.put('/update', doc, async (req, res) => {
 router.post('/order/test', doc, async (req, res) => {
 	try {
 		await orderTest.validateAsync(req.body, { abortEarly: false });
-		const { patientID, scan, physical, blood } = req.body;
+		const {
+ patientID, scan, physical, blood,
+} = req.body;
 
 		const { userID } = req.user;
 
 		const doctor = await db.query(
 			'SELECT * FROM doctor WHERE doctor_user = $1',
-			[userID]
+			[userID],
 		);
 
 		const patient = await db.query(
 			'SELECT * FROM patient WHERE patient_id = $1',
-			[patientID]
+			[patientID],
 		);
 
 		if (patient.rows.length === 0) {
@@ -102,7 +104,7 @@ router.post('/order/test', doc, async (req, res) => {
 				doctor.rows[0].doctor_id,
 				patient.rows[0].patient_id,
 				patient.rows[0].patient_diagnosis,
-			]
+			],
 		);
 
 		res.status(200).json({ message: 'OK' });
@@ -118,7 +120,7 @@ router.put('/update/diagnosis', doc, async (req, res) => {
 
 		const patient = await db.query(
 			'SELECT * FROM patient WHERE patient_id = $1',
-			[patientID]
+			[patientID],
 		);
 
 		if (patient.rows.length === 0) {
@@ -129,7 +131,7 @@ router.put('/update/diagnosis', doc, async (req, res) => {
 
 		const diagnosis = await db.query(
 			'SELECT * FROM diagnosis WHERE diagnosis_symptoms = $1 AND diagnosis_condition = $2',
-			[symptoms, condition]
+			[symptoms, condition],
 		);
 
 		if (diagnosis.rows.length === 0) {
@@ -140,7 +142,7 @@ router.put('/update/diagnosis', doc, async (req, res) => {
 
 		const update = await db.query(
 			'UPDATE patient SET patient_diagnosis = $1 WHERE patient_id = $2 RETURNING *',
-			[diagnosis.rows[0].diagnosis_id, patientID]
+			[diagnosis.rows[0].diagnosis_id, patientID],
 		);
 
 		if (update.rows.length === 0) {
@@ -164,7 +166,7 @@ router.post('/add/availability', doc, async (req, res) => {
 		const { userID } = req.user;
 		const user = await db.query(
 			'SELECT user_id FROM db_user WHERE user_id = $1',
-			[userID]
+			[userID],
 		);
 
 		if (!user.rows.length) {
@@ -173,12 +175,12 @@ router.post('/add/availability', doc, async (req, res) => {
 
 		const doctor = await db.query(
 			'SELECT * FROM doctor WHERE doctor_user = $1',
-			[userID]
+			[userID],
 		);
 
 		const availability = await db.query(
 			'SELECT * FROM availability WHERE doctor_id = $1 AND availability_date = $2',
-			[doctor.rows[0].doctor_id, availabilityDate]
+			[doctor.rows[0].doctor_id, availabilityDate],
 		);
 
 		if (availability.rows.length > 0) {
@@ -197,7 +199,7 @@ router.post('/add/availability', doc, async (req, res) => {
 				'9:00 AM',
 				'10:00 AM',
 				false,
-			]
+			],
 		);
 		await db.query(
 			'INSERT INTO availability (doctor_id, office_id, availability_date, availability_from_time, availability_to_time, availability_taken) VALUES ($1, $2, $3, $4, $5, $6)',
@@ -208,7 +210,7 @@ router.post('/add/availability', doc, async (req, res) => {
 				'10:00 AM',
 				'11:00 AM',
 				false,
-			]
+			],
 		);
 		await db.query(
 			'INSERT INTO availability (doctor_id, office_id, availability_date, availability_from_time, availability_to_time, availability_taken) VALUES ($1, $2, $3, $4, $5, $6)',
@@ -219,7 +221,7 @@ router.post('/add/availability', doc, async (req, res) => {
 				'11:00 AM',
 				'12:00 PM',
 				false,
-			]
+			],
 		);
 		await db.query(
 			'INSERT INTO availability (doctor_id, office_id, availability_date, availability_from_time, availability_to_time, availability_taken) VALUES ($1, $2, $3, $4, $5, $6)',
@@ -230,7 +232,7 @@ router.post('/add/availability', doc, async (req, res) => {
 				'12:00 PM',
 				'1:00 PM',
 				false,
-			]
+			],
 		);
 		await db.query(
 			'INSERT INTO availability (doctor_id, office_id, availability_date, availability_from_time, availability_to_time, availability_taken) VALUES ($1, $2, $3, $4, $5, $6)',
@@ -241,7 +243,7 @@ router.post('/add/availability', doc, async (req, res) => {
 				'1:00 PM',
 				'2:00 PM',
 				false,
-			]
+			],
 		);
 		await db.query(
 			'INSERT INTO availability (doctor_id, office_id, availability_date, availability_from_time, availability_to_time, availability_taken) VALUES ($1, $2, $3, $4, $5, $6)',
@@ -252,7 +254,7 @@ router.post('/add/availability', doc, async (req, res) => {
 				'2:00 PM',
 				'3:00 PM',
 				false,
-			]
+			],
 		);
 		await db.query(
 			'INSERT INTO availability (doctor_id, office_id, availability_date, availability_from_time, availability_to_time, availability_taken) VALUES ($1, $2, $3, $4, $5, $6)',
@@ -263,7 +265,7 @@ router.post('/add/availability', doc, async (req, res) => {
 				'3:00 PM',
 				'4:00 PM',
 				false,
-			]
+			],
 		);
 		await db.query(
 			'INSERT INTO availability (doctor_id, office_id, availability_date, availability_from_time, availability_to_time, availability_taken) VALUES ($1, $2, $3, $4, $5, $6)',
@@ -274,7 +276,7 @@ router.post('/add/availability', doc, async (req, res) => {
 				'4:00 PM',
 				'5:00 PM',
 				false,
-			]
+			],
 		);
 
 		res.status(200).json({ message: 'OK' });
@@ -291,7 +293,7 @@ router.put('/update/availability', doc, async (req, res) => {
 		const { userID } = req.user;
 		const user = await db.query(
 			'SELECT user_id FROM db_user WHERE user_id = $1',
-			[userID]
+			[userID],
 		);
 
 		if (!user.rows.length) {
@@ -300,7 +302,7 @@ router.put('/update/availability', doc, async (req, res) => {
 
 		const availability = await db.query(
 			'SELECT * FROM availability WHERE availability_id = $1',
-			[availabilityID]
+			[availabilityID],
 		);
 
 		if (availability.rows.length === 0) {
@@ -311,7 +313,7 @@ router.put('/update/availability', doc, async (req, res) => {
 
 		await db.query(
 			'UPDATE availability SET availability_taken = $1 WHERE availability_id = $2',
-			[taken, availabilityID]
+			[taken, availabilityID],
 		);
 
 		res.status(200).json({ message: 'OK' });

@@ -12,6 +12,7 @@ import Register from '../pages/Register';
 import setAuthToken from '../utils/setAuthToken';
 import NavbarComponent from './Navbar';
 import PrivateRoute from './ProtectedRoute';
+import PatientScheduleComponent from './Schedule/Patient';
 
 toast.configure();
 const App = () => {
@@ -34,6 +35,7 @@ const App = () => {
         <Route exact path="/login/doctor" component={Login} />
         <Route exact path="/login/admin" component={Login} />
         <PrivateRoute exact path="/dashboard" component={Dashboard} />
+        <PrivateRoute exact path="/patient/schedule" component={PatientScheduleComponent} />
         <Route component={NotFoundPage} />
 
       </Switch>
