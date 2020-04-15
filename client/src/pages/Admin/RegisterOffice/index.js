@@ -60,40 +60,49 @@ const RegisterComponent = () => {
 											<div className="form-group">
 												<input
 													type="text"
+													id="Capacity"
+													className="form-control"
 													placeholder="Capacity"
 													name="capacity"
 													value={capacity}
 													onChange={(e) => onChange(e)}
 													required
+													autoFocus
 												/>
 											</div>
 											<div className="form-group">
 												<input
 													type="text"
 													placeholder="Primary Address"
+													className="form-control"
 													name="address"
 													value={address}
 													onChange={(e) => onChange(e)}
 													required
+													autoFocus
 												/>
 											</div>
 											<div className="form-group">
 												<input
 													type="text"
 													placeholder="Secondary Address (APT#)"
+													className="form-control"
 													name="address2"
 													value={address2}
 													onChange={(e) => onChange(e)}
+													autoFocus
 												/>
 											</div>
 											<div className="form-group">
 												<input
 													type="text"
 													placeholder="City"
+													className="form-control"
 													name="city"
 													value={city}
 													onChange={(e) => onChange(e)}
 													required
+													autoFocus
 												/>
 											</div>
 											<div className="form-group">
@@ -102,7 +111,9 @@ const RegisterComponent = () => {
 														name="state"
 														value={state}
 														key={state}
+														className="form-control"
 														onChange={(e) => onChange(e)}
+														autoFocus
 													>
 														<option value="State">
 															Choose a State
@@ -166,7 +177,9 @@ const RegisterComponent = () => {
 														placeholder="Zip"
 														name="zip"
 														value={zip}
+														className="form-control"
 														onChange={(e) => onChange(e)}
+														autoFocus
 														required
 													/>
 												</div>
@@ -176,7 +189,9 @@ const RegisterComponent = () => {
 														placeholder="Phone (XXXXXXXXXX)"
 														name="phoneNumber"
 														value={phoneNumber}
+														className="form-control"
 														onChange={(e) => onChange(e)}
+														autoFocus
 														required
 													/>
 												</div>
