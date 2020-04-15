@@ -325,7 +325,7 @@ router.put('/update/availability', doc, async (req, res) => {
 router.get('/get/offices', doc, async (req, res) => {
 	try {
 		const offices = await db.query(
-			'SELECT * FROM address INNER JOIN office ON (address.address_id = office.office_address)'
+			'SELECT * FROM address INNER JOIN office ON (address.address_id = office.office_address)',
 		);
 
 		res.status(200).json({

@@ -269,6 +269,7 @@ const NavbarComponent = () => {
 			<Link to="/">
 				<img src={logo} alt="logo" />
 			</Link>
+<<<<<<< HEAD
 			{/* <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
             </button> */}
@@ -283,6 +284,8 @@ const NavbarComponent = () => {
 				<img src={logo} alt="logo" />
 			</Link>
 >>>>>>> ad822ac373e23a780f384f66ad9affcb1e568fb5
+=======
+>>>>>>> 6902a3462d0001f0c4c79d220fe72e1afde669d9
 
 			<Navbar.Toggle aria-controls="responsive-navbar-nav" />
 			<Navbar.Collapse id="responsive-navbar-nav">
