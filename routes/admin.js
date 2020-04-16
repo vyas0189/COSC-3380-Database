@@ -8,7 +8,7 @@ const {
 	updateDoctorAdmin,
 	cancelAppointmentAdmin,
 	registerAdmin,
-	generateWeeklyReport,
+	generateReport,
 } = require('../validation');
 const { admin } = require('../middleware/auth');
 
@@ -180,8 +180,8 @@ router.post('/register/office', admin, async (req, res) => {
 	try {
 		await registerOffice.validateAsync(req.body, { abortEarly: false });
 		const {
-			capacity, address, city, state, zip, phoneNumber,
-		} = req.body;
+ capacity, address, city, state, zip, phoneNumber,
+} = req.body;
 
 		let { address2 } = req.body;
 
@@ -216,12 +216,40 @@ router.post('/register/office', admin, async (req, res) => {
 	}
 });
 
+router.get('/get/offices', admin, async (req, res) => {
+	try {
+		const offices = await db.query(
+			'SELECT * FROM address INNER JOIN office ON (address.address_id = office.office_address)',
+		);
+
+		res.status(200).json({
+			message: 'OK',
+			offices: offices.rows,
+		});
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error });
+	}
+});
+
+router.get('/get/doctors', admin, async (req, res) => {
+	try {
+		const doctors = await db.query('SELECT * FROM doctor');
+
+		res.status(200).json({
+			message: 'OK',
+			doctors: doctors.rows,
+		});
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error });
+	}
+});
+
 router.put('/update/doctor', admin, async (req, res) => {
 	try {
 		await updateDoctorAdmin.validateAsync(req.body, { abortEarly: false });
 		const {
-			doctorID, primary, specialty, office,
-		} = req.body;
+ doctorID, primary, specialty, office,
+} = req.body;
 
 		const doctor = await db.query(
 			'SELECT * FROM doctor WHERE doctor_id = $1',
@@ -278,14 +306,14 @@ router.delete('/cancel', admin, async (req, res) => {
 	}
 });
 
-router.get('/view/weeklyNewUsers', admin, async (req, res) => {
+router.get('/get/newUsers', admin, async (req, res) => {
 	try {
-		await generateWeeklyReport.validateAsync(req.body, { abortEarly: false });
-		const { weekStartDate, weekEndDate } = req.body;
+		await generateReport.validateAsync(req.body, { abortEarly: false });
+		const { startDate, endDate } = req.body;
 
 		const newUsers = await db.query(
 			'SELECT * from db_user WHERE created_at::date >= $1 AND created_at::date <= $2',
-			[weekStartDate, weekEndDate],
+			[startDate, endDate],
 		);
 
 		res.status(200).json({ message: 'OK', newUsers: newUsers.rows });
@@ -294,14 +322,14 @@ router.get('/view/weeklyNewUsers', admin, async (req, res) => {
 	}
 });
 
-router.get('/view/weeklyUpdatedUsers', admin, async (req, res) => {
+router.get('/get/updatedUsers', admin, async (req, res) => {
 	try {
-		await generateWeeklyReport.validateAsync(req.body, { abortEarly: false });
-		const { weekStartDate, weekEndDate } = req.body;
+		await generateReport.validateAsync(req.body, { abortEarly: false });
+		const { startDate, endDate } = req.body;
 
 		const updatedUsers = await db.query(
 			'SELECT * FROM db_user WHERE updated_at::date >= $1 AND updated_at::date <= $2',
-			[weekStartDate, weekEndDate],
+			[startDate, endDate],
 		);
 
 		res.status(200).json({ message: 'OK', updatedUsers: updatedUsers.rows });

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { action, thunk } from "easy-peasy";
+import { action, thunk } from 'easy-peasy';
 import { toast } from 'react-toastify';
 import setAuthToken from '../utils/setAuthToken';
 
@@ -11,6 +11,7 @@ const authModel = {
 	err: null,
 	loginErr: null,
 	registerErr: null,
+	isAdmin: false,
 
 	getCurrentPatient: thunk(async (action, _, { getState }) => {
 		action.setError(null)
@@ -123,8 +124,12 @@ const authModel = {
 
 			}
 		} catch (err) {
-			action.setRegisterError(err.response.data.message)
-			toast.error(err.response.data.message)
+			const errArr = []
+			err.response.data.error.details.map(err => {
+				return errArr.push(err.context.label);
+			})
+			action.setRegisterError(errArr.join('\n'))
+			toast.error(errArr.join('\n'))
 		}
 		action.isLoading(false);
 	}),
@@ -178,6 +183,7 @@ const authModel = {
 			if (res.status === 200 && res.data.message === 'OK') {
 				action.setToken(res.data.token);
 				action.setAuthenticated(true);
+				action.setAdmin(true);
 				setAuthToken(res.data.token);
 				toast.success('Logged in Successfully')
 				action.getCurrentAdmin()
@@ -199,6 +205,7 @@ const authModel = {
 		state.loginErr = null;
 		state.loginErr = null;
 		state.registerErr = null;
+		state.isAdmin = false;
 		toast.success('You have Successfully Logged out!', { position: toast.POSITION.TOP_CENTER })
 	}),
 
@@ -227,7 +234,10 @@ const authModel = {
 
 	setRegisterError: action((state, error) => {
 		state.registerErr = error;
-	})
+	}),
+	setAdmin: action((state, admin) => {
+		state.isAdmin = admin;
+	}),
 
 }
 

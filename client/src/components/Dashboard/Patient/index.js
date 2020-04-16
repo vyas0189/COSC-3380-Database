@@ -19,9 +19,9 @@ const PatientDashboardComponent = () => {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
-    const handleShow = (token, doctorID) => {
+    const handleShow = (token, appointmentID) => {
         setShow(true);
-        getAppointmentDetails({ token, doctorID })
+        getAppointmentDetails({ token, appointmentID })
     };
 
     useEffect(() => {
@@ -93,7 +93,7 @@ const PatientDashboardComponent = () => {
                                 <td>{`${appointment.doctor_first_name} ${appointment.doctor_last_name}`}</td>
                                 <td>{`${appointment.address_name} ${appointment.address2_name ? appointment.address2_name : ''}, ${appointment.city} ${appointment.state} ${appointment.zip}`}</td>
                                 <td>
-                                    <p className="cancelApp badge badge-info" onClick={() => handleShow(token, appointment.doctor_id)}>View</p>
+                                    <p className="cancelApp badge badge-info" onClick={() => handleShow(token, appointment.appointment_id)}>View</p>
                                 </td>
                             </tr>
                         ) : null
@@ -141,13 +141,13 @@ const PatientDashboardComponent = () => {
                                 </Modal.Header>
                                 <Modal.Body>
                                     <ListGroup variant="flush">
-                                        <ListGroup.Item>Specialty: {appointmentDetails[0].doctor_specialty ? appointmentDetails[0].doctor_specialty : 'N/A'}</ListGroup.Item>
+                                        <ListGroup.Item>Specialty: {appointmentDetails.doctor_specialty ? appointmentDetails.doctor_specialty : 'N/A'}</ListGroup.Item>
 
-                                        <ListGroup.Item>Scan: {appointmentDetails[0].test_scan ? 'Yes' : 'No'}</ListGroup.Item>
-                                        <ListGroup.Item>Physical: {appointmentDetails[0].test_physical ? 'Yes' : 'No'}</ListGroup.Item>
-                                        <ListGroup.Item>Blood Test: {appointmentDetails[0].test_blood ? 'Yes' : 'No'}</ListGroup.Item>
-                                        <ListGroup.Item>Symptoms: {appointmentDetails[0].diagnosis_symptoms ? appointmentDetails[0].diagnosis_symptoms : 'N/A'}</ListGroup.Item>
-                                        <ListGroup.Item>Condition: {appointmentDetails[0].diagnosis_condition ? appointmentDetails[0].diagnosis_condition : 'N/A'}</ListGroup.Item>
+                                        <ListGroup.Item>Scan: {appointmentDetails.test_scan ? 'Yes' : 'No'}</ListGroup.Item>
+                                        <ListGroup.Item>Physical: {appointmentDetails.test_physical ? 'Yes' : 'No'}</ListGroup.Item>
+                                        <ListGroup.Item>Blood Test: {appointmentDetails.test_blood ? 'Yes' : 'No'}</ListGroup.Item>
+                                        <ListGroup.Item>Symptoms: {appointmentDetails.diagnosis_symptoms ? appointmentDetails.diagnosis_symptoms : 'N/A'}</ListGroup.Item>
+                                        <ListGroup.Item>Condition: {appointmentDetails.diagnosis_condition ? appointmentDetails.diagnosis_condition : 'N/A'}</ListGroup.Item>
 
                                     </ListGroup>
                                 </Modal.Body>

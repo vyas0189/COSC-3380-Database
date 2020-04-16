@@ -8,11 +8,10 @@
 	min-height: calc(100vh - 86.4px);
 }
 
-.bg-admin-dashboard {
-	background-image: url('../../../assets/admin/admin-default.jpg');
+.bg-doctor-dashboard {
+	background-image: url('../../../assets/doctor/doctor-default.jpg');
 	background-size: cover;
-    background-position: center;
-    
+	background-position: center;
 }
 
 .login-heading {
@@ -38,7 +37,7 @@
 }
 
 .welcome {
-    margin-bottom: 5rem;
+	margin-bottom: 5rem;
 }
 
 .form-label-group > input,

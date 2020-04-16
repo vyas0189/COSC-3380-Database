@@ -1,12 +1,10 @@
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import React, { Fragment, useEffect, useState } from 'react';
 import Loading from '../../../components/Loading';
-// import { Link } from 'react-router-dom';
-// import Loading from '../../Loading';
 import './RegisterDoctor.css';
 
 const RegisterComponent = () => {
-	const register = useStoreActions((actions) => actions.auth.registerDoctor);
+	const register = useStoreActions((actions) => actions.admin.registerDoctor);
 
 	const admin = useStoreState((state) => state.auth.user);
 	const getOffices = useStoreActions((actions) => actions.admin.getOffices);
@@ -80,6 +78,23 @@ const RegisterComponent = () => {
 			specialty,
 		};
 		register(userRegister);
+		setFormData({
+			username: '',
+			password: '',
+			role: '',
+			email: '',
+			firstName: '',
+			lastName: '',
+			address: '',
+			address2: '',
+			city: '',
+			state: '',
+			zip: '',
+			phoneNumber: '',
+			primary: '',
+			office: '',
+			specialty: '',
+		})
 	};
 
 	return (
@@ -299,8 +314,8 @@ const RegisterComponent = () => {
 														<option value="primary">
 															Primary Doctor
 														</option>
-														<option value="Yes">Yes</option>
-														<option value="No">No</option>
+														<option value="true">Yes</option>
+														<option value="false">No</option>
 													</select>
 												</div>
 												<div className="form-group">

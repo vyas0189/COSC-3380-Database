@@ -40,17 +40,40 @@ const NavbarComponent = () => {
 	const doctorLinks = (
 		<ul className="navbar-nav ml-auto">
 			<li className="nav-item">
-				<Link className="nav-link" to='/dashboard'>
+				<Link className="nav-link" to="/dashboard">
 					Dashboard
-                </Link>
-			</li>
-			<li className="nav-item active">
-				<Link className="nav-link" to='/doctorProfile'>Profile</Link>
+				</Link>
 			</li>
 			<li className="nav-item">
-				<i className="nav-link" onClick={logoutUser} >
+				<Link className="nav-link" to="/addAvailability">
+					Add Availability
+				</Link>
+			</li>
+
+			<li className="nav-item">
+				<Link className="nav-link" to="/updateAvailability">
+					Update Availability
+				</Link>
+			</li>
+			<li className="nav-item">
+				<Link className="nav-link" to="/updateDoctor">
+					Update Doctor
+				</Link>
+			</li>
+			<li className="nav-item">
+				<Link className="nav-link" to="/updateDiagnosis">
+					Update Diagnosis
+				</Link>
+			</li>
+			<li className="nav-item">
+				<Link className="nav-link" to="/orderTest">
+					Order Test
+				</Link>
+			</li>
+			<li className="nav-item">
+				<i className="nav-link" onClick={logoutUser}>
 					Logout
-                </i>
+				</i>
 			</li>
 		</ul>
 	);
@@ -58,14 +81,44 @@ const NavbarComponent = () => {
 	const adminLinks = (
 		<ul className="navbar-nav ml-auto">
 			<li className="nav-item">
-				<Link className="nav-link" to='/dashboard'>
+				<Link className="nav-link" to="/dashboard">
 					Dashboard
-                </Link>
+				</Link>
 			</li>
 			<li className="nav-item">
-				<i className="nav-link" onClick={logoutUser} >
+				<Link className="nav-link" to="/registerOffice">
+					Register Office
+				</Link>
+			</li>
+			<li className="nav-item">
+				<Link className="nav-link" to="/registerDoctor">
+					Register Doctor
+				</Link>
+			</li>
+			<li className="nav-item">
+				<Link className="nav-link" to="/adminUpdateDoctor">
+					Update Doctor
+				</Link>
+			</li>
+			<li className="nav-item">
+				<Link className="nav-link" to="/viewNewUsers">
+					View New Users
+				</Link>
+			</li>
+			<li className="nav-item">
+				<Link className="nav-link" to="/viewUpdatedUsers">
+					View Updated Users
+				</Link>
+			</li>
+			<li className="nav-item">
+				<Link className="nav-link" to="/cancelAppointment">
+					Cancel Appointment
+				</Link>
+			</li>
+			<li className="nav-item">
+				<i className="nav-link" onClick={logoutUser}>
 					Logout
-                </i>
+				</i>
 			</li>
 		</ul>
 	)

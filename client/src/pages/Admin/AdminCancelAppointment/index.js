@@ -1,6 +1,7 @@
+
 import { useStoreState } from 'easy-peasy';
 import React from 'react';
-import './Admin.css';
+import './AdminCancelAppointment.css';
 
 const AdminDashboardComponent = () => {
 	const admin = useStoreState((state) => state.auth.user);
@@ -15,8 +16,7 @@ const AdminDashboardComponent = () => {
 							<div className="row">
 								<div className="col-md-9 col-lg-8 mx-auto">
 									<div className="welcome text-center">
-										<h1>Welcome, {admin.username}.</h1>
-										<h2>How can we help you today?</h2>
+										<h1>Cancel Appointment</h1>										
 									</div>
 									<div className="body text-center"></div>
 								</div>
