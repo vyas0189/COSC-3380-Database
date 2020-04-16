@@ -1,12 +1,10 @@
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import React, { Fragment, useEffect, useState } from 'react';
 import Loading from '../../../components/Loading';
-// import { Link } from 'react-router-dom';
-// import Loading from '../../Loading';
 import './RegisterDoctor.css';
 
 const RegisterComponent = () => {
-	const register = useStoreActions((actions) => actions.auth.registerDoctor);
+	const register = useStoreActions((actions) => actions.admin.registerDoctor);
 
 	const admin = useStoreState((state) => state.auth.user);
 	const getOffices = useStoreActions((actions) => actions.admin.getOffices);
@@ -20,7 +18,7 @@ const RegisterComponent = () => {
 
 	useEffect(() => {
 		getOffices(adminToken);
-	}, []);
+	}, [offices]);
 
 	const [formData, setFormData] = useState({
 		username: '',

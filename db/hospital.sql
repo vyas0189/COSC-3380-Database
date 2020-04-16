@@ -155,3 +155,48 @@ CREATE TRIGGER UPDATE_DIAGNOSIS_NO_PRIMARY_DOCTOR
     ON patient
     FOR EACH ROW
 EXECUTE PROCEDURE deny_update_diagnosis();
+
+SELECT *
+FROM doctor doc
+         LEFT JOIN test t on doc.doctor_id = t.test_doctor
+         LEFT JOIN diagnosis d ON d.diagnosis_id = doc.doctor_diagnosis
+WHERE doc.doctor_id = '942b4fc2-5bce-4707-97f4-32623844dd35';
+
+-- SELECT * FROM doctor;
+
+SELECT *
+FROM doctor d
+         INNER JOIN (SELECT *
+                     FROM appointment appt
+                              JOIN availability av ON appt.appointment_availability = av.availability_id) a
+                    on d.doctor_id = a.doctor_id
+         INNER JOIN office o on a.office_id = o.office_id
+         INNER JOIN address a2 on o.office_address = a2.address_id
+WHERE d.doctor_primary = true
+  AND a.availability_taken = false
+  AND a.availability_date > CURRENT_DATE
+ORDER BY availability_date, availability_from_time;
+
+SELECT *
+FROM doctor d
+         INNER JOIN availability a on d.doctor_id = a.doctor_id
+         INNER JOIN office o on a.office_id = o.office_id
+         INNER JOIN address a2 on o.office_address = a2.address_id
+WHERE d.doctor_primary = true
+  AND a.availability_taken = false
+  AND a.availability_date > CURRENT_DATE
+ORDER BY availability_date, availability_from_time;
+
+SELECT *
+FROM appointment;
+
+SELECT *
+FROM doctor d
+         INNER JOIN (SELECT *
+                     FROM appointment appt
+                              JOIN availability av ON appt.appointment_availability = av.availability_id) a
+                    on d.doctor_id = a.doctor_id
+         INNER JOIN office o on a.office_id = o.office_id
+         INNER JOIN address a2 on o.office_address = a2.address_id
+WHERE d.doctor_primary = true;
+

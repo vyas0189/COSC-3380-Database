@@ -1,19 +1,26 @@
-import React from 'react';
-import { Nav } from 'react-bootstrap';
-
+import React, { useState } from 'react';
+import { Container, Tab, Tabs } from 'react-bootstrap';
+import PatientPrimaryScheduleComponent from '../../Dashboard/Patient/Schedule/Primary';
+import PatientSpecialistScheduleComponent from '../../Dashboard/Patient/Schedule/Specialist';
 const PatientScheduleComponent = () => {
-    
+
+    const [key, setKey] = useState('primary');
+
+
     return (
-        <div className="container mt-5" >
-            <Nav variant="tabs" defaultActiveKey="primary">
-                <Nav.Item>
-                    <Nav.Link eventKey="primary">Schedule Primary</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link eventKey="specialist">Schedule Specialist</Nav.Link>
-                </Nav.Item>
-            </Nav>
-        </div>
+        <Container className="mt-5">
+            <Tabs
+                activeKey={key}
+                onSelect={(k) => setKey(k)}
+            >
+                <Tab eventKey="primary" title="Primary">
+                    <PatientPrimaryScheduleComponent />
+                </Tab>
+                <Tab eventKey="specialist" title="Specialist">
+                    <PatientSpecialistScheduleComponent />
+                </Tab>
+            </Tabs>
+        </Container>
     )
 }
 

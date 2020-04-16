@@ -118,7 +118,7 @@ const RegisterComponent = () => {
 													onChange={(e) => onChange(e)}
 													required
 												/>
-												<label htmlFor="inputPassword">
+												<label htmlFor="inputEmail">
 													Email
 												</label>
 											</div>

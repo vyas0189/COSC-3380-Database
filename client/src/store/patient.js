@@ -8,6 +8,9 @@ const patientModel = {
     appointmentErr: null,
     appointmentDetails: [],
     appointmentDetailsLoading: false,
+    primaryAppointmentAvailability: [],
+    specialistAppointmentAvailability: [],
+    currentPrimary: false,
 
     getAppointments: thunk(async (action, payload) => {
         action.setAppointmentError(null)
@@ -28,7 +31,24 @@ const patientModel = {
         }
         action.setLoading(false)
     }),
+    getCurrentPrimaryCount: thunk(async (action, patientID) => {
+        action.setAppointmentError(null)
+        action.setLoading(true)
+        action.setCurrentPrimaryCount(false);
+        try {
 
+            const res = await axios.get(`/api/appointment/currentPrimaryAppointment/${patientID}`);
+
+            if (res.status === 200) {
+                if (+res.data.currentPrimary) {
+                    action.setCurrentPrimaryCount(true);
+                }
+            }
+        } catch (error) {
+            action.setAppointmentError(error.response.data.message)
+        }
+        action.setLoading(false)
+    }),
     schedulePrimaryAppointment: thunk(async (action, { token, primaryAppointment, reason, availabilityID }, { getState }) => {
         action.setAppointmentError(null)
         action.setLoading(true)
@@ -40,6 +60,7 @@ const patientModel = {
                 }
             });
             if (res.status === 200) {
+                action.setCurrentPrimaryCount(true);
                 toast.success('Appointment Scheduled!');
             }
 
@@ -50,7 +71,7 @@ const patientModel = {
         action.setLoading(false);
     }),
 
-    scheduleSpecialistAppointment: thunk(async (action, { token, primaryAppointment, reason, availabilityID }, { getState }) => {
+    scheduleSpecialistAppointment: thunk(async (action, { token, primaryAppointment, reason, availabilityID }) => {
         action.setAppointmentError(null)
         action.setLoading(true)
 
@@ -71,12 +92,12 @@ const patientModel = {
         action.setLoading(false);
     }),
 
-    getAppointmentDetails: thunk(async (action, { token, doctorID }, { getState }) => {
+    getAppointmentDetails: thunk(async (action, { token, appointmentID }, { getState }) => {
         action.setAppointmentError(null)
 
         action.setAppointmentDetailsLoading(true)
         try {
-            const res = await axios.get(`/api/appointment/appointmentDetails/${doctorID}`, {
+            const res = await axios.get(`/api/appointment/appointmentDetails/${appointmentID}`, {
                 headers: {
                     'jwt_token': token
                 },
@@ -117,6 +138,22 @@ const patientModel = {
         action.setLoading(false);
     }),
 
+    getPrimaryAppointmentAvailability: thunk(async (action) => {
+        action.setAppointmentError(null)
+        action.setLoading(true)
+
+        try {
+            const res = await axios.get('/api/appointment/primaryAvailable');
+
+            if (res.status === 200) {
+                action.setPrimaryAppointmentAvailability(res.data.primaryAvailable);
+            }
+        } catch (error) {
+            action.setAppointmentError(error.response.data.message);
+        }
+        action.setLoading(false);
+    }),
+
     setLoading: action((state, loading) => {
         state.appointmentLoading = loading;
     }),
@@ -132,6 +169,15 @@ const patientModel = {
     setAppointmentError: action((state, error) => {
         state.appointmentErr = error;
     }),
+    setPrimaryAppointmentAvailability: action((state, availability) => {
+        state.primaryAppointmentAvailability = availability;
+    }),
+    setSpecialistAppointmentAvailability: action((state, availability) => {
+        state.specialistAppointmentAvailability = availability;
+    }),
+    setCurrentPrimaryCount: action((state, count) => {
+        state.currentPrimary = count;
+    })
 
 }
 export default patientModel;

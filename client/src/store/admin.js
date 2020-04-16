@@ -69,8 +69,12 @@ const adminModel = {
 					toast.success('Registered Successfully');
 				}
 			} catch (err) {
-				action.setDoctorsError(err.response.data.message);
-				toast.error(err.response.data.message);
+				const errArr = []
+				err.response.data.error.details.map(err => {
+					return errArr.push(err.context.label);
+				})
+				action.setDoctorsError(errArr.join('\n'))
+				toast.error(errArr.join('\n'))
 			}
 			action.isLoading(false);
 		}
@@ -104,8 +108,12 @@ const adminModel = {
 					toast.success('Registered Successfully');
 				}
 			} catch (err) {
-				action.setOfficesError(err.response.data.message);
-				toast.error(err.response.data.message);
+				const errArr = []
+				err.response.data.error.details.map(err => {
+					return errArr.push(err.context.label);
+				})
+				action.setDoctorsError(errArr.join('\n'))
+				toast.error(errArr.join('\n'))
 			}
 			action.isLoading(false);
 		}
@@ -244,8 +252,12 @@ const adminModel = {
 					toast.success('Profile Updated!');
 				}
 			} catch (error) {
-				action.setError(error.response.data.message);
-				toast.error(error.response.data.message);
+				const errArr = []
+				error.response.data.error.details.map(err => {
+					return errArr.push(err.context.label);
+				})
+				action.setDoctorsError(errArr.join('\n'))
+				toast.error(errArr.join('\n'))
 			}
 			action.isLoading(false);
 		}

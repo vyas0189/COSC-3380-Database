@@ -124,8 +124,12 @@ const authModel = {
 
 			}
 		} catch (err) {
-			action.setRegisterError(err.response.data.message)
-			toast.error(err.response.data.message)
+			const errArr = []
+			err.response.data.error.details.map(err => {
+				return errArr.push(err.context.label);
+			})
+			action.setRegisterError(errArr.join('\n'))
+			toast.error(errArr.join('\n'))
 		}
 		action.isLoading(false);
 	}),
