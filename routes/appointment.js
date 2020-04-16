@@ -146,4 +146,32 @@ router.get('/view/appointmentsWithPatient', doc, async (req, res) => {
     }
 });
 
+router.get('/primaryAvailable', async (req, res) => {
+    try {
+        const primaryAvailable = await db.query('SELECT * FROM doctor d INNER JOIN availability a on d.doctor_id = a.doctor_id WHERE d.doctor_specialty = "Primary" AND a.availability_taken = false;');
+
+        if (primaryAvailable.rows.length === 0) {
+            return res.status(201).json({ message: 'No Availability', primaryAvailable: [] });
+        }
+
+        return res.status(200).json({ message: 'OK', primaryAvailable: primaryAvailable.rows });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error });
+    }
+});
+
+router.get('/specialtyAvailable', async (req, res) => {
+    try {
+        const specialtyAvailable = await db.query('SELECT * FROM doctor d INNER JOIN availability a on d.doctor_id = a.doctor_id WHERE d.doctor_specialty <> "Primary" AND a.availability_taken = false;');
+
+        if (specialtyAvailable.rows.length === 0) {
+            return res.status(201).json({ message: 'No Availability', specialtyAvailable: [] });
+        }
+
+        return res.status(200).json({ message: 'OK', specialtyAvailable: specialtyAvailable.rows });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error });
+    }
+});
+
 module.exports = router;

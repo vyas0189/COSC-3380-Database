@@ -20,7 +20,7 @@ const RegisterComponent = () => {
 
 	useEffect(() => {
 		getOffices(adminToken);
-	}, [offices]);
+	}, []);
 
 	const [formData, setFormData] = useState({
 		username: '',

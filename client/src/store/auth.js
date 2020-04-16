@@ -11,6 +11,7 @@ const authModel = {
 	err: null,
 	loginErr: null,
 	registerErr: null,
+	isAdmin: false,
 
 	getCurrentPatient: thunk(async (action, _, { getState }) => {
 		action.setError(null)
@@ -178,6 +179,7 @@ const authModel = {
 			if (res.status === 200 && res.data.message === 'OK') {
 				action.setToken(res.data.token);
 				action.setAuthenticated(true);
+				action.setAdmin(true);
 				setAuthToken(res.data.token);
 				toast.success('Logged in Successfully')
 				action.getCurrentAdmin()
@@ -199,6 +201,7 @@ const authModel = {
 		state.loginErr = null;
 		state.loginErr = null;
 		state.registerErr = null;
+		state.isAdmin = false;
 		toast.success('You have Successfully Logged out!', { position: toast.POSITION.TOP_CENTER })
 	}),
 
@@ -227,7 +230,10 @@ const authModel = {
 
 	setRegisterError: action((state, error) => {
 		state.registerErr = error;
-	})
+	}),
+	setAdmin: action((state, admin) => {
+		state.isAdmin = admin;
+	}),
 
 }
 

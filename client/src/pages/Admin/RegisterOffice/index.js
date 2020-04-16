@@ -40,6 +40,15 @@ const RegisterComponent = () => {
 			phoneNumber,
 		};
 		register(userRegister);
+		setFormData({
+			capacity: '',
+			address: '',
+			address2: '',
+			city: '',
+			state: '',
+			zip: '',
+			phoneNumber: '',
+		})
 	};
 
 	return (
@@ -59,7 +68,7 @@ const RegisterComponent = () => {
 										>
 											<div className="form-group">
 												<input
-													type="text"
+													type="number"
 													id="Capacity"
 													className="form-control"
 													placeholder="Capacity"
