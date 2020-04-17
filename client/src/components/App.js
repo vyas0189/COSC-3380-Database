@@ -28,84 +28,87 @@ import PrivateRoute from './ProtectedRoute';
 import AdminRoute from './ProtectedRoute/AdminRoute';
 import PatientScheduleComponent from './Schedule/Patient';
 
-
 toast.configure();
 const App = () => {
-  const user = useStoreActions((actions) => actions.auth.getCurrentPatient);
+	const user = useStoreActions((actions) => actions.auth.getCurrentPatient);
 
-  useEffect(() => {
-    setAuthToken(localStorage.token);
-    user();
-  }, [user]);
+	useEffect(() => {
+		setAuthToken(localStorage.token);
+		user();
+	}, [user]);
 
-  return (
-    <>
-      <NavbarComponent />
-      <Switch>
-        {/* general pages */}
+	return (
+		<>
+			<NavbarComponent />
+			<Switch>
+				{/* general pages */}
 
-        <Route exact path="/" component={Home} />
-        <Route exact path="/aboutus" component={AboutUs} />
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/register" component={Register} />
-        <Route exact path="/login/doctor" component={Login} />
-        <Route exact path="/login/admin" component={Login} />
+				<Route exact path="/" component={Home} />
+				<Route exact path="/aboutus" component={AboutUs} />
+				<Route exact path="/login" component={Login} />
+				<Route exact path="/register" component={Register} />
+				<Route exact path="/login/doctor" component={Login} />
+				<Route exact path="/login/admin" component={Login} />
 
-        <PrivateRoute exact path="/dashboard" component={Dashboard} />
-        <PrivateRoute exact path="/patient/schedule" component={PatientScheduleComponent} />
-        {/* admin pages */}
+				<PrivateRoute exact path="/dashboard" component={Dashboard} />
+				<PrivateRoute
+					exact
+					path="/patient/schedule"
+					component={PatientScheduleComponent}
+				/>
+				{/* admin pages */}
 
-        <AdminRoute
-          exact
-          path="/cancelAppointment"
-          component={AdminCancelAppointment}
-        />
-        <AdminRoute
-          exact
-          path="/registerDoctor"
-          component={RegisterDoctor}
-        />
-        <AdminRoute
-          exact
-          path="/registerOffice"
-          component={RegisterOffice}
-        />
-        <AdminRoute
-          exact
-          path="/adminUpdateDoctor"
-          component={AdminUpdateDoctor}
-        />
-        <AdminRoute exact path="/viewNewUsers" component={ViewNewUsers} />
-        <AdminRoute
-          exact
-          path="/viewUpdatedUsers"
-          component={ViewUpdatedUsers}
-        />
+				<AdminRoute
+					exact
+					path="/cancelAppointment"
+					component={AdminCancelAppointment}
+				/>
+				<AdminRoute
+					exact
+					path="/registerDoctor"
+					component={RegisterDoctor}
+				/>
+				<AdminRoute
+					exact
+					path="/registerOffice"
+					component={RegisterOffice}
+				/>
+				<AdminRoute
+					exact
+					path="/adminUpdateDoctor"
+					component={AdminUpdateDoctor}
+				/>
+				<AdminRoute exact path="/viewNewUsers" component={ViewNewUsers} />
+				<AdminRoute
+					exact
+					path="/viewUpdatedUsers"
+					component={ViewUpdatedUsers}
+				/>
 
-        {/* doctor pages */}
+				{/* doctor pages */}
 
-        <PrivateRoute
-          exact
-          path="/addAvailability"
-          component={AddAvailability}
-        />
-        <PrivateRoute exact path="/orderTest" component={OrderTest} />
-        <PrivateRoute
-          exact
-          path="/updateAvailability"
-          component={UpdateAvailability}
-        />
-        <PrivateRoute
-          exact
-          path="/updateDiagnosis"
-          component={UpdateDiagnosis}
-        />
-        <PrivateRoute exact path="/updateDoctor" component={UpdateDoctor} />
+				<PrivateRoute
+					exact
+					path="/addAvailability"
+					component={AddAvailability}
+				/>
+				<PrivateRoute exact path="/orderTest" component={OrderTest} />
+				<PrivateRoute
+					exact
+					path="/updateAvailability"
+					component={UpdateAvailability}
+				/>
+				<PrivateRoute
+					exact
+					path="/updateDiagnosis"
+					component={UpdateDiagnosis}
+				/>
+				<PrivateRoute exact path="/updateDoctor" component={UpdateDoctor} />
 
-        <Route component={NotFoundPage} />
-      </Switch>
-    </>
-  );
+				<Route component={NotFoundPage} />
+			</Switch>
+		</>
+	);
 };
 
 export default App;

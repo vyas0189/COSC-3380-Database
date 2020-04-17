@@ -1,111 +1,167 @@
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import React, { Fragment, useEffect, useState } from 'react';
 import Loading from '../../../components/Loading';
+// import { Link } from 'react-router-dom';
+// import Loading from '../../Loading';
 import './UpdateDiagnosis.css';
 
-const AddComponent = () => {
-	const register = useStoreActions((actions) => actions.auth.addAvailability);
+const RegisterComponent = () => {
+	const update = useStoreActions((actions) => actions.doctor.updateDiagnosis);
+	// const admin = useStoreState((state) => state.auth.user);
+	// const token = useStoreState((state) => state.auth.token);
+	// const loading = useStoreState((state) => state.auth.loading);
+	const adminToken = useStoreState((state) => state.auth.token);
 
-	const doctor = useStoreState((state) => state.auth.user);
-	const getOffices = useStoreActions((actions) => actions.doctor.getOffices);
-	const offices = useStoreState((state) => state.doctor.offices);
-
-	const doctorToken = useStoreState((state) => state.auth.token);
-	const loading = useStoreState((state) => state.auth.loading);
+	//patients
+	const getPatients = useStoreActions((actions) => actions.doctor.getPatients);
+	const patients = useStoreState((state) => state.doctor.patients);
 
 	useEffect(() => {
-		getOffices(doctorToken);
+		getPatients(adminToken);
 	}, []);
 
 	const [formData, setFormData] = useState({
-		officeID: '',
-		availabilityDate: '',
+		patientID: '',
+		symptoms: '',
+		condition: '',
 	});
 
-	const { officeID, availabilityDate } = formData;
+	const { patientID, symptoms, condition } = formData;
 
 	const onChange = (e) => {
-
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
+	//doesn't work here - register not a function???
 	const onSubmit = async (e) => {
 		e.preventDefault();
-		const availabilityInfo = {
-			officeID,
-			availabilityDate,
+		const userRegister = {
+			patientID,
+			symptoms,
+			condition,
 		};
-		register(availabilityInfo);
+		update(userRegister);
 	};
 
-	return loading ? (
-		<Loading />
-	) : (
-			<Fragment>
-				<div className="container-fluid">
-					<div className="row no-gutter">
-						<div className="d-none d-md-flex col-md-4 col-lg-6 bg-doctor-dashboard"></div>
-						<div className="col-md-8 col-lg-6">
-							<div className="login d-flex align-items-center py-5">
-								<div className="container">
-									<div className="row">
-										<div className="col-md-9 col-lg-4 mx-auto">
-											<h3 className="login-heading mb-4">
-												Add Availability
+	return (
+		<Fragment>
+			<div className="container-fluid">
+				<div className="row no-gutter">
+					<div className="d-none d-md-flex col-md-4 col-lg-6 bg-admin-dashboard"></div>
+					<div className="col-md-8 col-lg-6">
+						<div className="login d-flex align-items-center py-5">
+							<div className="container">
+								<div className="row">
+									<div className="col-md-9 col-lg-4 mx-auto">
+										<h3 className="login-heading mb-4">
+											Update Diagnosis
 										</h3>
-											<form
-												className="form"
-												onSubmit={(e) => onSubmit(e)}
-											>
-												<div className="form-group">
-													<select
-														name="office"
-														value={officeID}
-														key={officeID}
-														onChange={(e) => onChange(e)}
-													>
-														<option value="Office">Office</option>
-														{offices.map((office, idx) => {
-															return (
-																<option value={office.office_id}>
-																	{`${office.address_name} ${
-																		office.address2_name
-																			? office.address2_name
-																			: ''
-																		}, ${office.city} ${
-																		office.state
-																		} ${office.zip}`}
-																</option>
-															);
-														})}
-													</select>
-												</div>
-												<div className="form-group">
-													<input
-														type="text"
-														placeholder="Date MM-DD-YYYY"
-														name="availabilityDate"
-														value={availabilityDate}
-														onChange={(e) => onChange(e)}
-														required
-													/>
-												</div>
+										<form
+											className="form"
+											onSubmit={(e) => onSubmit(e)}
+										>
+											<div className="form-group">
+												<select
+													name="patientID"
+													value={patientID}
+													key={patientID}
+													className="form-control"
+													autoFocus
+													onChange={(e) => onChange(e)}
+												>
+													<option value="Patient">Patient</option>
+													{patients.map((patient, idx) => {
+														return (
+															<option value={patient.patient_id}>
+																{`${patient.patient_first_name} ${patient.patient_last_name} ${patient.patient_dob}
+																	`}
+															</option>
+														);
+													})}
+												</select>
+											</div>
 
-												<input
-													type="submit"
-													className="btn btn-sm btn-primary btn-register text-uppercase font-weight-bold mb-2"
-													value="Add"
-												/>
-											</form>
-										</div>
+											{/* <div className="form-group">
+												<select
+													name="state"
+													value={state}
+													key={state}
+													className="form-control"
+													autoFocus
+													onChange={(e) => onChange(e)}
+												>
+													<option value="State">
+														Choose a State
+													</option>
+													<option value="AL">AL</option>
+													<option value="AK">AK</option>
+													<option value="AR">AR</option>
+													<option value="AZ">AZ</option>
+													<option value="CA">CA</option>
+													<option value="CO">CO</option>
+													<option value="CT">CT</option>
+													<option value="DC">DC</option>
+													<option value="DE">DE</option>
+													<option value="FL">FL</option>
+													<option value="GA">GA</option>
+													<option value="HI">HI</option>
+													<option value="IA">IA</option>
+													<option value="ID">ID</option>
+													<option value="IL">IL</option>
+													<option value="IN">IN</option>
+													<option value="KS">KS</option>
+													<option value="KY">KY</option>
+													<option value="LA">LA</option>
+													<option value="MA">MA</option>
+													<option value="MD">MD</option>
+													<option value="ME">ME</option>
+													<option value="MI">MI</option>
+													<option value="MN">MN</option>
+													<option value="MO">MO</option>
+													<option value="MS">MS</option>
+													<option value="MT">MT</option>
+													<option value="NC">NC</option>
+													<option value="NE">NE</option>
+													<option value="NH">NH</option>
+													<option value="NJ">NJ</option>
+													<option value="NM">NM</option>
+													<option value="NV">NV</option>
+													<option value="NY">NY</option>
+													<option value="ND">ND</option>
+													<option value="OH">OH</option>
+													<option value="OK">OK</option>
+													<option value="OR">OR</option>
+													<option value="PA">PA</option>
+													<option value="RI">RI</option>
+													<option value="SC">SC</option>
+													<option value="SD">SD</option>
+													<option value="TN">TN</option>
+													<option value="TX">TX</option>
+													<option value="UT">UT</option>
+													<option value="VT">VT</option>
+													<option value="VA">VA</option>
+													<option value="WA">WA</option>
+													<option value="WI">WI</option>
+													<option value="WV">WV</option>
+													<option value="WY">WY</option>
+												</select>
+											</div> */}
+
+											<input
+												type="submit"
+												className="btn btn-sm btn-primary btn-register text-uppercase font-weight-bold mb-2"
+												value="Update"
+											/>
+										</form>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</Fragment>
-		);
+			</div>
+		</Fragment>
+	);
 };
 
-export default AddComponent;
+export default RegisterComponent;

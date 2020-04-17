@@ -220,6 +220,7 @@ const authModel = {
 	setToken: action((state, token) => {
 		state.token = token;
 	}),
+
 	setAuthenticated: action((state, authenticated) => {
 		state.isAuthenticated = authenticated;
 	}),
@@ -235,6 +236,7 @@ const authModel = {
 	setRegisterError: action((state, error) => {
 		state.registerErr = error;
 	}),
+	
 	setAdmin: action((state, admin) => {
 		state.isAdmin = admin;
 	}),
