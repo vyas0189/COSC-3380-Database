@@ -6,12 +6,11 @@ const RegisterComponent = () => {
 	const admin = useStoreState((state) => state.auth.user);
 
 	const getNewUsers = useStoreActions((actions) => actions.admin.getNewUsers);
-	const adminToken = useStoreState((state) => state.auth.token);
-
+	
 	const newUsers = useStoreState((state) => state.admin.newUsers);
 
 	useEffect(() => {
-		getNewUsers(adminToken);
+		getNewUsers();
 	}, []);
 
 	const [formData, setFormData] = useState({

@@ -119,16 +119,12 @@ const adminModel = {
 		}
 	),
 
-	getOffices: thunk(async (action, payload) => {
+	getOffices: thunk(async (action) => {
 		action.setOfficesError(null);
 		action.setLoading(true);
 
 		try {
-			const res = await axios.get('/api/admin/get/offices', {
-				headers: {
-					jwt_token: payload,
-				},
-			});
+			const res = await axios.get('/api/admin/get/offices');
 			if (res.status === 200) {
 				action.setOffices(res.data.offices);
 			}
@@ -138,16 +134,12 @@ const adminModel = {
 		action.setLoading(false);
 	}),
 
-	getDoctors: thunk(async (action, payload) => {
+	getDoctors: thunk(async (action) => {
 		action.setDoctorsError(null);
 		action.setLoading(true);
 
 		try {
-			const res = await axios.get('/api/admin/get/doctors', {
-				headers: {
-					jwt_token: payload,
-				},
-			});
+			const res = await axios.get('/api/admin/get/doctors');
 			if (res.status === 200) {
 				action.setDoctors(res.data.doctors);
 			}
@@ -157,16 +149,12 @@ const adminModel = {
 		action.setLoading(false);
 	}),
 
-	getNewUsers: thunk(async (action, payload) => {
+	getNewUsers: thunk(async (action, ) => {
 		action.setNewUsersError(null);
 		action.setLoading(true);
 
 		try {
-			const res = await axios.get('/api/admin/get/newUsers', {
-				headers: {
-					jwt_token: payload,
-				},
-			});
+			const res = await axios.get('/api/admin/get/newUsers');
 			if (res.status === 200) {
 				action.setNewUsers(res.data.newUsers);
 			}
@@ -176,16 +164,12 @@ const adminModel = {
 		action.setLoading(false);
 	}),
 
-	getUpdatedUsers: thunk(async (action, payload) => {
+	getUpdatedUsers: thunk(async (action) => {
 		action.setUpdatedUsersError(null);
 		action.setLoading(true);
 
 		try {
-			const res = await axios.get('/api/admin/get/updatedUsers', {
-				headers: {
-					jwt_token: payload,
-				},
-			});
+			const res = await axios.get('/api/admin/get/updatedUsers');
 			if (res.status === 200) {
 				action.setUpdatedUsers(res.data.updatedUsers);
 			}
@@ -207,12 +191,7 @@ const adminModel = {
 			try {
 				const res = await axios.put(
 					'/api/doctor/add/availability',
-					{ officeID, availabilityDate },
-					{
-						headers: {
-							jwt_token: getState().token,
-						},
-					}
+					{ officeID, availabilityDate }
 				);
 
 				if (res.status === 200) {
@@ -239,12 +218,7 @@ const adminModel = {
 			try {
 				const res = await axios.put(
 					'/api/admin/update/doctor',
-					{ doctorID, primary, specialty, office },
-					{
-						headers: {
-							jwt_token: getState().token,
-						},
-					}
+					{ doctorID, primary, specialty, office }
 				);
 
 				if (res.status === 200) {

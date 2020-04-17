@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { action, thunk } from 'easy-peasy';
-import { toast } from 'react-toastify';
 
 const doctorModel = {
 	loading: false,
@@ -14,11 +13,7 @@ const doctorModel = {
 		action.setLoading(true);
 
 		try {
-			const res = await axios.get('/api/doctor/get/offices', {
-				headers: {
-					jwt_token: payload,
-				},
-			});
+			const res = await axios.get('/api/doctor/get/offices');
 			if (res.status === 200) {
 				action.setOffices(res.data.offices);
 			}

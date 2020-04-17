@@ -13,15 +13,11 @@ const authModel = {
 	registerErr: null,
 	isAdmin: false,
 
-	getCurrentPatient: thunk(async (action, _, { getState }) => {
+	getCurrentPatient: thunk(async (action) => {
 		action.setError(null)
 		action.isLoading(true)
 		try {
-			const res = await axios.get('/api/auth/patient/me', {
-				headers: {
-					'jwt_token': getState().token
-				}
-			});
+			const res = await axios.get('/api/auth/patient/me');
 
 			if (res.status === 200) {
 				action.setAuthenticated(true)
@@ -43,11 +39,7 @@ const authModel = {
 			if (!address2.length) {
 				address2 = 'n/a'
 			}
-			const res = await axios.put('/api/patient/update', { firstName, lastName, email, address, city, state, zip, phoneNumber, dob, gender }, {
-				headers: {
-					'jwt_token': getState().token
-				}
-			})
+			const res = await axios.put('/api/patient/update', { firstName, lastName, email, address, city, state, zip, phoneNumber, dob, gender })
 
 			if (res.status === 200) {
 				action.setUser(res.data.patient)
@@ -64,11 +56,7 @@ const authModel = {
 		action.setError(null)
 		action.isLoading(true)
 		try {
-			const res = await axios.get('/api/auth/doctor/me', {
-				headers: {
-					'jwt_token': getState().token
-				}
-			});
+			const res = await axios.get('/api/auth/doctor/me');
 
 			if (res.status === 200) {
 				action.setAuthenticated(true)
@@ -86,11 +74,7 @@ const authModel = {
 		action.setError(null)
 		action.isLoading(true)
 		try {
-			const res = await axios.get('/api/admin/me', {
-				headers: {
-					'jwt_token': getState().token
-				}
-			});
+			const res = await axios.get('/api/admin/me');
 
 			if (res.status === 200) {
 				action.setAuthenticated(true)

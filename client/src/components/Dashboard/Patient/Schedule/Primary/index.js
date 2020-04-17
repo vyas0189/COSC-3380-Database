@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Form, ListGroup, Modal, Table } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import Loading from '../../../../Loading';
+
 const PatientPrimaryScheduleComponent = () => {
 
     const formatPhoneNumber = (phoneNumberString) => {
@@ -23,7 +24,6 @@ const PatientPrimaryScheduleComponent = () => {
     const patientID = useStoreState(state => state.auth.user);
     const currentPrimary = useStoreState(state => state.patient.currentPrimary);
     const schedulePrimary = useStoreActions(actions => actions.patient.schedulePrimaryAppointment);
-    const token = useStoreState(state => state.auth.token);
     const [show, setShow] = useState(false);
     const [primaryDetails, setDetails] = useState({
         availability_id: '',
@@ -53,9 +53,12 @@ const PatientPrimaryScheduleComponent = () => {
     const [reasonPrimary, setReason] = useState('');
     const handleChange = (e) => setReason(e.target.value)
     const history = useHistory()
-    const handleClose = (e) => {
+    const handleClose = () => {
+        setShow(false);
+    }
+    const handleSubmit = (e) => {
         e.preventDefault();
-        schedulePrimary({ token, primaryAppointment: true, reason: reasonPrimary, availabilityID: availability_id });
+        schedulePrimary({ primaryAppointment: true, reason: reasonPrimary, availabilityID: availability_id });
         setDetails({
             availability_id: '',
             availability_date: '',
@@ -159,7 +162,7 @@ const PatientPrimaryScheduleComponent = () => {
                             <ListGroup.Item>Doctor: {`${doctor_first_name} ${doctor_last_name}`}</ListGroup.Item>
                             <ListGroup.Item>Office: {`${address_name} ${address2_name ? address2_name : ''}, ${city} ${state} ${zip}`}</ListGroup.Item>
                             <ListGroup.Item>
-                                <Form onSubmit={(e) => handleClose(e)}>
+                                <Form onSubmit={(e) => handleSubmit(e)}>
                                     <Form.Group controlId="reasonForm.ControlTextarea1">
                                         <Form.Label>Reason*</Form.Label>
                                         <Form.Control required as="textarea" rows="3" onChange={handleChange} />

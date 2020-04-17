@@ -12,17 +12,12 @@ const patientModel = {
     specialistAppointmentAvailability: [],
     currentPrimary: false,
 
-    getAppointments: thunk(async (action, payload) => {
+    getAppointments: thunk(async (action) => {
         action.setAppointmentError(null)
-
         action.setLoading(true)
 
         try {
-            const res = await axios.get('/api/appointment/view/myAppointments', {
-                headers: {
-                    'jwt_token': payload
-                }
-            });
+            const res = await axios.get('/api/appointment/view/myAppointments');
             if (res.status === 200) {
                 action.setAppointments(res.data.appointments)
             }
@@ -49,18 +44,15 @@ const patientModel = {
         }
         action.setLoading(false)
     }),
-    schedulePrimaryAppointment: thunk(async (action, { token, primaryAppointment, reason, availabilityID }, { getState }) => {
+    schedulePrimaryAppointment: thunk(async (action, { primaryAppointment, reason, availabilityID }) => {
         action.setAppointmentError(null)
         action.setLoading(true)
 
         try {
-            const res = await axios.post('/api/appointment/schedule/primaryAppointment', { primaryAppointment, reason, availabilityID }, {
-                headers: {
-                    'jwt_token': token
-                }
-            });
+            const res = await axios.post('/api/appointment/schedule/primaryAppointment', { primaryAppointment, reason, availabilityID });
             if (res.status === 200) {
                 action.setCurrentPrimaryCount(true);
+                action.getAppointments();
                 toast.success('Appointment Scheduled!');
             }
 
@@ -71,16 +63,12 @@ const patientModel = {
         action.setLoading(false);
     }),
 
-    scheduleSpecialistAppointment: thunk(async (action, { token, primaryAppointment, reason, availabilityID }) => {
+    scheduleSpecialistAppointment: thunk(async (action, { primaryAppointment, reason, availabilityID }) => {
         action.setAppointmentError(null)
         action.setLoading(true)
 
         try {
-            const res = await axios.post('/api/appointment/schedule/specialistAppointment', { primaryAppointment, reason, availabilityID }, {
-                headers: {
-                    'jwt_token': token
-                }
-            });
+            const res = await axios.post('/api/appointment/schedule/specialistAppointment', { primaryAppointment, reason, availabilityID });
             if (res.status === 200) {
                 toast.success('Appointment Scheduled!');
             }
@@ -92,17 +80,12 @@ const patientModel = {
         action.setLoading(false);
     }),
 
-    getAppointmentDetails: thunk(async (action, { token, appointmentID }, { getState }) => {
+    getAppointmentDetails: thunk(async (action, { appointmentID }) => {
         action.setAppointmentError(null)
 
         action.setAppointmentDetailsLoading(true)
         try {
-            const res = await axios.get(`/api/appointment/appointmentDetails/${appointmentID}`, {
-                headers: {
-                    'jwt_token': token
-                },
-
-            });
+            const res = await axios.get(`/api/appointment/appointmentDetails/${appointmentID}`);
             if (res.status === 200) {
                 action.setAppointmentsDetails(res.data.appointmentDetails)
             }
@@ -114,22 +97,19 @@ const patientModel = {
         action.setAppointmentDetailsLoading(false)
     }),
 
-    cancelAppointment: thunk(async (action, { token, appointmentID }, { getState }) => {
+    cancelAppointment: thunk(async (action, { appointmentID }) => {
         action.setAppointmentError(null)
         action.setLoading(true)
 
         try {
             const res = await axios.delete('/api/appointment/cancel', {
-                headers: {
-                    'jwt_token': token
-                },
                 data: {
                     appointmentID
                 }
             });
             if (res.status === 200) {
                 toast.success('Appointment Canceled!');
-                action.getAppointments(token)
+                action.getAppointments()
             }
         } catch (error) {
             action.setAppointmentError(error.response.data.message);
@@ -153,7 +133,23 @@ const patientModel = {
         }
         action.setLoading(false);
     }),
+    getSpecialistAppointmentAvailability: thunk(async (action) => {
+        action.setAppointmentError(null)
+        action.setLoading(true)
 
+        try {
+            const res = await axios.get('/api/appointment/specialtyAvailable');
+
+            if (res.status === 200) {
+                console.log(res.data);
+
+                action.setSpecialistAppointmentAvailability(res.data.specialtyAvailable);
+            }
+        } catch (error) {
+            action.setAppointmentError(error.response);
+        }
+        action.setLoading(false);
+    }),
     setLoading: action((state, loading) => {
         state.appointmentLoading = loading;
     }),

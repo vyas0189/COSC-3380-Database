@@ -10,11 +10,10 @@ const AddComponent = () => {
 	const getOffices = useStoreActions((actions) => actions.doctor.getOffices);
 	const offices = useStoreState((state) => state.doctor.offices);
 
-	const doctorToken = useStoreState((state) => state.auth.token);
 	const loading = useStoreState((state) => state.auth.loading);
 
 	useEffect(() => {
-		getOffices(doctorToken);
+		getOffices();
 	}, []);
 
 	const [formData, setFormData] = useState({

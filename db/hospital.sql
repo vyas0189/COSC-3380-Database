@@ -114,13 +114,13 @@ CREATE FUNCTION deny_specialist_scheduling() RETURNS trigger AS
 $$
 BEGIN
     IF (
-            NEW.appointment_primary = FALSE
+            NEW.appointment_primary <> FALSE
             AND (
                 SELECT patient_primary_doctor
                 FROM patient
                 WHERE patient_id = NEW.appointment_patient
             ) IS NULL
-            AND (
+            OR (
                 SELECT patient_doctor_specialty
                 FROM patient
                 WHERE patient_id = NEW.appointment_patient

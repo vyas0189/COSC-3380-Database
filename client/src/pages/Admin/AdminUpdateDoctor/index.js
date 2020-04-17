@@ -1,6 +1,5 @@
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import React, { Fragment, useEffect, useState } from 'react';
-import Loading from '../../../components/Loading';
 // import { Link } from 'react-router-dom';
 // import Loading from '../../Loading';
 import './AdminUpdateDoctor.css';
@@ -10,9 +9,7 @@ const RegisterComponent = () => {
 		(actions) => actions.auth.adminUpdateDoctor
 	);
 	const admin = useStoreState((state) => state.auth.user);
-	const token = useStoreState((state) => state.auth.token);
 	const loading = useStoreState((state) => state.auth.loading);
-	const adminToken = useStoreState((state) => state.auth.token);
 
 	//offices
 	const getOffices = useStoreActions((actions) => actions.admin.getOffices);
@@ -25,8 +22,8 @@ const RegisterComponent = () => {
 	const doctors = useStoreState((state) => state.admin.doctors);
 
 	useEffect(() => {
-		getOffices(adminToken);
-		getDoctors(adminToken);
+		getOffices();
+		getDoctors();
 	}, []);
 
 	const [formData, setFormData] = useState({
@@ -103,9 +100,9 @@ const RegisterComponent = () => {
 																	office.address2_name
 																		? office.address2_name
 																		: ''
-																}, ${office.city} ${
+																	}, ${office.city} ${
 																	office.state
-																} ${office.zip}`}
+																	} ${office.zip}`}
 															</option>
 														);
 													})}

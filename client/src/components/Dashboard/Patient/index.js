@@ -8,27 +8,25 @@ import './Patient.css';
 const PatientDashboardComponent = () => {
     const patient = useStoreState(state => state.auth.user);
     const getAppointment = useStoreActions(actions => actions.patient.getAppointments)
-    const patientToken = useStoreState(state => state.auth.token);
     const appointmentLoading = useStoreState(state => state.patient.appointmentLoading);
     const appointmentDetailsLoading = useStoreState(state => state.patient.appointmentDetailsLoading);
     const appointments = useStoreState(state => state.patient.appointments);
-    const token = useStoreState(state => state.auth.token);
     const cancelAppointment = useStoreActions(actions => actions.patient.cancelAppointment);
     const getAppointmentDetails = useStoreActions(actions => actions.patient.getAppointmentDetails);
     const appointmentDetails = useStoreState(state => state.patient.appointmentDetails)
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
-    const handleShow = (token, appointmentID) => {
+    const handleShow = (appointmentID) => {
         setShow(true);
-        getAppointmentDetails({ token, appointmentID })
+        getAppointmentDetails({ appointmentID })
     };
 
     useEffect(() => {
 
-        getAppointment(patientToken)
+        getAppointment()
 
-    }, [getAppointment, patientToken]);
+    }, []);
 
     const UpcomingAppointment = () => {
 
@@ -56,7 +54,7 @@ const PatientDashboardComponent = () => {
                                 <td>
                                     <p className="cancelApp badge badge-danger" onClick={(e) => {
                                         e.preventDefault()
-                                        cancelAppointment({ token, appointmentID: appointment.appointment_id })
+                                        cancelAppointment({ appointmentID: appointment.appointment_id })
                                     }}>Cancel</p>
                                 </td>
                             </tr>
@@ -93,7 +91,7 @@ const PatientDashboardComponent = () => {
                                 <td>{`${appointment.doctor_first_name} ${appointment.doctor_last_name}`}</td>
                                 <td>{`${appointment.address_name} ${appointment.address2_name ? appointment.address2_name : ''}, ${appointment.city} ${appointment.state} ${appointment.zip}`}</td>
                                 <td>
-                                    <p className="cancelApp badge badge-info" onClick={() => handleShow(token, appointment.appointment_id)}>View</p>
+                                    <p className="cancelApp badge badge-info" onClick={() => handleShow(appointment.appointment_id)}>View</p>
                                 </td>
                             </tr>
                         ) : null

@@ -58,7 +58,7 @@ router.post('/schedule/specialistAppointment', auth, async (req, res) => {
 
         res.status(200).json({ message: 'OK', appointment: appointment.rows[0] });
     } catch (error) {
-        res.status(500).json({ message: 'Server Error', error });
+        res.status(500).json({ message: 'Unable to schedule.', error });
     }
 });
 
@@ -162,7 +162,7 @@ router.get('/primaryAvailable', async (req, res) => {
 
 router.get('/specialtyAvailable', async (req, res) => {
     try {
-        const specialtyAvailable = await db.query('SELECT * FROM doctor d INNER JOIN availability a on d.doctor_id = a.doctor_id INNER JOIN office o on a.office_id = o.office_id INNER JOIN address a2 on o.office_address = a2.address_id WHERE d.doctor_primary = true AND a.availability_taken <> false AND a.availability_date > CURRENT_DATE ORDER BY availability_date, availability_from_time;');
+        const specialtyAvailable = await db.query('SELECT * FROM doctor d INNER JOIN availability a on d.doctor_id = a.doctor_id INNER JOIN office o on a.office_id = o.office_id INNER JOIN address a2 on o.office_address = a2.address_id WHERE d.doctor_primary = false AND a.availability_taken = false AND a.availability_date > CURRENT_DATE ORDER BY availability_date, availability_from_time;');
 
         if (specialtyAvailable.rows.length === 0) {
             return res.status(200).json({ message: 'No Availability', specialtyAvailable: [] });
