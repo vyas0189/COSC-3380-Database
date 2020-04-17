@@ -1,14 +1,10 @@
-<<<<<<< HEAD
 import { useStoreState } from 'easy-peasy';
 import React from 'react';
 import { Link } from 'react-router-dom';
-=======
-import { useStoreActions, useStoreState } from 'easy-peasy';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Button, Container, ListGroup, Modal, Table } from 'react-bootstrap';
 import Loading from '../../Loading';
->>>>>>> 45305ece24a05e215cd4c4b42df7b123380dbe42
 import './Patient.css';
 
 const PatientDashboardComponent = () => {
