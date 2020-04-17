@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .pdm {
     position: relative;
     width: 100%;
@@ -20,4 +21,13 @@
     position: absolute;
     top: 0px;
     right: 0px;
+=======
+.cancelApp {
+	color: white !important;
+	font-size: 1em;
+}
+
+.cancelApp:hover{
+	cursor: pointer;
+>>>>>>> 45305ece24a05e215cd4c4b42df7b123380dbe42
 }

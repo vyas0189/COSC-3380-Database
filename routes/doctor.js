@@ -4,6 +4,8 @@ const {
 	updateDoctor,
 	updateDiagnosis,
 	orderTest,
+	addAvailability,
+	updateAvailability,
 } = require('../validation');
 
 const router = Router();
@@ -71,8 +73,8 @@ router.post('/order/test', doc, async (req, res) => {
 	try {
 		await orderTest.validateAsync(req.body, { abortEarly: false });
 		const {
-			patientID, scan, physical, blood,
-		} = req.body;
+ patientID, scan, physical, blood,
+} = req.body;
 
 		const { userID } = req.user;
 
@@ -87,12 +89,9 @@ router.post('/order/test', doc, async (req, res) => {
 		);
 
 		if (patient.rows.length === 0) {
-			return res
-				.status(401)
-				.json({
-					message:
-						'That patient is not in our database. Please try again.',
-				});
+			return res.status(401).json({
+				message: 'That patient is not in our database. Please try again.',
+			});
 		}
 
 		await db.query(
@@ -119,24 +118,15 @@ router.put('/update/diagnosis', doc, async (req, res) => {
 		await updateDiagnosis.validateAsync(req.body, { abortEarly: false });
 		const { patientID, symptoms, condition } = req.body;
 
-		// const { userID } = req.user;
-		// const user = await db.query(
-		// 	'SELECT user_id FROM db_user WHERE user_id = $1',
-		// 	[userID],
-		// );
-
 		const patient = await db.query(
 			'SELECT * FROM patient WHERE patient_id = $1',
 			[patientID],
 		);
 
 		if (patient.rows.length === 0) {
-			return res
-				.status(401)
-				.json({
-					message:
-						'That patient is not in our database. Please try again.',
-				});
+			return res.status(401).json({
+				message: 'That patient is not in our database. Please try again.',
+			});
 		}
 
 		const diagnosis = await db.query(
@@ -156,15 +146,205 @@ router.put('/update/diagnosis', doc, async (req, res) => {
 		);
 
 		if (update.rows.length === 0) {
-			return res
-				.status(401)
-				.json({
-					message:
-						'That patient cannot be diagnosed, they have not seen a primary care doctor yet',
-				});
+			return res.status(401).json({
+				message:
+					'That patient cannot be diagnosed, they have not seen a primary care doctor yet',
+			});
 		}
 
 		res.status(200).json({ message: 'OK' });
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error });
+	}
+});
+
+router.post('/add/availability', doc, async (req, res) => {
+	try {
+		await addAvailability.validateAsync(req.body, { abortEarly: false });
+		const { officeID, availabilityDate } = req.body;
+
+		const { userID } = req.user;
+		const user = await db.query(
+			'SELECT user_id FROM db_user WHERE user_id = $1',
+			[userID],
+		);
+
+		if (!user.rows.length) {
+			return res.status(401).json({ message: 'User not found.' });
+		}
+
+		const doctor = await db.query(
+			'SELECT * FROM doctor WHERE doctor_user = $1',
+			[userID],
+		);
+
+		const availability = await db.query(
+			'SELECT * FROM availability WHERE doctor_id = $1 AND availability_date = $2',
+			[doctor.rows[0].doctor_id, availabilityDate],
+		);
+
+		if (availability.rows.length > 0) {
+			return res.status(401).json({
+				message:
+					'You already have availability times set for that date. Please update your availability if you would like to make changes.',
+			});
+		}
+
+		await db.query(
+			'INSERT INTO availability (doctor_id, office_id, availability_date, availability_from_time, availability_to_time, availability_taken) VALUES ($1, $2, $3, $4, $5, $6)',
+			[
+				doctor.rows[0].doctor_id,
+				officeID,
+				availabilityDate,
+				'9:00 AM',
+				'10:00 AM',
+				false,
+			],
+		);
+		await db.query(
+			'INSERT INTO availability (doctor_id, office_id, availability_date, availability_from_time, availability_to_time, availability_taken) VALUES ($1, $2, $3, $4, $5, $6)',
+			[
+				doctor.rows[0].doctor_id,
+				officeID,
+				availabilityDate,
+				'10:00 AM',
+				'11:00 AM',
+				false,
+			],
+		);
+		await db.query(
+			'INSERT INTO availability (doctor_id, office_id, availability_date, availability_from_time, availability_to_time, availability_taken) VALUES ($1, $2, $3, $4, $5, $6)',
+			[
+				doctor.rows[0].doctor_id,
+				officeID,
+				availabilityDate,
+				'11:00 AM',
+				'12:00 PM',
+				false,
+			],
+		);
+		await db.query(
+			'INSERT INTO availability (doctor_id, office_id, availability_date, availability_from_time, availability_to_time, availability_taken) VALUES ($1, $2, $3, $4, $5, $6)',
+			[
+				doctor.rows[0].doctor_id,
+				officeID,
+				availabilityDate,
+				'12:00 PM',
+				'1:00 PM',
+				false,
+			],
+		);
+		await db.query(
+			'INSERT INTO availability (doctor_id, office_id, availability_date, availability_from_time, availability_to_time, availability_taken) VALUES ($1, $2, $3, $4, $5, $6)',
+			[
+				doctor.rows[0].doctor_id,
+				officeID,
+				availabilityDate,
+				'1:00 PM',
+				'2:00 PM',
+				false,
+			],
+		);
+		await db.query(
+			'INSERT INTO availability (doctor_id, office_id, availability_date, availability_from_time, availability_to_time, availability_taken) VALUES ($1, $2, $3, $4, $5, $6)',
+			[
+				doctor.rows[0].doctor_id,
+				officeID,
+				availabilityDate,
+				'2:00 PM',
+				'3:00 PM',
+				false,
+			],
+		);
+		await db.query(
+			'INSERT INTO availability (doctor_id, office_id, availability_date, availability_from_time, availability_to_time, availability_taken) VALUES ($1, $2, $3, $4, $5, $6)',
+			[
+				doctor.rows[0].doctor_id,
+				officeID,
+				availabilityDate,
+				'3:00 PM',
+				'4:00 PM',
+				false,
+			],
+		);
+		await db.query(
+			'INSERT INTO availability (doctor_id, office_id, availability_date, availability_from_time, availability_to_time, availability_taken) VALUES ($1, $2, $3, $4, $5, $6)',
+			[
+				doctor.rows[0].doctor_id,
+				officeID,
+				availabilityDate,
+				'4:00 PM',
+				'5:00 PM',
+				false,
+			],
+		);
+
+		res.status(200).json({ message: 'OK' });
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error });
+	}
+});
+
+router.put('/update/availability', doc, async (req, res) => {
+	try {
+		await updateAvailability.validateAsync(req.body, { abortEarly: false });
+		const { availabilityID, taken } = req.body;
+
+		const { userID } = req.user;
+		const user = await db.query(
+			'SELECT user_id FROM db_user WHERE user_id = $1',
+			[userID],
+		);
+
+		if (!user.rows.length) {
+			return res.status(401).json({ message: 'User not found.' });
+		}
+
+		const availability = await db.query(
+			'SELECT * FROM availability WHERE availability_id = $1',
+			[availabilityID],
+		);
+
+		if (availability.rows.length === 0) {
+			return res.status(401).json({
+				message: 'You have no availability slots at that time.',
+			});
+		}
+
+		await db.query(
+			'UPDATE availability SET availability_taken = $1 WHERE availability_id = $2',
+			[taken, availabilityID],
+		);
+
+		res.status(200).json({ message: 'OK' });
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error });
+	}
+});
+
+router.get('/get/offices', doc, async (req, res) => {
+	try {
+		const offices = await db.query(
+			'SELECT * FROM address INNER JOIN office ON (address.address_id = office.office_address)',
+		);
+
+		res.status(200).json({
+			message: 'OK',
+			offices: offices.rows,
+		});
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error });
+	}
+});
+
+router.get('/get/patients', doc, async (req, res) => {
+	try {
+		const patients = await db.query('SELECT * FROM patient');
+
+		res.status(200).json({
+			message: 'OK',
+			offices: patients.rows,
+		});
 	} catch (error) {
 		res.status(500).json({ message: 'Server Error', error });
 	}
