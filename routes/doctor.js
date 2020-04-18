@@ -285,42 +285,42 @@ router.post('/add/availability', doc, async (req, res) => {
 	}
 });
 
-router.put('/update/availability', doc, async (req, res) => {
-	try {
-		await updateAvailability.validateAsync(req.body, { abortEarly: false });
-		const { availabilityID, taken } = req.body;
+// router.put('/update/availability', doc, async (req, res) => {
+// 	try {
+// 		await updateAvailability.validateAsync(req.body, { abortEarly: false });
+// 		const { availabilityID, taken } = req.body;
 
-		const { userID } = req.user;
-		const user = await db.query(
-			'SELECT user_id FROM db_user WHERE user_id = $1',
-			[userID],
-		);
+// 		const { userID } = req.user;
+// 		const user = await db.query(
+// 			'SELECT user_id FROM db_user WHERE user_id = $1',
+// 			[userID],
+// 		);
 
-		if (!user.rows.length) {
-			return res.status(401).json({ message: 'User not found.' });
-		}
+// 		if (!user.rows.length) {
+// 			return res.status(401).json({ message: 'User not found.' });
+// 		}
 
-		const availability = await db.query(
-			'SELECT * FROM availability WHERE availability_id = $1',
-			[availabilityID],
-		);
+// 		const availability = await db.query(
+// 			'SELECT * FROM availability WHERE availability_id = $1',
+// 			[availabilityID],
+// 		);
 
-		if (availability.rows.length === 0) {
-			return res.status(401).json({
-				message: 'You have no availability slots at that time.',
-			});
-		}
+// 		if (availability.rows.length === 0) {
+// 			return res.status(401).json({
+// 				message: 'You have no availability slots at that time.',
+// 			});
+// 		}
 
-		await db.query(
-			'UPDATE availability SET availability_taken = $1 WHERE availability_id = $2',
-			[taken, availabilityID],
-		);
+// 		await db.query(
+// 			'UPDATE availability SET availability_taken = $1 WHERE availability_id = $2',
+// 			[taken, availabilityID],
+// 		);
 
-		res.status(200).json({ message: 'OK' });
-	} catch (error) {
-		res.status(500).json({ message: 'Server Error', error });
-	}
-});
+// 		res.status(200).json({ message: 'OK' });
+// 	} catch (error) {
+// 		res.status(500).json({ message: 'Server Error', error });
+// 	}
+// });
 
 router.get('/get/offices', doc, async (req, res) => {
 	try {
@@ -354,11 +354,48 @@ router.get('/allAvailability/:doctorID', async (req, res) => {
 	try {
 		const { doctorID } = req.params;
 
-		const availability = await db.query('SELECT doctor_id, availability_date, a.office_id, address_name, address2_name, state, city, zip FROM availability a JOIN office o on a.office_id = o.office_id JOIN address a2 on o.office_address = a2.address_id WHERE doctor_id = $1 GROUP BY availability_date, doctor_id, a.office_id, a2.address_name, a2.address2_name, a2.state, a2.city, a2.zip ORDER BY availability_date; ', [doctorID]);
+		const availability = await db.query('SELECT doctor_id, availability_date, a.office_id, address_name, address2_name, state, city, zip FROM availability a JOIN office o on a.office_id = o.office_id JOIN address a2 on o.office_address = a2.address_id WHERE doctor_id = $1 AND availability_date >= CURRENT_DATE GROUP BY availability_date, doctor_id, a.office_id, a2.address_name, a2.address2_name, a2.state, a2.city, a2.zip ORDER BY availability_date; ', [doctorID]);
 
 		res.status(200).json({ message: 'OK', availabilities: availability.rows });
 	} catch (error) {
 		res.status(500).json({ message: 'Server Error', error });
 	}
 });
+
+router.put('/updateAvailability', async (req, res) => {
+	const {
+		newDate, newOffice, doctorID, date,
+	} = req.body;
+
+	try {
+		await db.query(
+			'UPDATE FROM availability SET availability_date = $1 office_id = $2 WHERE doctor_id = $3 AND availability_date = $4',
+			[
+				newDate, newOffice, doctorID, date,
+			],
+		);
+
+		res.status(200).json({ message: 'OK' });
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error });
+	}
+});
+
+router.delete('/cancelAvailability', async (req, res) => {
+	const { doctorID, date } = req.body;
+
+	try {
+		await db.query(
+			'DELETE FROM availability WHERE doctor_id = $1 AND availability_date = $2',
+			[
+				doctorID, date,
+			],
+		);
+
+		res.status(200).json({ message: 'OK' });
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error });
+	}
+});
+
 module.exports = router;
