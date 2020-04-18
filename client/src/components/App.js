@@ -23,6 +23,7 @@ import Login from '../pages/Login';
 import NotFoundPage from '../pages/NotFound';
 import Register from '../pages/Register';
 import setAuthToken from '../utils/setAuthToken';
+import PatientProfile from './Dashboard/Patient/Profile';
 import NavbarComponent from './Navbar';
 import PrivateRoute from './ProtectedRoute';
 import AdminRoute from './ProtectedRoute/AdminRoute';
@@ -36,7 +37,7 @@ const App = () => {
   useEffect(() => {
     setAuthToken(localStorage.token);
     user();
-  }, [user]);
+  }, []);
 
   return (
     <>
@@ -53,6 +54,7 @@ const App = () => {
 
         <PrivateRoute exact path="/dashboard" component={Dashboard} />
         <PrivateRoute exact path="/patient/schedule" component={PatientScheduleComponent} />
+        <PrivateRoute exact path="/patient/profile" component={PatientProfile} />
         {/* admin pages */}
 
         <AdminRoute

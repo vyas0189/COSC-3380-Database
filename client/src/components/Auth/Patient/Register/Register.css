@@ -41,6 +41,7 @@
 	padding: var(--input-padding-y) var(--input-padding-x);
 	height: auto;
 	border-radius: 2rem;
+	font-size: .8rem;
 }
 
 .form-label-group > label {

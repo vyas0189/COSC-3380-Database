@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -20,12 +21,9 @@ const PatientSpecialistScheduleComponent = () => {
     const getSpecialistAppointments = useStoreActions(actions => actions.patient.getSpecialistAppointmentAvailability);
     const loading = useStoreState(state => state.patient.appointmentLoading);
     const specialistAvailability = useStoreState(state => state.patient.specialistAppointmentAvailability)
-    const getCurrentPrimaryCount = useStoreActions(actions => actions.patient.getCurrentPrimaryCount)
-    const patientID = useStoreState(state => state.auth.user);
-    const currentPrimary = useStoreState(state => state.patient.currentPrimary);
     const scheduleSpecialist = useStoreActions(actions => actions.patient.scheduleSpecialistAppointment);
     const [show, setShow] = useState(false);
-    const [primaryDetails, setDetails] = useState({
+    const [specialDetails, setDetails] = useState({
         availability_id: '',
         availability_date: '',
         availability_from_time: '',
@@ -51,7 +49,7 @@ const PatientSpecialistScheduleComponent = () => {
         zip,
         city,
         doctor_first_name,
-    } = primaryDetails;
+    } = specialDetails;
     const [reasonPrimary, setReason] = useState('');
     const handleChange = (e) => setReason(e.target.value)
     const history = useHistory()
@@ -82,12 +80,11 @@ const PatientSpecialistScheduleComponent = () => {
     };
 
     useEffect(() => {
-        getCurrentPrimaryCount(patientID.patient_id)
         getSpecialistAppointments();
     }, [])
     return (
         <div>
-            {loading ? <Loading /> : currentPrimary ? <h3>You have already booked an Primary Appointment.</h3> : (
+            {loading ? <Loading /> : (
                 <Table striped bordered hover>
                     <thead>
                         <tr>
@@ -130,7 +127,7 @@ const PatientSpecialistScheduleComponent = () => {
                                             <p className="cancelApp badge badge-success" onClick={(e) => {
                                                 e.preventDefault()
                                                 setDetails({
-                                                    ...primaryDetails,
+                                                    ...specialDetails,
                                                     availability_id,
                                                     availability_date,
                                                     availability_from_time,

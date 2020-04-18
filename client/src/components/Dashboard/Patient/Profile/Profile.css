@@ -1,0 +1,14 @@
+.card {
+    width: 30rem;
+}
+
+.profileContainer{
+    min-height: calc(100vh - 86.4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.editProfile {
+    width: 100%;
+}

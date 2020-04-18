@@ -113,9 +113,10 @@ ALTER TABLE appointment
 CREATE FUNCTION deny_specialist_scheduling() RETURNS trigger AS
 $$
 BEGIN
-    IF (
-            NEW.appointment_primary <> FALSE
-            AND (
+    IF (NEW.appointment_primary = TRUE) THEN
+        RETURN NEW;
+    ELSIF (
+            (
                 SELECT patient_primary_doctor
                 FROM patient
                 WHERE patient_id = NEW.appointment_patient
@@ -126,6 +127,16 @@ BEGIN
                 WHERE patient_id = NEW.appointment_patient
             ) IS NULL
         ) THEN
+        RETURN NULL;
+    END IF;
+
+    IF ((SELECT patient_doctor_specialty
+         FROM patient
+         WHERE patient_id = NEW.appointment_patient) <> (SELECT doctor_specialty
+                                                         FROM availability a
+                                                                  JOIN doctor d on a.doctor_id = d.doctor_id
+                                                         WHERE a.availability_id = NEW.appointment_availability))
+    THEN
         RETURN NULL;
     END IF;
     RETURN NEW;
