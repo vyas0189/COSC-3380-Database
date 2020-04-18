@@ -354,9 +354,9 @@ router.get('/allAvailability/:doctorID', async (req, res) => {
 	try {
 		const { doctorID } = req.params;
 
-		const availability = await db.query('SELECT doctor_id, availability_date, office_id FROM availability WHERE doctor_id = $1 GROUP BY availability_date, doctor_id, office_id ORDER BY availability_date;', [doctorID]);
+		const availability = await db.query('SELECT doctor_id, availability_date, a.office_id, address_name, address2_name, state, city, zip FROM availability a JOIN office o on a.office_id = o.office_id JOIN address a2 on o.office_address = a2.address_id WHERE doctor_id = $1 GROUP BY availability_date, doctor_id, a.office_id, a2.address_name, a2.address2_name, a2.state, a2.city, a2.zip ORDER BY availability_date; ', [doctorID]);
 
-		res.status(200).json({ message: 'OK', availabilities: availability.rows[0] });
+		res.status(200).json({ message: 'OK', availabilities: availability.rows });
 	} catch (error) {
 		res.status(500).json({ message: 'Server Error', error });
 	}
