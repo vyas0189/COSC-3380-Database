@@ -16,7 +16,7 @@ const AddComponent = () => {
 
     useEffect(() => {
         getOffices();
-    }, []);
+    }, [getOffices]);
 
     const [formData, setFormData] = useState({
         officeID: '',
