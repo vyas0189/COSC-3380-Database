@@ -1,46 +1,41 @@
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import React, { Fragment, useEffect, useState } from 'react';
 import Loading from '../../../components/Loading';
-// import { Link } from 'react-router-dom';
-// import Loading from '../../Loading';
 import './UpdateDiagnosis.css';
+import moment from 'moment';
 
-const RegisterComponent = () => {
-	const update = useStoreActions((actions) => actions.doctor.updateDiagnosis);
-	// const admin = useStoreState((state) => state.auth.user);
-	// const token = useStoreState((state) => state.auth.token);
-	// const loading = useStoreState((state) => state.auth.loading);
-	const adminToken = useStoreState((state) => state.auth.token);
-
+const UpdateDiagnosis = () => {
+	const updateDiagnosis = useStoreActions(
+		(actions) => actions.doctor.updateDiagnosis
+	);
 	//patients
 	const getPatients = useStoreActions((actions) => actions.doctor.getPatients);
 	const patients = useStoreState((state) => state.doctor.patients);
+	//diagnoses
+	const getDiagnoses = useStoreActions(
+		(actions) => actions.doctor.getDiagnoses
+	);
+	const diagnoses = useStoreState((state) => state.doctor.diagnoses);
 
 	useEffect(() => {
-		getPatients(adminToken);
+		getPatients();
+		getDiagnoses();
 	}, []);
 
 	const [formData, setFormData] = useState({
 		patientID: '',
-		symptoms: '',
-		condition: '',
+		diagnosisID: '',
 	});
 
-	const { patientID, symptoms, condition } = formData;
+	const { patientID, diagnosisID } = formData;
 
 	const onChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
-	//doesn't work here - register not a function???
 	const onSubmit = async (e) => {
 		e.preventDefault();
-		const userRegister = {
-			patientID,
-			symptoms,
-			condition,
-		};
-		update(userRegister);
+		updateDiagnosis({ patientID, diagnosisID });
 	};
 
 	return (
@@ -73,7 +68,13 @@ const RegisterComponent = () => {
 													{patients.map((patient, idx) => {
 														return (
 															<option value={patient.patient_id}>
-																{`${patient.patient_first_name} ${patient.patient_last_name} ${patient.patient_dob}
+																{`${
+																	patient.patient_first_name
+																} ${
+																	patient.patient_last_name
+																} - ${moment(
+																	patient.patient_dob
+																).format('MM/DD/YYYY')}
 																	`}
 															</option>
 														);
@@ -81,71 +82,29 @@ const RegisterComponent = () => {
 												</select>
 											</div>
 
-											{/* <div className="form-group">
+											<div className="form-group">
 												<select
-													name="state"
-													value={state}
-													key={state}
+													name="diagnosisID"
+													value={diagnosisID}
+													key={diagnosisID}
 													className="form-control"
 													autoFocus
 													onChange={(e) => onChange(e)}
 												>
-													<option value="State">
-														Choose a State
+													<option value="Diagnosis">
+														Diagnosis
 													</option>
-													<option value="AL">AL</option>
-													<option value="AK">AK</option>
-													<option value="AR">AR</option>
-													<option value="AZ">AZ</option>
-													<option value="CA">CA</option>
-													<option value="CO">CO</option>
-													<option value="CT">CT</option>
-													<option value="DC">DC</option>
-													<option value="DE">DE</option>
-													<option value="FL">FL</option>
-													<option value="GA">GA</option>
-													<option value="HI">HI</option>
-													<option value="IA">IA</option>
-													<option value="ID">ID</option>
-													<option value="IL">IL</option>
-													<option value="IN">IN</option>
-													<option value="KS">KS</option>
-													<option value="KY">KY</option>
-													<option value="LA">LA</option>
-													<option value="MA">MA</option>
-													<option value="MD">MD</option>
-													<option value="ME">ME</option>
-													<option value="MI">MI</option>
-													<option value="MN">MN</option>
-													<option value="MO">MO</option>
-													<option value="MS">MS</option>
-													<option value="MT">MT</option>
-													<option value="NC">NC</option>
-													<option value="NE">NE</option>
-													<option value="NH">NH</option>
-													<option value="NJ">NJ</option>
-													<option value="NM">NM</option>
-													<option value="NV">NV</option>
-													<option value="NY">NY</option>
-													<option value="ND">ND</option>
-													<option value="OH">OH</option>
-													<option value="OK">OK</option>
-													<option value="OR">OR</option>
-													<option value="PA">PA</option>
-													<option value="RI">RI</option>
-													<option value="SC">SC</option>
-													<option value="SD">SD</option>
-													<option value="TN">TN</option>
-													<option value="TX">TX</option>
-													<option value="UT">UT</option>
-													<option value="VT">VT</option>
-													<option value="VA">VA</option>
-													<option value="WA">WA</option>
-													<option value="WI">WI</option>
-													<option value="WV">WV</option>
-													<option value="WY">WY</option>
+													{diagnoses.map((diagnosis, idx) => {
+														return (
+															<option
+																value={diagnosis.diagnosis_id}
+															>
+																{`${diagnosis.diagnosis_symptoms} - ${diagnosis.diagnosis_condition}`}
+															</option>
+														);
+													})}
 												</select>
-											</div> */}
+											</div>
 
 											<input
 												type="submit"
@@ -164,4 +123,4 @@ const RegisterComponent = () => {
 	);
 };
 
-export default RegisterComponent;
+export default UpdateDiagnosis;

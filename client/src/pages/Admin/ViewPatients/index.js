@@ -125,9 +125,7 @@ const ViewPatients = () => {
 				class="modal fade right"
 				id="patientModal"
 				tabindex="1"
-				role="dialog"
-				// aria-labelledby="exampleModalPreviewLabel"
-				// aria-hidden="true"
+				role="dialog"				
 			>
 				<div
 					class="modal-dialog-full-width modal-dialog momodel modal-fluid"
