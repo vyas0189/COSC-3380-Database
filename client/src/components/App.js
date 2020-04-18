@@ -9,8 +9,8 @@ import AdminCancelAppointment from '../pages/Admin/AdminCancelAppointment';
 import AdminUpdateDoctor from '../pages/Admin/AdminUpdateDoctor';
 import RegisterDoctor from '../pages/Admin/RegisterDoctor';
 import RegisterOffice from '../pages/Admin/RegisterOffice';
-import ViewNewUsers from '../pages/Admin/ViewNewUsers';
-import ViewUpdatedUsers from '../pages/Admin/ViewUpdatedUsers';
+import ViewPatients from '../pages/Admin/ViewPatients';
+import ViewAppointments from '../pages/Admin/ViewAppointments';
 import Dashboard from '../pages/Dashboard';
 //doctor imports
 import AddAvailability from '../pages/Doctor/AddAvailability';
@@ -78,11 +78,11 @@ const App = () => {
 					path="/adminUpdateDoctor"
 					component={AdminUpdateDoctor}
 				/>
-				<AdminRoute exact path="/viewNewUsers" component={ViewNewUsers} />
+				<AdminRoute exact path="/viewPatients" component={ViewPatients} />
 				<AdminRoute
 					exact
-					path="/viewUpdatedUsers"
-					component={ViewUpdatedUsers}
+					path="/viewAppointments"
+					component={ViewAppointments}
 				/>
 
 				{/* doctor pages */}

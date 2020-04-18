@@ -105,13 +105,13 @@ const NavbarComponent = () => {
 				</Link>
 			</li>
 			<li className="nav-item">
-				<Link className="nav-link" to="/viewNewUsers">
-					View New Patients
+				<Link className="nav-link" to="/viewPatients">
+					View Patients
 				</Link>
 			</li>
 			<li className="nav-item">
-				<Link className="nav-link" to="/viewUpdatedUsers">
-					View Updated Users
+				<Link className="nav-link" to="/viewAppointments">
+					View Appointments
 				</Link>
 			</li>
 			<li className="nav-item">

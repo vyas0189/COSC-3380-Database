@@ -302,14 +302,14 @@ router.delete('/cancel', admin, async (req, res) => {
 	}
 });
 
-router.get('/get/newPatients/:startDate/:endDate', admin, async (req, res) => {
+router.get('/get/patients/:startDate/:endDate', admin, async (req, res) => {
 	try {
 		// console.log(req.params);
 
 		await generateReport.validateAsync(req.params, { abortEarly: false });
 		const { startDate, endDate } = req.params;
 
-		const newPatients = await db.query(
+		const patients = await db.query(
 			"SELECT username, role, created_at,	updated_at,	patient_id,	patient_first_name,	patient_last_name, patient_email, patient_phone_number, patient_gender, patient_address, patient_dob, date_part('year', age(patient_dob)) AS age FROM db_user JOIN patient ON user_id = patient_user WHERE role = 'patient' AND created_at::date >= $1 AND created_at::date <= $2;",
 			[startDate, endDate]
 		);
@@ -328,12 +328,49 @@ router.get('/get/newPatients/:startDate/:endDate', admin, async (req, res) => {
 			message: 'OK',
 			avgAge: avgAge.rows,
 			stateCounts: stateCounts.rows,
-			newPatients: newPatients.rows,
+			patients: patients.rows,
 		});
 	} catch (error) {
 		res.status(500).json({ message: 'Server Error', error });
 	}
 });
 
+router.get('/get/appointments/:startDate/:endDate', admin, async (req, res) => {
+	try {
+		// console.log(req.params);
+
+		await generateReport.validateAsync(req.params, { abortEarly: false });
+		const { startDate, endDate } = req.params;
+
+		const doctors = await db.query(
+			"SELECT username, role, created_at, doctor_id, doctor_first_name, doctor_last_name, doctor_email, doctor_phone_number, doctor_specialty FROM doctor JOIN db_user ON db_user.user_id = doctor.doctor_user WHERE role = 'doctor';"
+		);
+
+		const doctorAppts = await db.query(
+			'SELECT COUNT(availability_taken) AS count, COUNT(availability_taken) / COUNT(doctor_first_name) AS average, doctor_first_name, doctor_last_name FROM availability JOIN doctor ON availability.doctor_id = doctor.doctor_id WHERE availability_taken IS TRUE AND availability_date::date >= $1 AND availability_date::date <= $2 GROUP BY doctor.doctor_first_name, doctor.doctor_last_name ORDER BY COUNT(availability_taken) DESC;',
+			[startDate, endDate]
+		);
+
+		const specialtyAppts = await db.query(
+			'SELECT COUNT(availability_taken) AS count, COUNT(availability_taken) / COUNT(doctor_specialty) AS average, doctor_specialty FROM availability JOIN doctor ON availability.doctor_id = doctor.doctor_id WHERE availability_taken IS TRUE AND availability_date::date >= $1 AND availability_date::date <= $2 GROUP BY doctor_specialty ORDER BY COUNT(availability_taken) DESC;',
+			[startDate, endDate]
+		);
+
+		const apptCount = await db.query(
+			'SELECT COUNT(availability_taken) AS count FROM availability WHERE availability_taken IS TRUE AND availability_date::date >= $1 AND availability_date::date <= $2;',
+			[startDate, endDate]
+		);
+
+		res.status(200).json({
+			message: 'OK',
+			doctors: doctors.rows,
+			doctorAppts: doctorAppts.rows,
+			specialtyAppts: specialtyAppts.rows,
+			apptCount: apptCount.rows,
+		});
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error });
+	}
+});
 
 module.exports = router;

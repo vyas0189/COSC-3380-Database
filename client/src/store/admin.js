@@ -8,19 +8,29 @@ const adminModel = {
 	//offices
 	offices: [],
 	officeErr: null,
+
 	//doctors
 	doctors: [],
 	doctorErr: null,
+	//doctorAppts
+	doctorAppts: [],
+	doctorApptErr: null,
+	//specialtyAppts
+	specialtyAppts: [],
+	specialtyApptErr: null,
+	//apptCount
+	apptCount: [],
+	apptCountErr: null,
 
+	//newPatients
+	patients: [],
+	patientErr: null,
 	//avgAge
 	avgAge: [],
 	avgAgeErr: null,
 	//stateCounts
 	stateCounts: [],
 	stateCountErr: null,
-	//newPatients
-	newPatients: [],
-	newPatientErr: null,
 
 	registerDoctor: thunk(
 		async (
@@ -161,28 +171,57 @@ const adminModel = {
 		action.setLoading(false);
 	}),
 
-	getNewPatients: thunk(async (action, { startDate, endDate }) => {
+	getPatients: thunk(async (action, { startDate, endDate }) => {
 		action.setAvgAgeError(null);
 		action.setStateCountError(null);
-		action.setNewPatientsError(null);
+		action.setPatientsError(null);
 		action.setLoading(true);
 
 		try {
 			console.log(startDate, endDate);
 			const res = await axios.get(
-				`/api/admin/get/newPatients/${startDate}/${endDate}`
+				`/api/admin/get/patients/${startDate}/${endDate}`
 			);
 			console.log(res.data);
 
 			if (res.status === 200) {
 				action.setAvgAge(res.data.avgAge);
 				action.setStateCounts(res.data.stateCounts);
-				action.setNewPatients(res.data.newPatients);
+				action.setPatients(res.data.patients);
 			}
 		} catch (error) {
 			action.setAvgAgeError(error.response.data.message);
 			action.setStateCountError(error.response.data.message);
-			action.setNewPatientsError(error.response.data.message);
+			action.setPatientsError(error.response.data.message);
+		}
+		action.setLoading(false);
+	}),
+
+	getAppointments: thunk(async (action, { startDate, endDate }) => {
+		action.setDoctorsError(null);
+		action.setDoctorApptError(null);
+		action.setSpecialtyApptError(null);
+		action.setApptCountError(null);
+		action.setLoading(true);
+
+		try {
+			console.log(startDate, endDate);
+			const res = await axios.get(
+				`/api/admin/get/appointments/${startDate}/${endDate}`
+			);
+			console.log(res.data);
+
+			if (res.status === 200) {
+				action.setDoctors(res.data.doctors);
+				action.setDoctorAppts(res.data.doctorAppts);
+				action.setSpecialtyAppts(res.data.specialtyAppts);
+				action.setApptCount(res.data.apptCount);
+			}
+		} catch (error) {
+			action.setDoctorsError(error.response.data.message);
+			action.setDoctorApptError(error.response.data.message);
+			action.setSpecialtyApptError(error.response.data.message);
+			action.setApptCountError(error.response.data.message);
 		}
 		action.setLoading(false);
 	}),
@@ -243,12 +282,36 @@ const adminModel = {
 		state.doctorErr = error;
 	}),
 
-	setNewPatients: action((state, newPatients) => {
-		state.newPatients = newPatients;
+	setDoctorAppts: action((state, doctorAppts) => {
+		state.doctorAppts = doctorAppts;
 	}),
 
-	setNewPatientsError: action((state, error) => {
-		state.newPatientErr = error;
+	setDoctorApptError: action((state, error) => {
+		state.doctorApptErr = error;
+	}),
+
+	setSpecialtyAppts: action((state, specialtyAppts) => {
+		state.specialtyAppts = specialtyAppts;
+	}),
+
+	setSpecialtyApptError: action((state, error) => {
+		state.specialtyApptErr = error;
+	}),
+
+	setApptCount: action((state, apptCount) => {
+		state.apptCount = apptCount;
+	}),
+
+	setApptCountError: action((state, error) => {
+		state.ApptCountError = error;
+	}),
+
+	setPatients: action((state, patients) => {
+		state.patients = patients;
+	}),
+
+	setPatientsError: action((state, error) => {
+		state.patientErr = error;
 	}),
 
 	setAvgAge: action((state, avgAge) => {

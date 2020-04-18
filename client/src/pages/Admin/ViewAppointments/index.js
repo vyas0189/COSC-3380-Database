@@ -3,10 +3,10 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Button, Form, ListGroup, Modal, Table } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import Loading from '../../../components/Loading';
-import './ViewNewUsers.css';
+import './ViewAppointments.css';
 import moment from 'moment';
 
-const ViewNewUsers = () => {
+const ViewAppointments = () => {
 	const formatPhoneNumber = (phoneNumberString) => {
 		const cleaned = ('' + phoneNumberString).replace(/\D/g, '');
 		const match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
@@ -19,17 +19,18 @@ const ViewNewUsers = () => {
 		return null;
 	};
 
-	const getNewPatients = useStoreActions(
-		(actions) => actions.admin.getNewPatients
+	const getAppointments = useStoreActions(
+		(actions) => actions.admin.getAppointments
 	);
-	const avgAge = useStoreState((state) => state.admin.avgAge);
-	const stateCounts = useStoreState((state) => state.admin.stateCounts);
-	const newPatients = useStoreState((state) => state.admin.newPatients);
+	const doctors = useStoreState((state) => state.admin.doctors);
+	const doctorAppts = useStoreState((state) => state.admin.doctorAppts);
+	const specialtyAppts = useStoreState((state) => state.admin.specialtyAppts);
+	const apptCount = useStoreState((state) => state.admin.apptCount);
 
 	const [show, setShow] = useState(false);
 
 	useEffect(() => {
-		getNewPatients({
+		getAppointments({
 			startDate: '1999-01-01',
 			endDate: moment().format('YYYY-MM-DD'),
 		});
@@ -45,7 +46,7 @@ const ViewNewUsers = () => {
 	const handleClose = (e) => {
 		// e.preventDefault();
 		setShow(false);
-		history.push('/viewNewUsers');
+		history.push('/viewAppointments');
 	};
 
 	const handleShow = () => {
@@ -61,7 +62,7 @@ const ViewNewUsers = () => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		handleShow();
-		getNewPatients({
+		getAppointments({
 			startDate: moment(startDate).format('YYYY-MM-DD'),
 			endDate: moment(endDate).format('YYYY-MM-DD'),
 		});
@@ -77,7 +78,7 @@ const ViewNewUsers = () => {
 							<div className="row">
 								<div className="col-md-9 col-lg-4 mx-auto">
 									<h3 className="login-heading mb-4">
-										View New Patients
+										View Appointment Information
 									</h3>
 									<form onSubmit={(e) => handleSubmit(e)}>
 										<div className="form-group">
@@ -111,7 +112,7 @@ const ViewNewUsers = () => {
 											type="submit"
 											className="btn btn-sm btn-primary btn-register text-uppercase font-weight-bold mb-2"
 											data-toggle="modal"
-											data-target="#patientModal"
+											data-target="#appointmentModal"
 										>
 											View
 										</button>
@@ -125,7 +126,7 @@ const ViewNewUsers = () => {
 
 			<div
 				class="modal fade right"
-				id="patientModal"
+				id="appointmentModal"
 				tabindex="1"
 				role="dialog"
 				// aria-labelledby="exampleModalPreviewLabel"
@@ -138,24 +139,58 @@ const ViewNewUsers = () => {
 					<div class="modal-content-full-width modal-content ">
 						<div class="modal-header">
 							<div class="modal-title">
-								New Patient Information
+								Appointment & Doctor Information
 							</div>
 						</div>
 
 						<div class="modal-body">
 							<ListGroup horizontal>
-								<b>Average Patient Age:</b>
-								{avgAge.map((age, idx) => (
+								<b>Total Appointments:</b>
+								{apptCount.map((count, idx) => (
 									<div class="list-group-item-custom">
-										{age.avg_age.toPrecision(2)}
+										{count.count}
 									</div>
 								))}
-								<b>Patient Location Counts:</b>
-								{stateCounts.map((stateCount, idx) => (
+							</ListGroup>
+							<ListGroup horizontal>
+								<b>Appointments by Doctor:</b>
+								{doctorAppts.map((doctorAppt, idx) => (
 									<div class="list-group-item-custom">
-										<b>{stateCount.state}: </b> {stateCount.count}
+										Dr. {doctorAppt.doctor_first_name}{' '}
+										{doctorAppt.doctor_last_name}: {doctorAppt.count}
 									</div>
 								))}
+							</ListGroup>
+							<ListGroup horizontal>
+								<b>Average Appointments per Doctor:</b>
+								{doctorAppts.map((doctorAppt, idx) => {
+									if (idx === 0)
+										return (
+											<div class="list-group-item-custom">
+												{doctorAppt.average}
+											</div>
+										);
+								})}
+							</ListGroup>
+							<ListGroup horizontal>
+								<b>Appointments by Specialty:</b>
+								{specialtyAppts.map((specialtyAppt, idx) => (
+									<div class="list-group-item-custom">
+										{specialtyAppt.doctor_specialty}:{' '}
+										{specialtyAppt.count}
+									</div>
+								))}
+							</ListGroup>
+							<ListGroup horizontal>
+								<b>Average Appointments per Specialty:</b>
+								{specialtyAppts.map((specialtyAppt, idx) => {
+									if (idx === 0)
+										return (
+											<div class="list-group-item-custom">
+												{specialtyAppt.average}
+											</div>
+										);
+								})}
 							</ListGroup>
 							<Table striped bordered hover>
 								<thead>
@@ -167,38 +202,29 @@ const ViewNewUsers = () => {
 										<th>Name</th>
 										<th>Email</th>
 										<th>Phone Number</th>
-										<th>Gender</th>
-										<th>DOB</th>
-										<th>Age</th>
+										<th>Specialty</th>
 									</tr>
 								</thead>
 								<tbody>
-									{newPatients.map((patient, idx) => {
+									{doctors.map((doctor, idx) => {
 										return (
 											<tr key={idx}>
-												<td>{`${patient.username}`}</td>
-												<td>{`${patient.role}`}</td>
+												<td>{`${doctor.username}`}</td>
+												<td>{`${doctor.role}`}</td>
 												<td>
-													{moment(patient.created_at).format(
+													{moment(doctor.created_at).format(
 														'MM/DD/YYYY'
 													)}
 												</td>
-												<td>{`${patient.patient_id}`}</td>
-												<td>{`${patient.patient_first_name} ${patient.patient_last_name}`}</td>
-												<td>{`${patient.patient_email}`}</td>
+												<td>{`${doctor.doctor_id}`}</td>
+												<td>{`${doctor.doctor_first_name} ${doctor.doctor_last_name}`}</td>
+												<td>{`${doctor.doctor_email}`}</td>
 												<td>
 													{formatPhoneNumber(
-														patient.patient_phone_number
+														doctor.doctor_phone_number
 													)}
 												</td>
-												<td>{`${patient.patient_gender}`}</td>
-												<td>
-													{moment(patient.patient_dob).format(
-														'MM/DD/YYYY'
-													)}
-												</td>
-												<td>{`${patient.age}`}</td>
-												<td></td>
+												<td>{`${doctor.doctor_specialty}`}</td>
 											</tr>
 										);
 									})}
@@ -212,4 +238,4 @@ const ViewNewUsers = () => {
 	);
 };
 
-export default ViewNewUsers;
+export default ViewAppointments;
