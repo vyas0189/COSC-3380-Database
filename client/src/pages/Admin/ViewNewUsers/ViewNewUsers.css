@@ -97,18 +97,16 @@
 }
 
 .modal-dialog-full-width {
-	width: 90% !important;
-	height: 90% !important;
-	margin: 5% !important;
-	padding: 0 !important;
-	max-width: none !important;
+	width: 90%;
+	height: 90%;
+	margin: 5%;
+	max-width: 90%;
 }
 
 .modal-content-full-width {
-	height: auto !important;
-	min-height: 90% !important;
-	border-radius: 0 !important;
-	background-color: #ececec !important;
+	height: auto;
+	min-height: 90%;
+	background-color: #ececec;
 }
 
 .modal-title {
@@ -121,6 +119,10 @@
 	margin-left: 5px;
 	margin-right: 2%;
 	background-color: #ececec;
+}
+
+.table {
+	margin-top: 2%;
 }
 
 /* Fallback for Edge
