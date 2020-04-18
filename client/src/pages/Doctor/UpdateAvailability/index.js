@@ -43,10 +43,6 @@ const UpdateAvailability = () => {
                         <tr key={idx}>
                             <td>{`${availability.address_name} ${availability.address2_name ? availability.address2_name : ''}, ${availability.city} ${availability.state} ${availability.zip}`}</td>
                             <td>{moment(availability.availability_date).format('MM/DD/YYYY')}</td>
-                            <td>
-                                    <p className="cancelApp badge badge-danger" onClick={(e) => {
-                                    }}>Update</p>
-                                </td>
                         </tr>
                     );
                 })
