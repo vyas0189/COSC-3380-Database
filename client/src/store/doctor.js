@@ -77,19 +77,40 @@ const doctorModel = {
 		action.setLoading(false)
 	}),
 
-	updateAvailability: thunk(async (action) => {
+	updateAvailability: thunk(async (action, { newDate, newOffice, doctorID, date, }) => {
 		action.setAvailabilityError(null)
 		action.setLoading(true)
 
 		try {
-			const res = await axios.get('/api/doctor/update/availability');
+			const res = await axios.put('/api/doctor/updateAvailability', {
+				data: { newDate, newOffice, doctorID, date, }
+			});
 			if (res.status === 200) {
-				action.getAvailability(res.data.availability)
+				toast.success('Availability Updated');
+				action.getAllAvailability(doctorID)
 			}
 		} catch (error) {
 			// action.setAvailabilityError(errArr.join('\n'))
+			toast.error('Unable to Update Availability');
 		}
 		action.setLoading(false)
+	}),
+	cancelAvailability: thunk(async (action, { doctorID, date }) => {
+		action.setLoading(true);
+
+		try {
+			const res = await axios.delete('/api/doctor/cancelAvailability', {
+				data: { doctorID, date }
+			})
+
+			if (res.status === 200) {
+				toast.success('Availability Cancelled');
+				action.getAllAvailability(doctorID)
+			}
+		} catch (error) {
+			toast.error(error.response.message);
+		}
+		action.setLoading(false);
 	}),
 
 	setLoading: action((state, loading) => {
