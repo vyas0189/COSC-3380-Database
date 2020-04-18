@@ -17,6 +17,8 @@ const UpdateAvailability = () => {
     const doctorID = useStoreState(state => state.auth.user)
     const loading = useStoreState((state) => state.doctor.loading);
     const cancelAvailability = useStoreActions(actions => actions.doctor.cancelAvailability);
+    const updateAvailability = useStoreActions(actions => actions.doctor.updateAvailability);
+
     useEffect(() => {
         getAllAvailability(doctorID.doctor_id)
     }, []);
@@ -45,6 +47,9 @@ const UpdateAvailability = () => {
                                 <td>{moment(availability.availability_date).format('MM/DD/YYYY')}</td>
                                 <td>
                                     <Link className="cancelApp badge badge-success" onClick={(e) => {
+                                        e.preventDefault();
+                                        const data = { doctorID: availability.doctor_id, date: availability.availability_date };
+                                        updateAvailability(data)
                                     }}>Update</Link>
                                 </td>
                                 <td>
