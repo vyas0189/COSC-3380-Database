@@ -10,7 +10,48 @@ const patientModel = {
     appointmentDetailsLoading: false,
     primaryAppointmentAvailability: [],
     specialistAppointmentAvailability: [],
+    detailsLoading: true,
+    patientDetails: null,
     currentPrimary: false,
+
+    updatePatient: thunk(async (action, { patientID, firstName, lastName, email, address, city, state, zip, phoneNumber, dob, gender, address2 }) => {
+        action.setAppointmentError(null);
+        action.setDetailsLoading(true);
+        try {
+            if (!address2.length) {
+                address2 = 'n/a'
+            }
+            const res = await axios.put('/api/patient/update', { firstName, lastName, email, address, city, state, zip, phoneNumber, dob, gender, address2 })
+
+            if (res.status === 200) {
+                action.getPatientDetails(patientID)
+                toast.success('Profile Updated!')
+            }
+        } catch (error) {
+            const errArr = []
+            error.response.data.error.details.map(err => {
+                return errArr.push(err.context.label);
+            })
+            toast.error(errArr.join('\n'))
+        }
+        action.setDetailsLoading(false)
+    }),
+
+    getPatientDetails: thunk(async (action, patientID) => {
+        action.setAppointmentError(null)
+        action.setDetailsLoading(true);
+        try {
+
+            const res = await axios.get(`/api/patient/info/${patientID}`);
+
+            if (res.status === 200) {
+                action.setInfo(res.data.patientInfo);
+            }
+        } catch (error) {
+            action.setAppointmentError(error.response.data.message)
+        }
+        action.setDetailsLoading(false)
+    }),
 
     getAppointments: thunk(async (action) => {
         action.setAppointmentError(null)
@@ -70,6 +111,7 @@ const patientModel = {
         try {
             const res = await axios.post('/api/appointment/schedule/specialistAppointment', { primaryAppointment, reason, availabilityID });
             if (res.status === 200) {
+                action.getAppointments();
                 toast.success('Appointment Scheduled!');
             }
 
@@ -173,7 +215,13 @@ const patientModel = {
     }),
     setCurrentPrimaryCount: action((state, count) => {
         state.currentPrimary = count;
-    })
+    }),
+    setInfo: action((state, info) => {
+        state.patientDetails = info;
+    }),
+    setDetailsLoading: action((state, loading) => {
+        state.detailsLoading = loading;
+    }),
 
 }
 export default patientModel;
