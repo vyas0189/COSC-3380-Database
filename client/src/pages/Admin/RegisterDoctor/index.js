@@ -281,10 +281,7 @@ const RegisterComponent = () => {
 														key={office}
 														onChange={(e) => onChange(e)}
 													>
-
-														<option value="Office">
-															Office
-														</option>
+														<option value="Office">Office</option>
 														{offices.map((office, idx) => {
 															return (
 																<option value={office.office_id}>

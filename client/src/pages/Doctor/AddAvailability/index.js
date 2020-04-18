@@ -1,12 +1,15 @@
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import React, { Fragment, useEffect, useState } from 'react';
 import Loading from '../../../components/Loading';
+import moment from 'moment';
+import { Button, Form, ListGroup, Modal, Table } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
 // import { Link } from 'react-router-dom';
 // import Loading from '../../Loading';
 import './AddAvailability.css';
 
 const AddComponent = () => {
-	const register = useStoreActions((actions) => actions.auth.addAvailability);
+	const register = useStoreActions((actions) => actions.doctor.addAvailability);
 
 	const doctor = useStoreState((state) => state.auth.user);
 	const getOffices = useStoreActions((actions) => actions.doctor.getOffices);
@@ -19,11 +22,11 @@ const AddComponent = () => {
 	}, []);
 
 	const [formData, setFormData] = useState({
-		officeID: '',
+		office: '',
 		availabilityDate: '',
 	});
 
-	const { officeID, availabilityDate } = formData;
+	const { office, availabilityDate } = formData;
 
 	const onChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -32,15 +35,18 @@ const AddComponent = () => {
 	const onSubmit = async (e) => {
 		e.preventDefault();
 		const availabilityInfo = {
-			officeID,
+			office,
 			availabilityDate,
 		};
 		register(availabilityInfo);
+		setFormData({
+			office: '',
+			availabilityDate: '',
+		})
 	};
 
-	return loading ? (
-		<Loading />
-	) : (
+	return (
+		loading ? <Loading />:
 			<Fragment>
 				<div className="container-fluid">
 					<div className="row no-gutter">
@@ -50,9 +56,7 @@ const AddComponent = () => {
 								<div className="container">
 									<div className="row">
 										<div className="col-md-9 col-lg-4 mx-auto">
-											<h3 className="login-heading mb-4">
-												Add Availability
-										</h3>
+											<h3 className="login-heading mb-4">Add Availability</h3>
 											<form
 												className="form"
 												onSubmit={(e) => onSubmit(e)}
@@ -60,8 +64,8 @@ const AddComponent = () => {
 												<div className="form-group">
 													<select
 														name="office"
-														value={officeID}
-														key={officeID}
+														value={office}
+														key={office}
 														onChange={(e) => onChange(e)}
 													>
 														<option value="Office">Office</option>
@@ -75,6 +79,7 @@ const AddComponent = () => {
 																		}, ${office.city} ${
 																		office.state
 																		} ${office.zip}`}
+																	
 																</option>
 															);
 														})}
@@ -82,7 +87,7 @@ const AddComponent = () => {
 												</div>
 												<div className="form-group">
 													<input
-														type="text"
+														type="date"
 														placeholder="Date MM-DD-YYYY"
 														name="availabilityDate"
 														value={availabilityDate}

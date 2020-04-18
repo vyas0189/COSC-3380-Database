@@ -7,6 +7,9 @@ const doctorModel = {
 	//offices
 	offices: [],
 	officeErr: null,
+	//schedule
+	availability: [],
+	availabilityErr: null,
 
 	getOffices: thunk(async (action, payload) => {
 		action.setOfficesError(null);
@@ -23,6 +26,53 @@ const doctorModel = {
 		action.setLoading(false);
 	}),
 
+	addAvailability: thunk(
+		async (
+			action,
+			{
+				office,
+				availabilityDate,
+			}
+		) => {
+			action.setAvailabilityError(null);
+			action.setLoading(true);
+			try {
+				const res = await axios.post('/api/doctor/add/availability', {
+					office,
+					availabilityDate,
+				});
+
+				if (res.status === 200) {
+					//toast.success('Schedule Added!');
+				}
+
+			}catch (err) {
+				const errArr = []
+				err.response.data.error.details.map(err => {
+					return errArr.push(err.context.label);
+				})
+				action.setAvailabilityError(errArr.join('\n'))
+				//toast.error(errArr.join('\n'))
+			}
+			action.setLoading(false);
+		}
+	),
+
+	updateAvailability: thunk(async (action) => {
+        action.setAvailabilityError(null)
+        action.setLoading(true)
+
+        try {
+            const res = await axios.get('/api/doctor/update/availability');
+            if (res.status === 200) {
+                action.getAvailability(res.data.availability)
+            }
+        } catch (error) {
+			//action.setAvailabilityError(errArr.join('\n'))
+        }
+        action.setLoading(false)
+    }),
+
 	setLoading: action((state, loading) => {
 		state.loading = loading;
 	}),
@@ -34,5 +84,20 @@ const doctorModel = {
 	setOfficesError: action((state, error) => {
 		state.officeErr = error;
 	}),
+
+	setAvailability: action((state, availability) => {
+		state.availability = availability;
+	}),
+
+	setAvailabilityError: action((state, error) => {
+		state.availabilityErr = error;
+	}),
+	getAvailability: action((state, availability) => {
+        state.availability = availability
+    }),
+    //updateAvailabilityError: action((state, error) => {
+        //state.availabilityErr = error;
+    //}),
+
 };
 export default doctorModel;

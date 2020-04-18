@@ -1,6 +1,4 @@
-import { useStoreState } from 'easy-peasy';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { useStoreActions, useStoreState } from 'easy-peasy';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Button, Container, ListGroup, Modal, Table } from 'react-bootstrap';
@@ -70,41 +68,6 @@ const PatientDashboardComponent = () => {
         )
     }
 
-<<<<<<< HEAD
-    const btnstyle = {
-        color: 'red',
-        height: '40px',
-        background: 'white',
-        borderRadius:10,
-        borderWidth: 1,
-        font: '1rem',
-    }
-
-    return (
-        <header className = "pdm" >
-            <div>
-                <h1>Welcome {patient.patient_first_name} {patient.patient_last_name}</h1>
-                <h2>Past Appointment(s) <button style = {btnstyle}>Check</button> </h2> 
-                <h2>Upcoming Appointment(s) <button style = {btnstyle}>Check</button> </h2>
-                {
-                    patient.patient_primary_doctor ?
-                        <button className="btn btn-success"> Schedule An Appointment with Primary Doctor</button> :
-                        <button className="btn btn-success"> Schedule An Appointment with Primary Doctor</button> 
-                }
-                <br></br><br></br>
-                {
-                    patient.patient_primary_doctor ?
-                        <button className="btn btn-success"> Cancel Appointment with Primary Doctor</button> :
-                        <button className="btn btn-success"> Cancel Appointment with Primary Doctor</button> 
-                }
-            </div>
-            <div className = "contactinfo">
-                <h4>Contact us</h4>
-                <h4>Call us at: (538)-743-8262</h4>
-                <h4>Email us at: APlusCare@uh.edu</h4>
-            </div>
-        </header>     
-=======
     const pastAppointment = () => {
         return (<Table striped bordered hover >
             <thead>
@@ -200,7 +163,6 @@ const PatientDashboardComponent = () => {
             }
 
         </Container >
->>>>>>> 45305ece24a05e215cd4c4b42df7b123380dbe42
     )
 }
 

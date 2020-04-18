@@ -1,33 +1,8 @@
-<<<<<<< HEAD
-.pdm {
-    position: relative;
-    width: 100%;
-    height: calc(100vh - 86.4px);
-    min-height: 35rem;
-    padding: 2rem 0;
-    background: linear-gradient(rgba(94, 87, 87, 0.2), rgba(211, 192, 192, 0.2)), url('./communication.jpg');
-    background-position: center 0;
-    background-repeat: no-repeat;
-    background-attachment: scroll;
-    background-size: cover;
-}
-
-.pdm button {
-    font-size: 1.25rem;
-    height: 30px;
-}
-
-.contactinfo {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-=======
 .cancelApp {
-	color: white !important;
-	font-size: 1em;
+    color: white !important;
+    font-size: 1em;
 }
 
-.cancelApp:hover{
-	cursor: pointer;
->>>>>>> 45305ece24a05e215cd4c4b42df7b123380dbe42
+.cancelApp:hover {
+    cursor: pointer;
 }
