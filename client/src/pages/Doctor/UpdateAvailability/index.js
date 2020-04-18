@@ -7,14 +7,17 @@ import './UpdateAvailability.css';
 const UpdateAvailability = () => {
 
     const availability = useStoreState(state => state.doctor.availability);
-    const updateAvailability = useStoreActions(actions => actions.doctor.updateAvailability);
+    const getAllAvailability = useStoreActions(actions => actions.doctor.getAllAvailability);
+    const doctorID = useStoreState((state) => state.doctor.doctorID)
+    //const updateAvailability = useStoreActions(actions => actions.doctor.updateAvailability);
     const getOffices = useStoreActions((actions) => actions.doctor.getOffices);
     const offices = useStoreState((state) => state.doctor.offices);
 
-    const loading = useStoreState((state) => state.auth.loading);
+    const loading = useStoreState((state) => state.doctor.loading);
 
     useEffect(() => {
-        updateAvailability()
+
+        getAllAvailability(doctorID.doctor_id)
     }, []);
 
     useEffect(() => {

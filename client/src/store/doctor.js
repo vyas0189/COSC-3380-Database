@@ -70,7 +70,7 @@ const doctorModel = {
                 action.getAvailability(res.data.availability)
             }
         } catch (error) {
-            action.setAllAvailabilityError(err.response.message)
+            action.setAllAvailabilityError(error.response.message)
         }
         action.setLoading(false)
     }),
@@ -118,7 +118,7 @@ const doctorModel = {
         state.allAvailability = availability;
     }),
 
-    setAllAvailabilityErr: action((state, error) => {
+    setAllAvailabilityError: action((state, error) => {
         state.allAvailabilityErr = error;
     }),
 
