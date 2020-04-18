@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { action, thunk } from 'easy-peasy';
-
+import { toast } from 'react-toastify';
 const doctorModel = {
 	loading: false,
 
@@ -30,7 +30,7 @@ const doctorModel = {
 		async (
 			action,
 			{
-				office,
+				officeID,
 				availabilityDate,
 			}
 		) => {
@@ -38,15 +38,15 @@ const doctorModel = {
 			action.setLoading(true);
 			try {
 				const res = await axios.post('/api/doctor/add/availability', {
-					office,
+					officeID,
 					availabilityDate,
 				});
 
 				if (res.status === 200) {
-					//toast.success('Schedule Added!');
+					toast.success('Schedule Added!');
 				}
 
-			}catch (err) {
+			} catch (err) {
 				const errArr = []
 				err.response.data.error.details.map(err => {
 					return errArr.push(err.context.label);
@@ -57,22 +57,23 @@ const doctorModel = {
 			action.setLoading(false);
 		}
 	),
-
+	
+	
 	updateAvailability: thunk(async (action) => {
-        action.setAvailabilityError(null)
-        action.setLoading(true)
+		action.setAvailabilityError(null)
+		action.setLoading(true)
 
-        try {
-            const res = await axios.get('/api/doctor/update/availability');
-            if (res.status === 200) {
-                action.getAvailability(res.data.availability)
-            }
-        } catch (error) {
-			//action.setAvailabilityError(errArr.join('\n'))
-        }
-        action.setLoading(false)
-    }),
-
+		try {
+			const res = await axios.get('/api/doctor/update/availability');
+			if (res.status === 200) {
+				action.getAvailability(res.data.availability)
+			}
+		} catch (error) {
+			// action.setAvailabilityError(errArr.join('\n'))
+		}
+		action.setLoading(false)
+	}),
+	
 	setLoading: action((state, loading) => {
 		state.loading = loading;
 	}),
@@ -93,11 +94,11 @@ const doctorModel = {
 		state.availabilityErr = error;
 	}),
 	getAvailability: action((state, availability) => {
-        state.availability = availability
-    }),
-    //updateAvailabilityError: action((state, error) => {
-        //state.availabilityErr = error;
-    //}),
+		state.availability = availability
+	}),
+	//updateAvailabilityError: action((state, error) => {
+	//state.availabilityErr = error;
+	//}),
 
 };
 export default doctorModel;
