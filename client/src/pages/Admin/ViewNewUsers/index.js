@@ -106,7 +106,13 @@ const ViewNewUsers = () => {
 											/>
 										</div>
 
-										<button className="btn btn-sm btn-primary btn-register text-uppercase font-weight-bold mb-2">
+										<button
+											id="modalActivate"
+											type="submit"
+											className="btn btn-sm btn-primary btn-register text-uppercase font-weight-bold mb-2"
+											data-toggle="modal"
+											data-target="#patientModal"
+										>
 											View
 										</button>
 									</form>
@@ -117,26 +123,40 @@ const ViewNewUsers = () => {
 				</div>
 			</div>
 
-			<Modal show={show} onHide={handleClose}>
-				<div class="modal-dialog modal-xl">
-					<>
-						<Modal.Header closeButton>
-							<Modal.Title>New Patient Information</Modal.Title>
-						</Modal.Header>
+			<div
+				class="modal fade right"
+				id="patientModal"
+				tabindex="1"
+				role="dialog"
+				// aria-labelledby="exampleModalPreviewLabel"
+				// aria-hidden="true"
+			>
+				<div
+					class="modal-dialog-full-width modal-dialog momodel modal-fluid"
+					role="document"
+				>
+					<div class="modal-content-full-width modal-content ">
+						<div class="modal-header">
+							<div class="modal-title">
+								New Patient Information
+							</div>
+						</div>
 
-						<Modal.Body>
-							<b>Average Patient Age:</b>{' '}
-							{avgAge.map((age, idx) => (
-								<ListGroup.Item>
-									{age.avg_age.toPrecision(2)}
-								</ListGroup.Item>
-							))}
-							<b>Patient Location Counts:</b>
-							{stateCounts.map((stateCount, idx) => (
-								<ListGroup.Item>
-									<b>{stateCount.state}: </b> {stateCount.count}
-								</ListGroup.Item>
-							))}
+						<div class="modal-body">
+							<ListGroup horizontal>
+								<b>Average Patient Age:</b>
+								{avgAge.map((age, idx) => (
+									<div class="list-group-item-custom">
+										{age.avg_age.toPrecision(2)}
+									</div>
+								))}
+								<b>Patient Location Counts:</b>
+								{stateCounts.map((stateCount, idx) => (
+									<div class="list-group-item-custom">
+										<b>{stateCount.state}: </b> {stateCount.count}
+									</div>
+								))}
+							</ListGroup>
 							<Table striped bordered hover>
 								<thead>
 									<tr>
@@ -165,7 +185,7 @@ const ViewNewUsers = () => {
 												</td>
 												<td>{`${patient.patient_id}`}</td>
 												<td>{`${patient.patient_first_name} ${patient.patient_last_name}`}</td>
-												<td>{`${patient.email}`}</td>
+												<td>{`${patient.patient_email}`}</td>
 												<td>
 													{formatPhoneNumber(
 														patient.patient_phone_number
@@ -177,17 +197,17 @@ const ViewNewUsers = () => {
 														'MM/DD/YYYY'
 													)}
 												</td>
-												<td>{`${patient.patient_age}`}</td>
+												<td>{`${patient.age}`}</td>
 												<td></td>
 											</tr>
 										);
 									})}
 								</tbody>
 							</Table>
-						</Modal.Body>
-					</>
+						</div>
+					</div>
 				</div>
-			</Modal>
+			</div>
 		</div>
 	);
 };
