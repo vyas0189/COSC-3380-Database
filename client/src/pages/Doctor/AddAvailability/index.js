@@ -1,9 +1,6 @@
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import React, { Fragment, useEffect, useState } from 'react';
 import Loading from '../../../components/Loading';
-import moment from 'moment';
-import { Button, Form, ListGroup, Modal, Table } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';
 // import { Link } from 'react-router-dom';
 // import Loading from '../../Loading';
 import './AddAvailability.css';
@@ -22,11 +19,11 @@ const AddComponent = () => {
 	}, []);
 
 	const [formData, setFormData] = useState({
-		office: '',
+		officeID: '',
 		availabilityDate: '',
 	});
 
-	const { office, availabilityDate } = formData;
+	const { officeID, availabilityDate } = formData;
 
 	const onChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -35,18 +32,18 @@ const AddComponent = () => {
 	const onSubmit = async (e) => {
 		e.preventDefault();
 		const availabilityInfo = {
-			office,
+			officeID,
 			availabilityDate,
 		};
 		register(availabilityInfo);
 		setFormData({
-			office: '',
+			officeID: '',
 			availabilityDate: '',
 		})
 	};
 
 	return (
-		loading ? <Loading />:
+		loading ? <Loading /> :
 			<Fragment>
 				<div className="container-fluid">
 					<div className="row no-gutter">
@@ -63,15 +60,15 @@ const AddComponent = () => {
 											>
 												<div className="form-group">
 													<select
-														name="office"
-														value={office}
-														key={office}
+														name="officeID"
+														value={officeID}
+														key={officeID}
 														onChange={(e) => onChange(e)}
 													>
 														<option value="Office">Office</option>
-														{offices.map((office, idx) => {
+														{offices.map((office) => {
 															return (
-																<option value={office.office_id}>
+																<option value={office.office_id} key={office.office_id}>
 																	{`${office.address_name} ${
 																		office.address2_name
 																			? office.address2_name
@@ -79,7 +76,7 @@ const AddComponent = () => {
 																		}, ${office.city} ${
 																		office.state
 																		} ${office.zip}`}
-																	
+
 																</option>
 															);
 														})}
@@ -110,7 +107,7 @@ const AddComponent = () => {
 					</div>
 				</div>
 			</Fragment>
-		);
+	);
 };
 
 export default AddComponent;

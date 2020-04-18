@@ -33,7 +33,7 @@ router.put('/update', auth, async (req, res) => {
             [firstName, lastName, email, phoneNumber, gender, dob, userID]);
 
 
-        res.status(200).json({ message: 'OK', patient: patient.row[0] });
+        res.status(200).json({ message: 'OK', patient: patient.rows[0] });
     } catch (error) {
         res.status(500).json({ message: 'Server Error', error });
     }

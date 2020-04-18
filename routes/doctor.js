@@ -73,8 +73,8 @@ router.post('/order/test', doc, async (req, res) => {
 	try {
 		await orderTest.validateAsync(req.body, { abortEarly: false });
 		const {
- patientID, scan, physical, blood,
-} = req.body;
+			patientID, scan, physical, blood,
+		} = req.body;
 
 		const { userID } = req.user;
 
@@ -350,4 +350,15 @@ router.get('/get/patients', doc, async (req, res) => {
 	}
 });
 
+router.get('/allAvailability/:doctorID', async (req, res) => {
+	try {
+		const { doctorID } = req.params;
+
+		const availability = await db.query('SELECT doctor_id, availability_date, office_id FROM availability WHERE doctor_id = $1 GROUP BY availability_date, doctor_id, office_id ORDER BY availability_date;', [doctorID]);
+
+		res.status(200).json({ message: 'OK', availabilities: availability.rows[0] });
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error });
+	}
+});
 module.exports = router;
