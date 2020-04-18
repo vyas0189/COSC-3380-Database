@@ -64,8 +64,8 @@ const AddComponent = () => {
 												<div className="form-group">
 													<select
 														name="office"
-														value={office}
-														key={office}
+														value={officeID}
+														key={officeID}
 														onChange={(e) => onChange(e)}
 													>
 														<option value="Office">Office</option>

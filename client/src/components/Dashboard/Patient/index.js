@@ -37,6 +37,7 @@ const PatientDashboardComponent = () => {
                     <th>Date</th>
                     <th>Time</th>
                     <th>Doctor</th>
+                    <th>Specialty</th>
                     <th>Office</th>
                     <th>Cancel</th>
                 </tr>
@@ -50,6 +51,7 @@ const PatientDashboardComponent = () => {
                                 <td>{moment(appointment.availability_date).format('MM/DD/YYYY')}</td>
                                 <td>{moment(appointment.availability_from_time, 'hh:mm:ss').format('hh:mm A')}</td>
                                 <td>{`${appointment.doctor_first_name} ${appointment.doctor_last_name}`}</td>
+                                <td>{appointment.doctor_specialty}</td>
                                 <td>{`${appointment.address_name} ${appointment.address2_name ? appointment.address2_name : ''}, ${appointment.city} ${appointment.state} ${appointment.zip}`}</td>
                                 <td>
                                     <p className="cancelApp badge badge-danger" onClick={(e) => {
@@ -76,6 +78,7 @@ const PatientDashboardComponent = () => {
                     <th>Date</th>
                     <th>Time</th>
                     <th>Doctor</th>
+                    <th>Specialty</th>
                     <th>Office</th>
                     <th>Appointment Details</th>
                 </tr>
@@ -89,6 +92,7 @@ const PatientDashboardComponent = () => {
                                 <td>{moment(appointment.availability_date).format('MM/DD/YYYY')}</td>
                                 <td>{moment(appointment.availability_from_time, 'hh:mm:ss').format('hh:mm A')}</td>
                                 <td>{`${appointment.doctor_first_name} ${appointment.doctor_last_name}`}</td>
+                                <th>{appointment.doctor_specialty}</th>
                                 <td>{`${appointment.address_name} ${appointment.address2_name ? appointment.address2_name : ''}, ${appointment.city} ${appointment.state} ${appointment.zip}`}</td>
                                 <td>
                                     <p className="cancelApp badge badge-info" onClick={() => handleShow(appointment.appointment_id)}>View</p>
