@@ -1,6 +1,6 @@
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { Form, Modal, Table } from 'react-bootstrap';
 import Loading from '../../../components/Loading';
 import './UpdateAvailability.css';
@@ -67,49 +67,52 @@ const UpdateAvailability = () => {
         <>
             {
                 loading ? <Loading /> : (
-                    <Table striped bordered hover >
-                        <thead>
-                            <tr>
-                                <th>Office</th>
-                                <th>Date</th>
-                                <th>Update</th>
-                                <th>Cancel</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                loading ? <Loading /> : (
+                    <Fragment>
+                        <div className="bg-doctor-dashboard" ></div>
+                        <Table striped bordered hover >
+                            <thead>
+                                <tr>
+                                    <th>Office</th>
+                                    <th>Date</th>
+                                    <th>Update</th>
+                                    <th>Cancel</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    loading ? <Loading /> : (
 
-                                    availability.map((availability, idx) => {
-                                        return (
-                                            <tr key={idx}>
-                                                <td>{`${availability.address_name} ${availability.address2_name ? availability.address2_name : ''}, ${availability.city} ${availability.state} ${availability.zip}`}</td>
-                                                <td>{moment(availability.availability_date).format('MM/DD/YYYY')}</td>
-                                                <td>
-                                                    <a className="cancelApp badge badge-success" onClick={(e) => {
-                                                        e.preventDefault();
-                                                        setUpdateInfo({
-                                                            officeID: availability.office_id,
-                                                            date: availability.availability_date
-                                                        });
-                                                        setShow(true);
-                                                    }}>Update</a>
-                                                </td>
-                                                <td>
-                                                    <a className="cancelApp badge badge-danger" onClick={(e) => {
-                                                        e.preventDefault();
-                                                        const data = { doctorID: availability.doctor_id, date: availability.availability_date };
-                                                        cancelAvailability(data)
-                                                    }}>Cancel</a>
-                                                </td>
+                                        availability.map((availability, idx) => {
+                                            return (
+                                                <tr key={idx}>
+                                                    <td>{`${availability.address_name} ${availability.address2_name ? availability.address2_name : ''}, ${availability.city} ${availability.state} ${availability.zip}`}</td>
+                                                    <td>{moment(availability.availability_date).format('MM/DD/YYYY')}</td>
+                                                    <td>
+                                                        <a className="cancelApp badge badge-success" onClick={(e) => {
+                                                            e.preventDefault();
+                                                            setUpdateInfo({
+                                                                officeID: availability.office_id,
+                                                                date: availability.availability_date
+                                                            });
+                                                            setShow(true);
+                                                        }}>Update</a>
+                                                    </td>
+                                                    <td>
+                                                        <a className="cancelApp badge badge-danger" onClick={(e) => {
+                                                            e.preventDefault();
+                                                            const data = { doctorID: availability.doctor_id, date: availability.availability_date };
+                                                            cancelAvailability(data)
+                                                        }}>Cancel</a>
+                                                    </td>
 
-                                            </tr>
-                                        );
-                                    })
-                                )
-                            }
-                        </tbody>
-                    </Table >
+                                                </tr>
+                                            );
+                                        })
+                                    )
+                                }
+                            </tbody>
+                        </Table >
+                    </Fragment>
                 )
             }
             <Modal show={show} onHide={handleClose}>
