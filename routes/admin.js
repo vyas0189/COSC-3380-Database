@@ -347,12 +347,12 @@ router.get('/get/appointments/:startDate/:endDate', admin, async (req, res) => {
 		);
 
 		const doctorAppts = await db.query(
-			'SELECT COUNT(availability_taken) AS count, COUNT(availability_taken) / COUNT(doctor_first_name) AS average, doctor_first_name, doctor_last_name FROM availability JOIN doctor ON availability.doctor_id = doctor.doctor_id WHERE availability_taken IS TRUE AND availability_date::date >= $1 AND availability_date::date <= $2 GROUP BY doctor.doctor_first_name, doctor.doctor_last_name ORDER BY COUNT(availability_taken) DESC;',
+			'SELECT COUNT(availability_taken) AS count, doctor_first_name, doctor_last_name FROM availability JOIN doctor ON availability.doctor_id = doctor.doctor_id WHERE availability_taken IS TRUE AND availability_date::date >= $1 AND availability_date::date <= $2 GROUP BY doctor.doctor_first_name, doctor.doctor_last_name ORDER BY COUNT(availability_taken) DESC;',
 			[startDate, endDate]
 		);
 
 		const specialtyAppts = await db.query(
-			'SELECT COUNT(availability_taken) AS count, COUNT(availability_taken) / COUNT(doctor_specialty) AS average, doctor_specialty FROM availability JOIN doctor ON availability.doctor_id = doctor.doctor_id WHERE availability_taken IS TRUE AND availability_date::date >= $1 AND availability_date::date <= $2 GROUP BY doctor_specialty ORDER BY COUNT(availability_taken) DESC;',
+			'SELECT COUNT(availability_taken) AS count, doctor_specialty FROM availability JOIN doctor ON availability.doctor_id = doctor.doctor_id WHERE availability_taken IS TRUE AND availability_date::date >= $1 AND availability_date::date <= $2 GROUP BY doctor_specialty ORDER BY COUNT(availability_taken) DESC;',
 			[startDate, endDate]
 		);
 

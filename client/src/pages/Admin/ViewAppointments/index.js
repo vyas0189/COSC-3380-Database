@@ -161,7 +161,7 @@ const ViewAppointments = () => {
 									</div>
 								))}
 							</ListGroup>
-							<ListGroup horizontal>
+							{/* <ListGroup horizontal>
 								<b>Average Appointments per Doctor:</b>
 								{doctorAppts.map((doctorAppt, idx) => {
 									if (idx === 0)
@@ -171,7 +171,7 @@ const ViewAppointments = () => {
 											</div>
 										);
 								})}
-							</ListGroup>
+							</ListGroup> */}
 							<ListGroup horizontal>
 								<b>Appointments by Specialty:</b>
 								{specialtyAppts.map((specialtyAppt, idx) => (
@@ -181,7 +181,7 @@ const ViewAppointments = () => {
 									</div>
 								))}
 							</ListGroup>
-							<ListGroup horizontal>
+							{/* <ListGroup horizontal>
 								<b>Average Appointments per Specialty:</b>
 								{specialtyAppts.map((specialtyAppt, idx) => {
 									if (idx === 0)
@@ -191,7 +191,7 @@ const ViewAppointments = () => {
 											</div>
 										);
 								})}
-							</ListGroup>
+							</ListGroup> */}
 							<Table striped bordered hover>
 								<thead>
 									<tr>
