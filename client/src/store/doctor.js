@@ -242,10 +242,6 @@ const doctorModel = {
 		state.allAvailabilityErr = error;
 	}),
 
-	//updateAvailabilityError: action((state, error) => {
-	//state.availabilityErr = error;
-	//}),
-
 	setPatients: action((state, patients) => {
 		state.patients = patients;
 	}),
