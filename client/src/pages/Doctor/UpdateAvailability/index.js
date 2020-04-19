@@ -1,7 +1,7 @@
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { Modal, Table } from 'react-bootstrap';
+import { Button, Card, Form, ListGroup, Modal, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Loading from '../../../components/Loading';
 //import Loading from 'src/components/Loading';
@@ -17,31 +17,36 @@ const UpdateAvailability = () => {
     const doctorID = useStoreState(state => state.auth.user)
     const loading = useStoreState((state) => state.doctor.loading);
     const cancelAvailability = useStoreActions(actions => actions.doctor.cancelAvailability);
-    const [updateInfo, setUpdateInfo] = useState({
-        officeID: '',
-        date: '',
-        newDate: '',
-        newOffice: ''
-    });
+
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
-
-    const { officeID, date } = updateInfo;
 
     useEffect(() => {
         getAllAvailability(doctorID.doctor_id)
         getOffices();
     }, [doctorID.doctor_id, getAllAvailability, getOffices]);
+
     const onChange = (e) => {
         setUpdateInfo({ ...updateInfo, [e.target.name]: e.target.value });
     };
+
     const onSubmit = (e) => {
         e.preventDefault();
         // details.patientID = patientID.patient_id
         // updatePatient(details);
         setShow(false)
     }
+
+    const [updateInfo, setUpdateInfo] = useState({
+        officeID: '',
+        date: '',
+        newDate: '',
+        newOffice: ''
+    });
+
+    const { officeID, date, newDate, newOffice } = updateInfo;
+
     return (
         <>
             <Table striped bordered hover >
@@ -69,7 +74,6 @@ const UpdateAvailability = () => {
                                                     officeID: availability.office_id,
                                                     date: availability.availability_date
                                                 });
-
                                                 setShow(true);
                                             }}>Update</Link>
                                         </td>
@@ -90,18 +94,17 @@ const UpdateAvailability = () => {
             </Table >
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
+                    <Modal.Title>Update Availability</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <form className="form"
-                        onSubmit={
-                            (e) => onSubmit(e)} >
-                        <div className="form-group" >
-                            <select name="officeID"
-                                value={officeID}
-                                key={officeID}
-                                onChange={
-                                    (e) => onChange(e)} >
+                    <Form
+                        onSubmit={(e) => onSubmit(e)} >
+                        <Form.Group >
+                            <Form.Control as = "select"
+                                value={newOffice}
+                                key={newOffice}
+                                onChange={(e) => onChange(e)} >
+                                <option value="Office" > Office </option> 
                                 {
                                     offices.map((office) => {
                                         return (< option value={office.office_id}
@@ -112,24 +115,26 @@ const UpdateAvailability = () => {
                                                 }, ${office.city} ${
                                                 office.state
                                                 } ${office.zip}`}
-
                                         </option>
                                         );
                                     })
-                                } </select> </div> <div className="form-group" >
-                            <input type="date"
+                                } </Form.Control>
+                        </Form.Group>
+                        <Form.Group >
+                            <Form.Control
+                                type="date"
                                 placeholder="MM-DD-YYYY"
                                 name="availabilityDate"
-                                value={moment(date).format('YYYY-MM-DD')}
-                                onChange={
-                                    (e) => onChange(e)}
-                                required />
-                        </div>
+                                value={newDate}
+                                onChange={(e) => onChange(e)}
+                                required
+                            />
+                        </Form.Group>
 
                         <input type="submit"
                             className="btn btn-sm btn-primary btn-register text-uppercase font-weight-bold mb-2"
-                            value="Add" />
-                    </form>
+                            value="Update" />
+                    </Form>
                 </Modal.Body>
 
             </Modal>

@@ -60,8 +60,7 @@ const AddComponent = () => {
                                                     <select name="officeID"
                                                         value={officeID}
                                                         key={officeID}
-                                                        onChange={
-                                                            (e) => onChange(e)} >
+                                                        onChange={(e) => onChange(e)} >
                                                         <option value="Office" > Office </option> {
                                                             offices.map((office) => {
                                                                 return (<option value={office.office_id}
