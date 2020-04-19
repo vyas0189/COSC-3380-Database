@@ -125,46 +125,45 @@ const PatientDashboardComponent = () => {
                     )
             }
 
-            {appointmentDetailsLoading ? <Loading /> : (
-                <Modal show={show} onHide={handleClose}>
-                    {appointmentDetails.length <= 0 ? (
+
+            <Modal show={show} onHide={handleClose}>
+                {appointmentDetails.length <= 0 ? (
+                    <>
+                        <Modal.Body>Appointment Details</Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={handleClose}>
+                                Close
+                                    </Button>
+                        </Modal.Footer>
+                    </>
+                ) : (
                         <>
-                            <Modal.Body>Appointment Details</Modal.Body>
+                            < Modal.Header closeButton>
+                                <Modal.Title>Appointment Details</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <ListGroup variant="flush">
+                                    <ListGroup.Item>Specialty: {appointmentDetails.doctor_specialty ? appointmentDetails.doctor_specialty : 'N/A'}</ListGroup.Item>
+
+                                    <ListGroup.Item>Scan: {appointmentDetails.test_scan ? 'Yes' : 'No'}</ListGroup.Item>
+                                    <ListGroup.Item>Physical: {appointmentDetails.test_physical ? 'Yes' : 'No'}</ListGroup.Item>
+                                    <ListGroup.Item>Blood Test: {appointmentDetails.test_blood ? 'Yes' : 'No'}</ListGroup.Item>
+                                    <ListGroup.Item>Symptoms: {appointmentDetails.diagnosis_symptoms ? appointmentDetails.diagnosis_symptoms : 'N/A'}</ListGroup.Item>
+                                    <ListGroup.Item>Condition: {appointmentDetails.diagnosis_condition ? appointmentDetails.diagnosis_condition : 'N/A'}</ListGroup.Item>
+
+                                </ListGroup>
+                            </Modal.Body>
                             <Modal.Footer>
                                 <Button variant="secondary" onClick={handleClose}>
                                     Close
                                     </Button>
                             </Modal.Footer>
                         </>
-                    ) : (
-                            <>
-                                < Modal.Header closeButton>
-                                    <Modal.Title>Appointment Details</Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body>
-                                    <ListGroup variant="flush">
-                                        <ListGroup.Item>Specialty: {appointmentDetails.doctor_specialty ? appointmentDetails.doctor_specialty : 'N/A'}</ListGroup.Item>
-
-                                        <ListGroup.Item>Scan: {appointmentDetails.test_scan ? 'Yes' : 'No'}</ListGroup.Item>
-                                        <ListGroup.Item>Physical: {appointmentDetails.test_physical ? 'Yes' : 'No'}</ListGroup.Item>
-                                        <ListGroup.Item>Blood Test: {appointmentDetails.test_blood ? 'Yes' : 'No'}</ListGroup.Item>
-                                        <ListGroup.Item>Symptoms: {appointmentDetails.diagnosis_symptoms ? appointmentDetails.diagnosis_symptoms : 'N/A'}</ListGroup.Item>
-                                        <ListGroup.Item>Condition: {appointmentDetails.diagnosis_condition ? appointmentDetails.diagnosis_condition : 'N/A'}</ListGroup.Item>
-
-                                    </ListGroup>
-                                </Modal.Body>
-                                <Modal.Footer>
-                                    <Button variant="secondary" onClick={handleClose}>
-                                        Close
-                                    </Button>
-                                </Modal.Footer>
-                            </>
-                        )}
+                    )}
 
 
-                </Modal>
-            )
-            }
+            </Modal>
+
 
         </Container >
     )

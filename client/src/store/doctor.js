@@ -2,7 +2,7 @@ import axios from 'axios';
 import { action, thunk } from 'easy-peasy';
 
 const doctorModel = {
-	loading: false,
+	loading: true,
 
 	//offices
 	offices: [],

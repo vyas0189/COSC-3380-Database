@@ -3,11 +3,11 @@ import { action, thunk } from "easy-peasy";
 import { toast } from 'react-toastify';
 
 const patientModel = {
-    appointmentLoading: false,
+    appointmentLoading: true,
     appointments: [],
     appointmentErr: null,
     appointmentDetails: [],
-    appointmentDetailsLoading: false,
+    appointmentDetailsLoading: true,
     primaryAppointmentAvailability: [],
     specialistAppointmentAvailability: [],
     detailsLoading: true,
