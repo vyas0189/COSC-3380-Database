@@ -1,26 +1,30 @@
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Form, ListGroup, Modal, Table } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Form, Modal, Table } from 'react-bootstrap';
 import Loading from '../../../components/Loading';
-//import Loading from 'src/components/Loading';
 import './UpdateAvailability.css';
 
 const UpdateAvailability = () => {
 
     const availability = useStoreState(state => state.doctor.allAvailability);
-    // const updateAvailability = useStoreActions(actions => actions.doctor.updateAvailability);
+    const updateAvailability = useStoreActions(actions => actions.doctor.updateAvailability);
     const getAllAvailability = useStoreActions(actions => actions.doctor.getAllAvailability);
     const getOffices = useStoreActions((actions) => actions.doctor.getOffices);
     const offices = useStoreState((state) => state.doctor.offices);
     const doctorID = useStoreState(state => state.auth.user)
     const loading = useStoreState((state) => state.doctor.loading);
     const cancelAvailability = useStoreActions(actions => actions.doctor.cancelAvailability);
-
     const [show, setShow] = useState(false);
 
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        setUpdateInfo({
+            officeID: '',
+            date: '',
+            newDate: '',
+        })
+        setShow(false);
+    }
 
     useEffect(() => {
         getAllAvailability(doctorID.doctor_id)
@@ -33,8 +37,20 @@ const UpdateAvailability = () => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        // details.patientID = patientID.patient_id
-        // updatePatient(details);
+        let updatedNewDate;
+        if (!newDate || newDate.length === 0) {
+            updatedNewDate = date
+        } else {
+            updatedNewDate = newDate
+        }
+
+        const updatedData = {
+            newDate: updatedNewDate,
+            officeID,
+            date,
+            doctorID: doctorID.doctor_id
+        }
+        updateAvailability(updatedData)
         setShow(false)
     }
 
@@ -45,53 +61,57 @@ const UpdateAvailability = () => {
         newOffice: ''
     });
 
-    const { officeID, date, newDate, newOffice } = updateInfo;
+    const { officeID, date, newDate } = updateInfo;
 
     return (
         <>
-            <Table striped bordered hover >
-                <thead>
-                    <tr>
-                        <th>Office</th>
-                        <th>Date</th>
-                        <th>Update</th>
-                        <th>Cancel</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        loading ? <Loading /> : (
+            {
+                loading ? <Loading /> : (
+                    <Table striped bordered hover >
+                        <thead>
+                            <tr>
+                                <th>Office</th>
+                                <th>Date</th>
+                                <th>Update</th>
+                                <th>Cancel</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                loading ? <Loading /> : (
 
-                            availability.map((availability, idx) => {
-                                return (
-                                    <tr key={idx}>
-                                        <td>{`${availability.address_name} ${availability.address2_name ? availability.address2_name : ''}, ${availability.city} ${availability.state} ${availability.zip}`}</td>
-                                        <td>{moment(availability.availability_date).format('MM/DD/YYYY')}</td>
-                                        <td>
-                                            <Link className="cancelApp badge badge-success" onClick={(e) => {
-                                                e.preventDefault();
-                                                setUpdateInfo({
-                                                    officeID: availability.office_id,
-                                                    date: availability.availability_date
-                                                });
-                                                setShow(true);
-                                            }}>Update</Link>
-                                        </td>
-                                        <td>
-                                            <Link className="cancelApp badge badge-danger" onClick={(e) => {
-                                                e.preventDefault();
-                                                const data = { doctorID: availability.doctor_id, date: availability.availability_date };
-                                                cancelAvailability(data)
-                                            }}>Cancel</Link>
-                                        </td>
+                                    availability.map((availability, idx) => {
+                                        return (
+                                            <tr key={idx}>
+                                                <td>{`${availability.address_name} ${availability.address2_name ? availability.address2_name : ''}, ${availability.city} ${availability.state} ${availability.zip}`}</td>
+                                                <td>{moment(availability.availability_date).format('MM/DD/YYYY')}</td>
+                                                <td>
+                                                    <a className="cancelApp badge badge-success" onClick={(e) => {
+                                                        e.preventDefault();
+                                                        setUpdateInfo({
+                                                            officeID: availability.office_id,
+                                                            date: availability.availability_date
+                                                        });
+                                                        setShow(true);
+                                                    }}>Update</a>
+                                                </td>
+                                                <td>
+                                                    <a className="cancelApp badge badge-danger" onClick={(e) => {
+                                                        e.preventDefault();
+                                                        const data = { doctorID: availability.doctor_id, date: availability.availability_date };
+                                                        cancelAvailability(data)
+                                                    }}>Cancel</a>
+                                                </td>
 
-                                    </tr>
-                                );
-                            })
-                        )
-                    }
-                </tbody>
-            </Table >
+                                            </tr>
+                                        );
+                                    })
+                                )
+                            }
+                        </tbody>
+                    </Table >
+                )
+            }
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Update Availability</Modal.Title>
@@ -100,11 +120,11 @@ const UpdateAvailability = () => {
                     <Form
                         onSubmit={(e) => onSubmit(e)} >
                         <Form.Group >
-                            <Form.Control as = "select"
-                                value={newOffice}
-                                key={newOffice}
+                            <Form.Control as="select"
+                                name="officeID"
+                                value={officeID}
+                                key={officeID}
                                 onChange={(e) => onChange(e)} >
-                                <option value="Office" > Office </option> 
                                 {
                                     offices.map((office) => {
                                         return (< option value={office.office_id}
@@ -123,9 +143,8 @@ const UpdateAvailability = () => {
                         <Form.Group >
                             <Form.Control
                                 type="date"
-                                placeholder="MM-DD-YYYY"
-                                name="availabilityDate"
-                                value={newDate}
+                                name="newDate"
+                                value={!newDate || newDate.length === 0 ? moment(date).format('YYYY-MM-DD') : moment(newDate).format('YYYY-MM-DD')}
                                 onChange={(e) => onChange(e)}
                                 required
                             />

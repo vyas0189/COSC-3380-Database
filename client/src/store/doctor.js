@@ -49,11 +49,15 @@ const doctorModel = {
 
 			} catch (err) {
 				const errArr = []
-				err.response.data.error.details.map(err => {
-					return errArr.push(err.context.label);
-				})
-				action.setAvailabilityError(errArr.join('\n'))
-				//toast.error(errArr.join('\n'))
+				if (err.response.status === 401) {
+					toast.error(err.response.data.message)
+				} else {
+					err.response.data.error.details.map(err => {
+						return errArr.push(err.context.label);
+					})
+					action.setAvailabilityError(errArr.join('\n'))
+					toast.error(errArr.join('\n'))
+				}
 			}
 			action.setLoading(false);
 		}
@@ -63,7 +67,6 @@ const doctorModel = {
 		action.setAllAvailabilityErr(null)
 		action.setLoading(true)
 		const doctorID = payload;
-		console.log(doctorID);
 
 		try {
 			const res = await axios.get(`/api/doctor/allAvailability/${doctorID}`);
@@ -77,13 +80,13 @@ const doctorModel = {
 		action.setLoading(false)
 	}),
 
-	updateAvailability: thunk(async (action, { newDate, newOffice, doctorID, date, }) => {
+	updateAvailability: thunk(async (action, { newDate, officeID, doctorID, date, }) => {
 		action.setAvailabilityError(null)
 		action.setLoading(true)
 
 		try {
 			const res = await axios.put('/api/doctor/updateAvailability', {
-				data: { newDate, newOffice, doctorID, date, }
+				newDate, officeID, doctorID, date,
 			});
 			if (res.status === 200) {
 				toast.success('Availability Updated');

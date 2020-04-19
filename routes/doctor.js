@@ -364,14 +364,14 @@ router.get('/allAvailability/:doctorID', async (req, res) => {
 
 router.put('/updateAvailability', async (req, res) => {
 	const {
-		newDate, newOffice, doctorID, date,
+		newDate, officeID, doctorID, date,
 	} = req.body;
 
 	try {
 		await db.query(
-			'UPDATE FROM availability SET availability_date = $1 office_id = $2 WHERE doctor_id = $3 AND availability_date = $4',
+			'UPDATE availability SET availability_date = $1, office_id = $2 WHERE doctor_id = $3 AND availability_date = $4;',
 			[
-				newDate, newOffice, doctorID, date,
+				newDate, officeID, doctorID, date,
 			],
 		);
 

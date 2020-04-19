@@ -183,8 +183,6 @@ const patientModel = {
             const res = await axios.get('/api/appointment/specialtyAvailable');
 
             if (res.status === 200) {
-                console.log(res.data);
-
                 action.setSpecialistAppointmentAvailability(res.data.specialtyAvailable);
             }
         } catch (error) {
