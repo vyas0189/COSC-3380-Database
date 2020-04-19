@@ -3,16 +3,17 @@ import { action, thunk } from "easy-peasy";
 import { toast } from 'react-toastify';
 
 const patientModel = {
-    appointmentLoading: false,
+    appointmentLoading: true,
     appointments: [],
     appointmentErr: null,
     appointmentDetails: [],
-    appointmentDetailsLoading: false,
+    appointmentDetailsLoading: true,
     primaryAppointmentAvailability: [],
     specialistAppointmentAvailability: [],
     detailsLoading: true,
     patientDetails: null,
     currentPrimary: false,
+    primaryAppointmentLoading: true,
 
     updatePatient: thunk(async (action, { patientID, firstName, lastName, email, address, city, state, zip, phoneNumber, dob, gender, address2 }) => {
         action.setAppointmentError(null);
@@ -162,7 +163,7 @@ const patientModel = {
 
     getPrimaryAppointmentAvailability: thunk(async (action) => {
         action.setAppointmentError(null)
-        action.setLoading(true)
+        action.setPrimaryLoading(true)
 
         try {
             const res = await axios.get('/api/appointment/primaryAvailable');
@@ -173,7 +174,7 @@ const patientModel = {
         } catch (error) {
             action.setAppointmentError(error.response.data.message);
         }
-        action.setLoading(false);
+        action.setPrimaryLoading(false);
     }),
     getSpecialistAppointmentAvailability: thunk(async (action) => {
         action.setAppointmentError(null)
@@ -220,6 +221,9 @@ const patientModel = {
     setDetailsLoading: action((state, loading) => {
         state.detailsLoading = loading;
     }),
+    setPrimaryLoading: action((state, loading) => {
+        state.primaryAppointmentLoading = loading;
+    })
 
 }
 export default patientModel;

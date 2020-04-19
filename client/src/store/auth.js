@@ -6,7 +6,7 @@ import setAuthToken from '../utils/setAuthToken';
 const authModel = {
 	token: localStorage.getItem('token'),
 	isAuthenticated: null,
-	loading: false,
+	loading: true,
 	user: null,
 	err: null,
 	loginErr: null,
@@ -204,6 +204,7 @@ const authModel = {
 	setToken: action((state, token) => {
 		state.token = token;
 	}),
+
 	setAuthenticated: action((state, authenticated) => {
 		state.isAuthenticated = authenticated;
 	}),
@@ -219,6 +220,7 @@ const authModel = {
 	setRegisterError: action((state, error) => {
 		state.registerErr = error;
 	}),
+	
 	setAdmin: action((state, admin) => {
 		state.isAdmin = admin;
 	}),

@@ -68,7 +68,6 @@ const UpdateAvailability = () => {
             {
                 loading ? <Loading /> : (
                     <Fragment>
-                        <div className="bg-doctor-dashboard" ></div>
                         <Table striped bordered hover >
                             <thead>
                                 <tr>
@@ -81,7 +80,6 @@ const UpdateAvailability = () => {
                             <tbody>
                                 {
                                     loading ? <Loading /> : (
-
                                         availability.map((availability, idx) => {
                                             return (
                                                 <tr key={idx}>
@@ -112,6 +110,9 @@ const UpdateAvailability = () => {
                                 }
                             </tbody>
                         </Table >
+                        <div className="container-fluid" >
+                            <img src="..." className="img-fluid bg-doctor-up"></img>
+                        </div>
                     </Fragment>
                 )
             }
@@ -158,7 +159,6 @@ const UpdateAvailability = () => {
                             value="Update" />
                     </Form>
                 </Modal.Body>
-
             </Modal>
         </>
     )

@@ -8,8 +8,8 @@
     min-height: calc(100vh - 86.4px);
 }
 
-.bg-doctor-dashboard {
-    background-image: url('../../../assets/doctor/doctor-login.jpg');
+.bg-doctor-add {
+    background-image: url('../../../assets/doctor/doctor-schedule.jpg');
     background-size: cover;
     background-position: center;
 }

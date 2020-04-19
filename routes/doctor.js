@@ -116,7 +116,7 @@ router.post('/order/test', doc, async (req, res) => {
 router.put('/update/diagnosis', doc, async (req, res) => {
 	try {
 		await updateDiagnosis.validateAsync(req.body, { abortEarly: false });
-		const { patientID, symptoms, condition } = req.body;
+		const { patientID, diagnosisID } = req.body;
 
 		const patient = await db.query(
 			'SELECT * FROM patient WHERE patient_id = $1',
@@ -129,20 +129,9 @@ router.put('/update/diagnosis', doc, async (req, res) => {
 			});
 		}
 
-		const diagnosis = await db.query(
-			'SELECT * FROM diagnosis WHERE diagnosis_symptoms = $1 AND diagnosis_condition = $2',
-			[symptoms, condition],
-		);
-
-		if (diagnosis.rows.length === 0) {
-			return res
-				.status(401)
-				.json({ message: 'Please enter a valid diagnosis' });
-		}
-
 		const update = await db.query(
 			'UPDATE patient SET patient_diagnosis = $1 WHERE patient_id = $2 RETURNING *',
-			[diagnosis.rows[0].diagnosis_id, patientID],
+			[diagnosisID, patientID],
 		);
 
 		if (update.rows.length === 0) {
@@ -285,42 +274,42 @@ router.post('/add/availability', doc, async (req, res) => {
 	}
 });
 
-// router.put('/update/availability', doc, async (req, res) => {
-// 	try {
-// 		await updateAvailability.validateAsync(req.body, { abortEarly: false });
-// 		const { availabilityID, taken } = req.body;
+router.put('/update/availability', doc, async (req, res) => {
+	try {
+		await updateAvailability.validateAsync(req.body, { abortEarly: false });
+		const { availabilityID, taken } = req.body;
 
-// 		const { userID } = req.user;
-// 		const user = await db.query(
-// 			'SELECT user_id FROM db_user WHERE user_id = $1',
-// 			[userID],
-// 		);
+		const { userID } = req.user;
+		const user = await db.query(
+			'SELECT user_id FROM db_user WHERE user_id = $1',
+			[userID],
+		);
 
-// 		if (!user.rows.length) {
-// 			return res.status(401).json({ message: 'User not found.' });
-// 		}
+		if (!user.rows.length) {
+			return res.status(401).json({ message: 'User not found.' });
+		}
 
-// 		const availability = await db.query(
-// 			'SELECT * FROM availability WHERE availability_id = $1',
-// 			[availabilityID],
-// 		);
+		const availability = await db.query(
+			'SELECT * FROM availability WHERE availability_id = $1',
+			[availabilityID],
+		);
 
-// 		if (availability.rows.length === 0) {
-// 			return res.status(401).json({
-// 				message: 'You have no availability slots at that time.',
-// 			});
-// 		}
+		if (availability.rows.length === 0) {
+			return res.status(401).json({
+				message: 'You have no availability slots at that time.',
+			});
+		}
 
-// 		await db.query(
-// 			'UPDATE availability SET availability_taken = $1 WHERE availability_id = $2',
-// 			[taken, availabilityID],
-// 		);
+		await db.query(
+			'UPDATE availability SET availability_taken = $1 WHERE availability_id = $2',
+			[taken, availabilityID],
+		);
 
-// 		res.status(200).json({ message: 'OK' });
-// 	} catch (error) {
-// 		res.status(500).json({ message: 'Server Error', error });
-// 	}
-// });
+		res.status(200).json({ message: 'OK' });
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error });
+	}
+});
 
 router.get('/get/offices', doc, async (req, res) => {
 	try {
@@ -343,7 +332,20 @@ router.get('/get/patients', doc, async (req, res) => {
 
 		res.status(200).json({
 			message: 'OK',
-			offices: patients.rows,
+			patients: patients.rows,
+		});
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error });
+	}
+});
+
+router.get('/get/diagnoses', doc, async (req, res) => {
+	try {
+		const diagnoses = await db.query('SELECT * FROM diagnosis');
+
+		res.status(200).json({
+			message: 'OK',
+			diagnoses: diagnoses.rows,
 		});
 	} catch (error) {
 		res.status(500).json({ message: 'Server Error', error });

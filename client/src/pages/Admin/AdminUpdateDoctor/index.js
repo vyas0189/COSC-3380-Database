@@ -73,6 +73,8 @@ const RegisterComponent = () => {
 													name="doctorID"
 													value={doctorID}
 													key={doctorID}
+													className="form-control"
+													autoFocus
 													onChange={(e) => onChange(e)}
 												>
 													<option value="Doctor">Doctor</option>
@@ -90,6 +92,8 @@ const RegisterComponent = () => {
 													name="office"
 													value={office}
 													key={office}
+													className="form-control"
+													autoFocus
 													onChange={(e) => onChange(e)}
 												>
 													<option value="Office">Office</option>
@@ -113,6 +117,8 @@ const RegisterComponent = () => {
 													name="primary"
 													value={primary}
 													key={primary}
+													className="form-control"
+													autoFocus
 													onChange={(e) => onChange(e)}
 												>
 													<option value="primary">
@@ -127,6 +133,8 @@ const RegisterComponent = () => {
 													name="specialty"
 													value={specialty}
 													key={specialty}
+													className="form-control"
+													autoFocus
 													onChange={(e) => onChange(e)}
 												>
 													<option value="specialty">
