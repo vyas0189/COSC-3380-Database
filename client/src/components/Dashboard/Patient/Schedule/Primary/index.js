@@ -7,16 +7,49 @@ import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import Loading from '../../../../Loading';
 const PatientPrimaryScheduleComponent = () => {
+	const formatPhoneNumber = (phoneNumberString) => {
+		const cleaned = ('' + phoneNumberString).replace(/\D/g, '');
+		const match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
+		if (match) {
+			const intlCode = match[1] ? '+1 ' : '';
+			return [intlCode, '(', match[2], ') ', match[3], '-', match[4]].join(
+				''
+			);
+		}
+		return null;
+	};
 
-    const formatPhoneNumber = (phoneNumberString) => {
-        const cleaned = ('' + phoneNumberString).replace(/\D/g, '')
-        const match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/)
-        if (match) {
-            const intlCode = (match[1] ? '+1 ' : '')
-            return [intlCode, '(', match[2], ') ', match[3], '-', match[4]].join('')
-        }
-        return null
-    }
+	const getPrimaryAppointments = useStoreActions(
+		(actions) => actions.patient.getPrimaryAppointmentAvailability
+	);
+	const loading = useStoreState((state) => state.patient.appointmentLoading);
+	const primaryAvailability = useStoreState(
+		(state) => state.patient.primaryAppointmentAvailability
+	);
+	const getCurrentPrimaryCount = useStoreActions(
+		(actions) => actions.patient.getCurrentPrimaryCount
+	);
+	const patientID = useStoreState((state) => state.auth.user);
+	const currentPrimary = useStoreState(
+		(state) => state.patient.currentPrimary
+	);
+	const schedulePrimary = useStoreActions(
+		(actions) => actions.patient.schedulePrimaryAppointment
+	);
+	const token = useStoreState((state) => state.auth.token);
+	const [show, setShow] = useState(false);
+	const [primaryDetails, setDetails] = useState({
+		availability_id: '',
+		availability_date: '',
+		availability_from_time: '',
+		doctor_last_name: '',
+		address_name: '',
+		address2_name: '',
+		state: '',
+		zip: '',
+		city: '',
+		doctor_first_name: '',
+	});
 
     const getPrimaryAppointments = useStoreActions(actions => actions.patient.getPrimaryAppointmentAvailability);
     const loading = useStoreState(state => state.patient.primaryAppointmentLoading);
