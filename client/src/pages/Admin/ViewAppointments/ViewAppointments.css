@@ -125,6 +125,9 @@
 	margin-top: 2%;
 }
 
+.modal .modal-fluid{
+	width: 100%;
+}
 /* Fallback for Edge
   -------------------------------------------------- */
 
