@@ -127,6 +127,7 @@
 
 .modal .modal-fluid{
 	width: 100%;
+	max-width: 92%;
 }
 /* Fallback for Edge
   -------------------------------------------------- */
