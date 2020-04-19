@@ -121,7 +121,8 @@
 	background-color: #ececec;
 }
 .modal .modal-fluid {
-    width: 100%;
+	width: 100%;
+	max-width: 92%;
 }
 .table {
 	margin-top: 2%;
