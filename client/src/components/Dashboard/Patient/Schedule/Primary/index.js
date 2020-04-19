@@ -108,7 +108,7 @@ const PatientPrimaryScheduleComponent = () => {
                     doctor: `${doctor_first_name} ${doctor_last_name}`,
                     office: `${address_name} ${address2_name ? address2_name : ''}, ${city} ${state} ${zip}`,
                     office_number: formatPhoneNumber(office_phone_number),
-                    schedule: (<Button className="cancelApp badge badge-success" onClick={(e) => {
+                    schedule: (<Button className="badge badge-success" onClick={(e) => {
                         e.preventDefault()
                         setDetails({
                             ...primaryDetails,
@@ -166,7 +166,7 @@ const PatientPrimaryScheduleComponent = () => {
                     width: 150,
                 }
             ],
-            rows: rows[0],
+            rows: rows[0].reverse(),
         };
         return <MDBDataTable striped bordered data={data} />
     }

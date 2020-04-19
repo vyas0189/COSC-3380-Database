@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useStoreActions, useStoreState } from 'easy-peasy';
+import { MDBDataTable } from 'mdbreact';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { Button, Form, ListGroup, Modal, Table } from 'react-bootstrap';
+import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import Loading from '../../../../Loading';
-
 const PatientSpecialistScheduleComponent = () => {
 
     const formatPhoneNumber = (phoneNumberString) => {
@@ -82,74 +82,107 @@ const PatientSpecialistScheduleComponent = () => {
     useEffect(() => {
         getSpecialistAppointments();
     }, [])
+
+    const setDataTable = () => {
+        let rows = []
+        rows.push(specialistAvailability.map((appointment) => {
+            const {
+                availability_id,
+                availability_date,
+                availability_from_time,
+                doctor_last_name,
+                address_name,
+                address2_name,
+                state,
+                zip,
+                doctor_first_name,
+                city,
+                office_phone_number,
+                doctor_specialty,
+            } = appointment
+            if (moment(availability_date).isAfter(new Date())) {
+                return {
+                    date: moment(availability_date).format('MM/DD/YYYY'),
+                    time: moment(availability_from_time, 'hh:mm:ss').format('hh:mm A'),
+                    doctor: `${doctor_first_name} ${doctor_last_name}`,
+                    specialty: doctor_specialty,
+                    office: `${address_name} ${address2_name ? address2_name : ''}, ${city} ${state} ${zip}`,
+                    office_number: formatPhoneNumber(office_phone_number),
+                    schedule: (<Button className="badge badge-success" onClick={(e) => {
+                        e.preventDefault()
+                        setDetails({
+                            ...specialDetails,
+                            availability_id,
+                            availability_date,
+                            availability_from_time,
+                            doctor_last_name,
+                            address_name,
+                            address2_name,
+                            state,
+                            zip,
+                            doctor_first_name,
+                            city,
+                            doctor_specialty,
+                        })
+                        handleShow()
+                    }}>Schedule</Button>)
+                }
+            } else { return null }
+        }))
+        const data = {
+            columns: [
+                {
+                    label: 'Date',
+                    field: 'date',
+                    sort: 'asc',
+                    width: 150,
+                },
+                {
+                    label: 'Time',
+                    field: 'time',
+                    sort: 'asc',
+                    width: 150,
+                },
+                {
+                    label: 'Doctor',
+                    field: 'doctor',
+                    sort: 'asc',
+                    width: 150,
+                },
+                {
+                    label: 'Specialty',
+                    field: 'specialty',
+                    sort: 'asc',
+                    width: 150,
+                },
+                {
+                    label: 'Office',
+                    field: 'office',
+                    sort: 'asc',
+                    width: 150,
+                },
+                {
+                    label: 'Office Number',
+                    field: 'office_number',
+                    sort: 'asc',
+                    width: 150,
+                },
+                {
+                    label: 'Schedule',
+                    field: 'schedule',
+                    width: 150,
+                }
+            ],
+            rows: rows[0],
+        };
+        return <MDBDataTable striped bordered data={data} />
+    }
     return (
         <div>
             {loading ? <Loading /> : (
-                <Table striped bordered hover>
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Doctor</th>
-                            <th>Specialty</th>
-                            <th>Office</th>
-                            <th>Office Number</th>
-                            <th>Schedule</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            specialistAvailability.map((appointment, idx) => {
-                                const {
-                                    availability_id,
-                                    availability_date,
-                                    availability_from_time,
-                                    doctor_last_name,
-                                    address_name,
-                                    address2_name,
-                                    state,
-                                    zip,
-                                    doctor_first_name,
-                                    city,
-                                    office_phone_number,
-                                    doctor_specialty,
-                                } = appointment
-                                return (moment(availability_date).isAfter(new Date()) ? (
-                                    <tr key={idx}>
-
-                                        <td>{moment(availability_date).format('MM/DD/YYYY')}</td>
-                                        <td>{moment(availability_from_time, 'hh:mm:ss').format('hh:mm A')}</td>
-                                        <td>{`${doctor_first_name} ${doctor_last_name}`}</td>
-                                        <td>{doctor_specialty}</td>
-                                        <td>{`${address_name} ${address2_name ? address2_name : ''}, ${city} ${state} ${zip}`}</td>
-                                        <td>{formatPhoneNumber(office_phone_number)}</td>
-                                        <td>
-                                            <p className="cancelApp badge badge-success" onClick={(e) => {
-                                                e.preventDefault()
-                                                setDetails({
-                                                    ...specialDetails,
-                                                    availability_id,
-                                                    availability_date,
-                                                    availability_from_time,
-                                                    doctor_last_name,
-                                                    address_name,
-                                                    address2_name,
-                                                    state,
-                                                    zip,
-                                                    doctor_first_name,
-                                                    city,
-                                                    doctor_specialty,
-                                                })
-                                                handleShow()
-                                            }}>Schedule</p>
-                                        </td>
-                                    </tr>
-                                ) : null
-                                )
-                            })
-                        }
-                    </tbody>
-                </Table>
+                <div style={{ marginTop: '1.2rem' }}>
+                    {setDataTable()}
+                </div>
             )}
 
 

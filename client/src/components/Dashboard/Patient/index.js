@@ -2,8 +2,8 @@ import { useStoreActions, useStoreState } from 'easy-peasy';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Button, Container, ListGroup, Modal, Table } from 'react-bootstrap';
-import Loading from '../../Loading';
 import { Link } from 'react-router-dom';
+import Loading from '../../Loading';
 import './Patient.css';
 
 const PatientDashboardComponent = () => {
@@ -25,9 +25,7 @@ const PatientDashboardComponent = () => {
     };
 
     useEffect(() => {
-
-        getAppointment()
-
+        getAppointment();
     }, []);
 
     const UpcomingAppointment = () => {
@@ -56,10 +54,10 @@ const PatientDashboardComponent = () => {
                                 <td>{appointment.doctor_specialty}</td>
                                 <td>{`${appointment.address_name} ${appointment.address2_name ? appointment.address2_name : ''}, ${appointment.city} ${appointment.state} ${appointment.zip}`}</td>
                                 <td>
-                                    <p className="cancelApp badge badge-danger" onClick={(e) => {
+                                    <Button className="btn btn-danger" onClick={(e) => {
                                         e.preventDefault()
                                         cancelAppointment({ appointmentID: appointment.appointment_id })
-                                    }}>Cancel</p>
+                                    }}>Cancel</Button>
                                 </td>
                             </tr>
                         ) : null
@@ -115,38 +113,38 @@ const PatientDashboardComponent = () => {
             {
                 appointmentLoading ? <Loading /> :
                     (
-                        appointments.length <= 0 ? <div class="text-content">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-12 ">
-                                    <div class="text-text">
-                                        <h1 class="text">_</h1>
-                                        <div class="im-sheep">
-                                            <div class="top">
-                                                <div class="body"></div>
-                                                <div class="head">
-                                                    <div class="im-eye one"></div>
-                                                    <div class="im-eye two"></div>
-                                                    <div class="im-ear one"></div>
-                                                    <div class="im-ear two"></div>
+                        appointments.length <= 0 ? <div className="text-content">
+                            <div className="container">
+                                <div className="row">
+                                    <div className="col-md-12 ">
+                                        <div className="text-text">
+                                            <h1 className="text">_</h1>
+                                            <div className="im-sheep">
+                                                <div className="top">
+                                                    <div className="body"></div>
+                                                    <div className="head">
+                                                        <div className="im-eye one"></div>
+                                                        <div className="im-eye two"></div>
+                                                        <div className="im-ear one"></div>
+                                                        <div className="im-ear two"></div>
+                                                    </div>
+                                                </div>
+                                                <div className="im-legs">
+                                                    <div className="im-leg"></div>
+                                                    <div className="im-leg"></div>
+                                                    <div className="im-leg"></div>
+                                                    <div className="im-leg"></div>
                                                 </div>
                                             </div>
-                                            <div class="im-legs">
-                                                <div class="im-leg"></div>
-                                                <div class="im-leg"></div>
-                                                <div class="im-leg"></div>
-                                                <div class="im-leg"></div>
-                                            </div>
+                                            <h1>No scheduled appointment</h1>
+                                            {<Link to={
+                                                isAuth ? '/patient/schedule' : '/login'
+                                            } className="btn btn-primary btn-round">Schedule Now</Link>}
                                         </div>
-                                        <h1>No scheduled appointment</h1>
-                                        {<Link to={
-							isAuth ? '/patient/schedule' : '/login'
-						} className="btn btn-primary btn-round">Schedule Now</Link>}
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>:
+                        </div> :
                             (
                                 <>
                                     <h2 className="mt-5 mb-4">Upcoming Appointment</h2>
