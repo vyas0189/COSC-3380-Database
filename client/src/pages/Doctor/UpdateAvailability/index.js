@@ -82,7 +82,7 @@ const AddComponent = () => {
 											</div>
 											<div className="form-group">
 												<input
-													type="date"													
+													type="date"
 													name="availabilityDate"
 													value={availabilityDate}
 													className="form-control"
