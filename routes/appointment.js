@@ -149,7 +149,7 @@ router.get('/view/appointmentsWithPatient', doc, async (req, res) => {
 
 router.get('/primaryAvailable', async (req, res) => {
     try {
-        const primaryAvailable = await db.query('SELECT * FROM doctor d INNER JOIN availability a on d.doctor_id = a.doctor_id INNER JOIN office o on a.office_id = o.office_id INNER JOIN address a2 on o.office_address = a2.address_id WHERE d.doctor_primary = true AND a.availability_taken = false AND a.availability_date >= CURRENT_DATE ORDER BY availability_date, availability_from_time;');
+        const primaryAvailable = await db.query('SELECT * FROM doctor d INNER JOIN availability a on d.doctor_id = a.doctor_id INNER JOIN office o on a.office_id = o.office_id INNER JOIN address a2 on o.office_address = a2.address_id WHERE d.doctor_primary = true AND a.availability_taken = false AND a.availability_date >= CURRENT_DATE ORDER BY availability_date, availability_from_time ASC;');
         if (primaryAvailable.rows.length === 0) {
             return res.status(201).json({ message: 'No Availability', primaryAvailable: [] });
         }

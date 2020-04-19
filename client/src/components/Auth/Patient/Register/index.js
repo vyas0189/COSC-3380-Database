@@ -38,7 +38,6 @@ const RegisterComponent = () => {
 
 	const register = useStoreActions((actions) => actions.auth.registerPatient);
 	const onChange = (e) => {
-		console.log(e.target.name, e.target.value);
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
