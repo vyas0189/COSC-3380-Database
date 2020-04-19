@@ -2,6 +2,7 @@ import { useStoreActions, useStoreState } from 'easy-peasy';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Button, Container, ListGroup, Modal, Table } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import Loading from '../../Loading';
 import './Patient.css';
 
@@ -15,6 +16,7 @@ const PatientDashboardComponent = () => {
     const getAppointmentDetails = useStoreActions(actions => actions.patient.getAppointmentDetails);
     const appointmentDetails = useStoreState(state => state.patient.appointmentDetails)
     const [show, setShow] = useState(false);
+    const isAuth = useStoreState(state => state.auth.isAuthenticated);
 
     const handleClose = () => setShow(false);
     const handleShow = (appointmentID) => {
@@ -23,9 +25,7 @@ const PatientDashboardComponent = () => {
     };
 
     useEffect(() => {
-
-        getAppointment()
-
+        getAppointment();
     }, []);
 
     const UpcomingAppointment = () => {
@@ -54,10 +54,10 @@ const PatientDashboardComponent = () => {
                                 <td>{appointment.doctor_specialty}</td>
                                 <td>{`${appointment.address_name} ${appointment.address2_name ? appointment.address2_name : ''}, ${appointment.city} ${appointment.state} ${appointment.zip}`}</td>
                                 <td>
-                                    <p className="cancelApp badge badge-danger" onClick={(e) => {
+                                    <Button className="btn btn-danger" onClick={(e) => {
                                         e.preventDefault()
                                         cancelAppointment({ appointmentID: appointment.appointment_id })
-                                    }}>Cancel</p>
+                                    }}>Cancel</Button>
                                 </td>
                             </tr>
                         ) : null
@@ -113,7 +113,38 @@ const PatientDashboardComponent = () => {
             {
                 appointmentLoading ? <Loading /> :
                     (
-                        appointments.length <= 0 ? <h3>No Appointments</h3> :
+                        appointments.length <= 0 ? <div className="text-content">
+                            <div className="container">
+                                <div className="row">
+                                    <div className="col-md-12 ">
+                                        <div className="text-text">
+                                            <h1 className="text">_</h1>
+                                            <div className="im-sheep">
+                                                <div className="top">
+                                                    <div className="body"></div>
+                                                    <div className="head">
+                                                        <div className="im-eye one"></div>
+                                                        <div className="im-eye two"></div>
+                                                        <div className="im-ear one"></div>
+                                                        <div className="im-ear two"></div>
+                                                    </div>
+                                                </div>
+                                                <div className="im-legs">
+                                                    <div className="im-leg"></div>
+                                                    <div className="im-leg"></div>
+                                                    <div className="im-leg"></div>
+                                                    <div className="im-leg"></div>
+                                                </div>
+                                            </div>
+                                            <h1>No scheduled appointment</h1>
+                                            {<Link to={
+                                                isAuth ? '/patient/schedule' : '/login'
+                                            } className="btn btn-primary btn-round">Schedule Now</Link>}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> :
                             (
                                 <>
                                     <h2 className="mt-5 mb-4">Upcoming Appointment</h2>
@@ -125,46 +156,45 @@ const PatientDashboardComponent = () => {
                     )
             }
 
-            {appointmentDetailsLoading ? <Loading /> : (
-                <Modal show={show} onHide={handleClose}>
-                    {appointmentDetails.length <= 0 ? (
+
+            <Modal show={show} onHide={handleClose}>
+                {appointmentDetails.length <= 0 ? (
+                    <>
+                        <Modal.Body>Appointment Details</Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={handleClose}>
+                                Close
+                                    </Button>
+                        </Modal.Footer>
+                    </>
+                ) : (
                         <>
-                            <Modal.Body>Appointment Details</Modal.Body>
+                            < Modal.Header closeButton>
+                                <Modal.Title>Appointment Details</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <ListGroup variant="flush">
+                                    <ListGroup.Item>Specialty: {appointmentDetails.doctor_specialty ? appointmentDetails.doctor_specialty : 'N/A'}</ListGroup.Item>
+
+                                    <ListGroup.Item>Scan: {appointmentDetails.test_scan ? 'Yes' : 'No'}</ListGroup.Item>
+                                    <ListGroup.Item>Physical: {appointmentDetails.test_physical ? 'Yes' : 'No'}</ListGroup.Item>
+                                    <ListGroup.Item>Blood Test: {appointmentDetails.test_blood ? 'Yes' : 'No'}</ListGroup.Item>
+                                    <ListGroup.Item>Symptoms: {appointmentDetails.diagnosis_symptoms ? appointmentDetails.diagnosis_symptoms : 'N/A'}</ListGroup.Item>
+                                    <ListGroup.Item>Condition: {appointmentDetails.diagnosis_condition ? appointmentDetails.diagnosis_condition : 'N/A'}</ListGroup.Item>
+
+                                </ListGroup>
+                            </Modal.Body>
                             <Modal.Footer>
                                 <Button variant="secondary" onClick={handleClose}>
                                     Close
                                     </Button>
                             </Modal.Footer>
                         </>
-                    ) : (
-                            <>
-                                < Modal.Header closeButton>
-                                    <Modal.Title>Appointment Details</Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body>
-                                    <ListGroup variant="flush">
-                                        <ListGroup.Item>Specialty: {appointmentDetails.doctor_specialty ? appointmentDetails.doctor_specialty : 'N/A'}</ListGroup.Item>
-
-                                        <ListGroup.Item>Scan: {appointmentDetails.test_scan ? 'Yes' : 'No'}</ListGroup.Item>
-                                        <ListGroup.Item>Physical: {appointmentDetails.test_physical ? 'Yes' : 'No'}</ListGroup.Item>
-                                        <ListGroup.Item>Blood Test: {appointmentDetails.test_blood ? 'Yes' : 'No'}</ListGroup.Item>
-                                        <ListGroup.Item>Symptoms: {appointmentDetails.diagnosis_symptoms ? appointmentDetails.diagnosis_symptoms : 'N/A'}</ListGroup.Item>
-                                        <ListGroup.Item>Condition: {appointmentDetails.diagnosis_condition ? appointmentDetails.diagnosis_condition : 'N/A'}</ListGroup.Item>
-
-                                    </ListGroup>
-                                </Modal.Body>
-                                <Modal.Footer>
-                                    <Button variant="secondary" onClick={handleClose}>
-                                        Close
-                                    </Button>
-                                </Modal.Footer>
-                            </>
-                        )}
+                    )}
 
 
-                </Modal>
-            )
-            }
+            </Modal>
+
 
         </Container >
     )

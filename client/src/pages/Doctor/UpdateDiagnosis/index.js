@@ -2,108 +2,125 @@ import { useStoreActions, useStoreState } from 'easy-peasy';
 import React, { Fragment, useEffect, useState } from 'react';
 import Loading from '../../../components/Loading';
 import './UpdateDiagnosis.css';
+import moment from 'moment';
 
-const AddComponent = () => {
-	const register = useStoreActions((actions) => actions.auth.addAvailability);
-
-	const doctor = useStoreState((state) => state.auth.user);
-	const getOffices = useStoreActions((actions) => actions.doctor.getOffices);
-	const offices = useStoreState((state) => state.doctor.offices);
-	const loading = useStoreState((state) => state.auth.loading);
+const UpdateDiagnosis = () => {
+	const updateDiagnosis = useStoreActions(
+		(actions) => actions.doctor.updateDiagnosis
+	);
+	//patients
+	const getPatients = useStoreActions((actions) => actions.doctor.getPatients);
+	const patients = useStoreState((state) => state.doctor.patients);
+	//diagnoses
+	const getDiagnoses = useStoreActions(
+		(actions) => actions.doctor.getDiagnoses
+	);
+	const diagnoses = useStoreState((state) => state.doctor.diagnoses);
 
 	useEffect(() => {
-		getOffices();
+		getPatients();
+		getDiagnoses();
 	}, []);
 
 	const [formData, setFormData] = useState({
-		officeID: '',
-		availabilityDate: '',
+		patientID: '',
+		diagnosisID: '',
 	});
 
-	const { officeID, availabilityDate } = formData;
+	const { patientID, diagnosisID } = formData;
 
 	const onChange = (e) => {
-
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
 	const onSubmit = async (e) => {
 		e.preventDefault();
-		const availabilityInfo = {
-			officeID,
-			availabilityDate,
-		};
-		register(availabilityInfo);
+		updateDiagnosis({ patientID, diagnosisID });
 	};
 
-	return loading ? (
-		<Loading />
-	) : (
-			<Fragment>
-				<div className="container-fluid">
-					<div className="row no-gutter">
-						<div className="d-none d-md-flex col-md-4 col-lg-6 bg-doctor-dashboard"></div>
-						<div className="col-md-8 col-lg-6">
-							<div className="login d-flex align-items-center py-5">
-								<div className="container">
-									<div className="row">
-										<div className="col-md-9 col-lg-4 mx-auto">
-											<h3 className="login-heading mb-4">
-												Add Availability
+	return (
+		<Fragment>
+			<div className="container-fluid">
+				<div className="row no-gutter">
+					<div className="d-none d-md-flex col-md-4 col-lg-6 bg-admin-dashboard"></div>
+					<div className="col-md-8 col-lg-6">
+						<div className="login d-flex align-items-center py-5">
+							<div className="container">
+								<div className="row">
+									<div className="col-md-9 col-lg-4 mx-auto">
+										<h3 className="login-heading mb-4">
+											Update Diagnosis
 										</h3>
-											<form
-												className="form"
-												onSubmit={(e) => onSubmit(e)}
-											>
-												<div className="form-group">
-													<select
-														name="office"
-														value={officeID}
-														key={officeID}
-														onChange={(e) => onChange(e)}
-													>
-														<option value="Office">Office</option>
-														{offices.map((office, idx) => {
-															return (
-																<option value={office.office_id}>
-																	{`${office.address_name} ${
-																		office.address2_name
-																			? office.address2_name
-																			: ''
-																		}, ${office.city} ${
-																		office.state
-																		} ${office.zip}`}
-																</option>
-															);
-														})}
-													</select>
-												</div>
-												<div className="form-group">
-													<input
-														type="text"
-														placeholder="Date MM-DD-YYYY"
-														name="availabilityDate"
-														value={availabilityDate}
-														onChange={(e) => onChange(e)}
-														required
-													/>
-												</div>
+										<form
+											className="form"
+											onSubmit={(e) => onSubmit(e)}
+										>
+											<div className="form-group">
+												<select
+													name="patientID"
+													value={patientID}
+													key={patientID}
+													className="form-control"
+													autoFocus
+													onChange={(e) => onChange(e)}
+												>
+													<option value="Patient">Patient</option>
+													{patients.map((patient, idx) => {
+														return (
+															<option value={patient.patient_id}>
+																{`${
+																	patient.patient_first_name
+																} ${
+																	patient.patient_last_name
+																} - ${moment(
+																	patient.patient_dob
+																).format('MM/DD/YYYY')}
+																	`}
+															</option>
+														);
+													})}
+												</select>
+											</div>
 
-												<input
-													type="submit"
-													className="btn btn-sm btn-primary btn-register text-uppercase font-weight-bold mb-2"
-													value="Add"
-												/>
-											</form>
-										</div>
+											<div className="form-group">
+												<select
+													name="diagnosisID"
+													value={diagnosisID}
+													key={diagnosisID}
+													className="form-control"
+													autoFocus
+													onChange={(e) => onChange(e)}
+												>
+													<option value="Diagnosis">
+														Diagnosis
+													</option>
+													{diagnoses.map((diagnosis, idx) => {
+														return (
+															<option
+																value={diagnosis.diagnosis_id}
+															>
+																{`${diagnosis.diagnosis_symptoms} - ${diagnosis.diagnosis_condition}`}
+															</option>
+														);
+													})}
+												</select>
+											</div>
+
+											<input
+												type="submit"
+												className="btn btn-sm btn-primary btn-register text-uppercase font-weight-bold mb-2"
+												value="Update"
+											/>
+										</form>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</Fragment>
-		);
+			</div>
+		</Fragment>
+	);
 };
 
-export default AddComponent;
+export default UpdateDiagnosis;

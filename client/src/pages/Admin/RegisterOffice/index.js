@@ -48,7 +48,7 @@ const RegisterComponent = () => {
 			state: '',
 			zip: '',
 			phoneNumber: '',
-		})
+		});
 	};
 
 	return (
@@ -187,8 +187,8 @@ const RegisterComponent = () => {
 														name="zip"
 														value={zip}
 														className="form-control"
-														onChange={(e) => onChange(e)}
 														autoFocus
+														onChange={(e) => onChange(e)}
 														required
 													/>
 												</div>

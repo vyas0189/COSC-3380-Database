@@ -102,6 +102,7 @@ const RegisterComponent = () => {
 													value={password}
 													onChange={(e) => onChange(e)}
 													minLength="6"
+													required
 												/>
 												<label htmlFor="inputPassword">
 													Password
@@ -204,6 +205,7 @@ const RegisterComponent = () => {
 													className="form-control"
 													value={state}
 													key={state}
+													required
 													onChange={(e) => onChange(e)}
 												>
 													<option value="State">
@@ -312,6 +314,7 @@ const RegisterComponent = () => {
 												<select
 													name="gender"
 													id="inputSex"
+													required
 													className="form-control"
 													value={gender}
 													key={gender}

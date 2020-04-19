@@ -2,11 +2,17 @@ const Joi = require('@hapi/joi');
 
 // all users
 
-const username = Joi.string().alphanum().min(3).max(30)
+const username = Joi.string()
+	.alphanum()
+	.min(3)
+	.max(30)
 	.label('Please Enter valid Username.');
 const password = Joi.string()
 	.regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/)
-	.required().label('Password must have minimum 6 characters, Minimum 1 special characters, Minimum 1 uppercase letter.');
+	.required()
+	.label(
+		'Password must have minimum 6 characters, Minimum 1 special characters, Minimum 1 uppercase letter.'
+	);
 const email = Joi.string()
 	.email()
 	.min(8)
@@ -15,9 +21,15 @@ const email = Joi.string()
 	.trim()
 	.required()
 	.label('Please Enter valid Email.');
-const firstName = Joi.string().min(3).max(50).trim()
+const firstName = Joi.string()
+	.min(3)
+	.max(50)
+	.trim()
 	.label('Please Enter valid First Name.');
-const lastName = Joi.string().min(2).max(50).trim()
+const lastName = Joi.string()
+	.min(2)
+	.max(50)
+	.trim()
 	.label('Please Enter valid Last Name.');
 const address = Joi.string()
 	.trim()
@@ -27,9 +39,14 @@ const address = Joi.string()
 	.label('Please Enter valid Address.');
 const city = Joi.string().trim().required().label('Please Enter valid City.');
 const state = Joi.string().min(2).required().label('Please Enter valid State.');
-const zip = Joi.number().min(4).required().label('Please Enter valid Zip Code.');
+const zip = Joi.number()
+	.min(4)
+	.required()
+	.label('Please Enter valid Zip Code.');
 const role = Joi.string().required().label('Please Enter valid Role.');
-const address2 = Joi.string().trim().label('Please Enter valid Secondary Address.');
+const address2 = Joi.string()
+	.trim()
+	.label('Please Enter valid Secondary Address.');
 const phoneNumber = Joi.string()
 	.trim()
 	.regex(/^[0-9]{7,10}$/)
@@ -44,24 +61,49 @@ const gender = Joi.string()
 	.required()
 	.label('Please Enter valid Gender.'); // o is for other
 const dob = Joi.date().required().label('Please Enter valid Date of Birth.');
-const patientID = Joi.string().guid().required().label('Please Enter valid Patient ID.');
+const patientID = Joi.string()
+	.guid()
+	.required()
+	.label('Please Enter valid Patient ID.');
 
 // doctor schema
 
 const primary = Joi.boolean().required().label('Please Enter valid Primary.');
-const specialty = Joi.string().max(20).required().label('Please Enter valid Specialty.');
-const office = Joi.string().guid().required().label('Please Enter valid Office.');
-const doctorID = Joi.string().guid().required().label('Please Enter valid Doctor ID.');
-const availabilityDate = Joi.date().required().label('Please Enter valid Availability Date.');
-const officeID = Joi.string().guid().required().label('Please Enter valid Office ID.');
+const specialty = Joi.string()
+	.max(20)
+	.required()
+	.label('Please Enter valid Specialty.');
+const office = Joi.string()
+	.guid()
+	.required()
+	.label('Please Enter valid Office.');
+const doctorID = Joi.string()
+	.guid()
+	.required()
+	.label('Please Enter valid Doctor ID.');
+const availabilityDate = Joi.date()
+	.required()
+	.label('Please Enter valid Availability Date.');
+const officeID = Joi.string()
+	.guid()
+	.required()
+	.label('Please Enter valid Office ID.');
 const taken = Joi.boolean().required().label('Please Enter valid Taken.');
 
 // appointment schema
 
-const primaryAppointment = Joi.boolean().required().label('Please Enter valid Primary Appointment.');
+const primaryAppointment = Joi.boolean()
+	.required()
+	.label('Please Enter valid Primary Appointment.');
 const reason = Joi.string().required().label('Please Enter valid Reason.');
-const availabilityID = Joi.string().guid().required().label('Please Enter valid Availability ID.');
-const appointmentID = Joi.string().guid().required().label('Please Enter valid Appointment ID.');
+const availabilityID = Joi.string()
+	.guid()
+	.required()
+	.label('Please Enter valid Availability ID.');
+const appointmentID = Joi.string()
+	.guid()
+	.required()
+	.label('Please Enter valid Appointment ID.');
 
 // test schema
 
@@ -71,8 +113,10 @@ const blood = Joi.boolean().required().label('Please Enter valid Blood.');
 
 // diagnosis schema
 
-const symptoms = Joi.string().required().label('Please Enter valid Symptoms.');
-const condition = Joi.string().required().label('Please Enter valid Condition.');
+const diagnosisID = Joi.string()
+	.guid()
+	.required()
+	.label('Please Enter valid Patient ID.');
 
 // office schema
 
@@ -200,8 +244,7 @@ module.exports = {
 	}),
 	updateDiagnosis: Joi.object().keys({
 		patientID,
-		symptoms,
-		condition,
+		diagnosisID,
 	}),
 	orderTest: Joi.object().keys({
 		patientID,

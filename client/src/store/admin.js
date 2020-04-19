@@ -3,20 +3,34 @@ import { action, thunk } from 'easy-peasy';
 import { toast } from 'react-toastify';
 
 const adminModel = {
-	loading: false,
+	loading: true,
 
 	//offices
 	offices: [],
 	officeErr: null,
+
 	//doctors
 	doctors: [],
 	doctorErr: null,
-	//newUsers
-	newUsers: [],
-	newUserErr: null,
-	//updatedUsers
-	updatedUsers: [],
-	updatedUserErr: null,
+	//doctorAppts
+	doctorAppts: [],
+	doctorApptErr: null,
+	//specialtyAppts
+	specialtyAppts: [],
+	specialtyApptErr: null,
+	//apptCount
+	apptCount: [],
+	apptCountErr: null,
+
+	//newPatients
+	patients: [],
+	patientErr: null,
+	//avgAge
+	avgAge: [],
+	avgAgeErr: null,
+	//stateCounts
+	stateCounts: [],
+	stateCountErr: null,
 
 	registerDoctor: thunk(
 		async (
@@ -69,12 +83,12 @@ const adminModel = {
 					toast.success('Registered Successfully');
 				}
 			} catch (err) {
-				const errArr = []
-				err.response.data.error.details.map(err => {
+				const errArr = [];
+				err.response.data.error.details.map((err) => {
 					return errArr.push(err.context.label);
-				})
-				action.setDoctorsError(errArr.join('\n'))
-				toast.error(errArr.join('\n'))
+				});
+				action.setDoctorsError(errArr.join('\n'));
+				toast.error(errArr.join('\n'));
 			}
 			action.isLoading(false);
 		}
@@ -108,12 +122,12 @@ const adminModel = {
 					toast.success('Registered Successfully');
 				}
 			} catch (err) {
-				const errArr = []
-				err.response.data.error.details.map(err => {
+				const errArr = [];
+				err.response.data.error.details.map((err) => {
 					return errArr.push(err.context.label);
-				})
-				action.setDoctorsError(errArr.join('\n'))
-				toast.error(errArr.join('\n'))
+				});
+				action.setDoctorsError(errArr.join('\n'));
+				toast.error(errArr.join('\n'));
 			}
 			action.isLoading(false);
 		}
@@ -149,62 +163,60 @@ const adminModel = {
 		action.setLoading(false);
 	}),
 
-	getNewUsers: thunk(async (action, ) => {
-		action.setNewUsersError(null);
+	getPatients: thunk(async (action, { startDate, endDate }) => {
+		action.setAvgAgeError(null);
+		action.setStateCountError(null);
+		action.setPatientsError(null);
 		action.setLoading(true);
 
 		try {
-			const res = await axios.get('/api/admin/get/newUsers');
+			console.log(startDate, endDate);
+			const res = await axios.get(
+				`/api/admin/get/patients/${startDate}/${endDate}`
+			);
+			console.log(res.data);
+
 			if (res.status === 200) {
-				action.setNewUsers(res.data.newUsers);
+				action.setAvgAge(res.data.avgAge);
+				action.setStateCounts(res.data.stateCounts);
+				action.setPatients(res.data.patients);
 			}
 		} catch (error) {
-			action.setNewUsersError(error.response.data.message);
+			action.setAvgAgeError(error.response.data.message);
+			action.setStateCountError(error.response.data.message);
+			action.setPatientsError(error.response.data.message);
 		}
 		action.setLoading(false);
 	}),
 
-	getUpdatedUsers: thunk(async (action) => {
-		action.setUpdatedUsersError(null);
+	getAppointments: thunk(async (action, { startDate, endDate }) => {
+		action.setDoctorsError(null);
+		action.setDoctorApptError(null);
+		action.setSpecialtyApptError(null);
+		action.setApptCountError(null);
 		action.setLoading(true);
 
 		try {
-			const res = await axios.get('/api/admin/get/updatedUsers');
+			console.log(startDate, endDate);
+			const res = await axios.get(
+				`/api/admin/get/appointments/${startDate}/${endDate}`
+			);
+			console.log(res.data);
+
 			if (res.status === 200) {
-				action.setUpdatedUsers(res.data.updatedUsers);
+				action.setDoctors(res.data.doctors);
+				action.setDoctorAppts(res.data.doctorAppts);
+				action.setSpecialtyAppts(res.data.specialtyAppts);
+				action.setApptCount(res.data.apptCount);
 			}
 		} catch (error) {
-			action.setUpdatedUsersError(error.response.data.message);
+			action.setDoctorsError(error.response.data.message);
+			action.setDoctorApptError(error.response.data.message);
+			action.setSpecialtyApptError(error.response.data.message);
+			action.setApptCountError(error.response.data.message);
 		}
 		action.setLoading(false);
 	}),
-
-	addAvailability: thunk(
-		async (
-			action,
-			{ officeID, availabilityDate },
-			{ getState }
-		) => {
-			action.setError(null);
-			action.isLoading(true);
-
-			try {
-				const res = await axios.put(
-					'/api/doctor/add/availability',
-					{ officeID, availabilityDate }
-				);
-
-				if (res.status === 200) {
-					action.setUser(res.data.doctor);
-					toast.success('Availability added!');
-				}
-			} catch (error) {
-				action.setError(error.response.data.message);
-				toast.error(error.response.data.message);
-			}
-			action.isLoading(false);
-		}
-	),
 
 	updateDoctorProfile: thunk(
 		async (
@@ -226,12 +238,12 @@ const adminModel = {
 					toast.success('Profile Updated!');
 				}
 			} catch (error) {
-				const errArr = []
-				error.response.data.error.details.map(err => {
+				const errArr = [];
+				error.response.data.error.details.map((err) => {
 					return errArr.push(err.context.label);
-				})
-				action.setDoctorsError(errArr.join('\n'))
-				toast.error(errArr.join('\n'))
+				});
+				action.setDoctorsError(errArr.join('\n'));
+				toast.error(errArr.join('\n'));
 			}
 			action.isLoading(false);
 		}
@@ -257,23 +269,56 @@ const adminModel = {
 		state.doctorErr = error;
 	}),
 
-	setNewUsers: action((state, newUsers) => {
-		state.newUsers = newUsers;
+	setDoctorAppts: action((state, doctorAppts) => {
+		state.doctorAppts = doctorAppts;
 	}),
 
-	setNewUsersError: action((state, error) => {
-		state.newUserErr = error;
+	setDoctorApptError: action((state, error) => {
+		state.doctorApptErr = error;
 	}),
 
-	setUpdatedUsers: action((state, updatedUsers) => {
-		state.updatedUsers = updatedUsers;
+	setSpecialtyAppts: action((state, specialtyAppts) => {
+		state.specialtyAppts = specialtyAppts;
 	}),
 
-	setUpdatedUsersError: action((state, error) => {
-		state.updatedUserErr = error;
+	setSpecialtyApptError: action((state, error) => {
+		state.specialtyApptErr = error;
 	}),
+
+	setApptCount: action((state, apptCount) => {
+		state.apptCount = apptCount;
+	}),
+
+	setApptCountError: action((state, error) => {
+		state.ApptCountError = error;
+	}),
+
+	setPatients: action((state, patients) => {
+		state.patients = patients;
+	}),
+
+	setPatientsError: action((state, error) => {
+		state.patientErr = error;
+	}),
+
+	setAvgAge: action((state, avgAge) => {
+		state.avgAge = avgAge;
+	}),
+
+	setAvgAgeError: action((state, error) => {
+		state.avgAgeErr = error;
+	}),
+
+	setStateCounts: action((state, stateCounts) => {
+		state.stateCounts = stateCounts;
+	}),
+
+	setStateCountError: action((state, error) => {
+		state.stateCountErr = error;
+	}),
+
 	isLoading: action((state, loading) => {
-		state.loading = loading
-	})
+		state.loading = loading;
+	}),
 };
 export default adminModel;
