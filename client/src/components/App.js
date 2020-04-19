@@ -3,6 +3,8 @@ import React, { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import DoctorSchedule from '../components/Schedule/Doctor';
+import PatientSchedule from '../components/Schedule/Patient';
 import AboutUs from '../pages/AboutUs';
 //admin imports
 import AdminCancelAppointment from '../pages/Admin/AdminCancelAppointment';
