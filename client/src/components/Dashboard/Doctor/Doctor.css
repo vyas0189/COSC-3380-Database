@@ -9,7 +9,7 @@
 }
 
 .bg-doctor-dashboard {
-    background-image: url('../../../assets/doctor/doctor-schedule.jpg');
+    background-image: url('../../../assets/doctor/doctor-default.jpg');
     background-size: cover;
     background-position: center;
 }

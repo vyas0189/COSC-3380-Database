@@ -110,9 +110,6 @@ const UpdateAvailability = () => {
                                 }
                             </tbody>
                         </Table >
-                        <div className="container-fluid" >
-                            <img src="..." className="img-fluid bg-doctor-up"></img>
-                        </div>
                     </Fragment>
                 )
             }

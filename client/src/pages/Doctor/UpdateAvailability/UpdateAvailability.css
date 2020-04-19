@@ -12,6 +12,8 @@
     background-image: url('../../../assets/doctor/doctor-update.jpg');
     background-size: cover;
     background-position: center;
+    width: 99vw;
+    height: 55vh;
 }
 
 .login-heading {
