@@ -6,7 +6,7 @@ import setAuthToken from '../utils/setAuthToken';
 const authModel = {
 	token: localStorage.getItem('token'),
 	isAuthenticated: null,
-	loading: false,
+	loading: true,
 	user: null,
 	err: null,
 	loginErr: null,

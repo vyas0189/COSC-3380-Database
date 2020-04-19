@@ -3,7 +3,7 @@ import { action, thunk } from 'easy-peasy';
 import { toast } from 'react-toastify';
 
 const adminModel = {
-	loading: false,
+	loading: true,
 
 	//offices
 	offices: [],

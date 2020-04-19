@@ -38,7 +38,6 @@ const RegisterComponent = () => {
 
 	const register = useStoreActions((actions) => actions.auth.registerPatient);
 	const onChange = (e) => {
-		console.log(e.target.name, e.target.value);
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
@@ -103,6 +102,7 @@ const RegisterComponent = () => {
 													value={password}
 													onChange={(e) => onChange(e)}
 													minLength="6"
+													required
 												/>
 												<label htmlFor="inputPassword">
 													Password
@@ -205,6 +205,7 @@ const RegisterComponent = () => {
 													className="form-control"
 													value={state}
 													key={state}
+													required
 													onChange={(e) => onChange(e)}
 												>
 													<option value="State">
@@ -313,6 +314,7 @@ const RegisterComponent = () => {
 												<select
 													name="gender"
 													id="inputSex"
+													required
 													className="form-control"
 													value={gender}
 													key={gender}

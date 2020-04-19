@@ -14,10 +14,10 @@ const Dashboard = () => {
     if (!isAuth) {
         return <Redirect to='/login' />
     } else {
-        return isLoading || user === null ? <Loading /> : (
-            user.role === 'admin' ? <AdminDashboardComponent /> :
-                user.role === 'doctor' ? <DoctorDashboardComponent />
-                    : user.role === 'patient' ? <PatientDashboardComponent /> : null
+        return isLoading || !user ? <Loading /> : (
+            !isLoading && user.role === 'admin' ? <AdminDashboardComponent /> :
+                !isLoading && user.role === 'doctor' ? <DoctorDashboardComponent />
+                    : !isLoading && user.role === 'patient' ? <PatientDashboardComponent /> : null
         )
     }
 }
