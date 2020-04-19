@@ -150,6 +150,7 @@ CREATE TRIGGER SPECIALIST_APPOINTMENT_NO_PRIMARY_CARE_DOCTOR
     ON appointment
     FOR EACH ROW
 EXECUTE PROCEDURE deny_specialist_scheduling();
+
 -- 2) Deny doctor from updating diagnosis if patient doesn't have a primary care doctor
 CREATE FUNCTION deny_update_diagnosis() RETURNS trigger AS
 $$

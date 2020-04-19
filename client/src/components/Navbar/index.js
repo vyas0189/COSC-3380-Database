@@ -14,25 +14,27 @@ const NavbarComponent = () => {
 
 	const logoutUser = () => {
 		logout();
-		history.push('/')
-	}
+		history.push('/');
+	};
 	const authLinks = (
 		<ul className="navbar-nav ml-auto">
 			<li className="nav-item">
-				<Link className="nav-link" to='/dashboard'>
+				<Link className="nav-link" to="/dashboard">
 					Dashboard
-                </Link>
+				</Link>
 			</li>
 			<li className="nav-item">
-				<Link className="nav-link" to='/patient/schedule'>Schedule</Link>
+				<Link className="nav-link" to="/patient/schedule">
+					Schedule
+				</Link>
 			</li>
 			<li className="nav-item">
 				<Link className="nav-link" to='/patient/profile'>Profile</Link>
 			</li>
 			<li className="nav-item">
-				<i className="nav-link" onClick={logoutUser} >
+				<i className="nav-link" onClick={logoutUser}>
 					Logout
-                </i>
+				</i>
 			</li>
 		</ul>
 	);
@@ -101,13 +103,13 @@ const NavbarComponent = () => {
 				</Link>
 			</li>
 			<li className="nav-item">
-				<Link className="nav-link" to="/viewNewUsers">
-					View New Users
+				<Link className="nav-link" to="/viewPatients">
+					View Patients
 				</Link>
 			</li>
 			<li className="nav-item">
-				<Link className="nav-link" to="/viewUpdatedUsers">
-					View Updated Users
+				<Link className="nav-link" to="/viewAppointments">
+					View Appointments
 				</Link>
 			</li>
 			<li className="nav-item">
@@ -121,27 +123,42 @@ const NavbarComponent = () => {
 				</i>
 			</li>
 		</ul>
-	)
+	);
 
 	const guestLinks = (
 		<ul className="navbar-nav ml-auto">
-
 			<li className="nav-item">
-				<Link className="nav-link" to="/aboutus">About Us
-                </Link>
+				<Link className="nav-link" to="/aboutus">
+					About Us
+				</Link>
 			</li>
 
 			<li className="nav-item dropdown">
-				<a className="nav-link dropdown-toggle" href="/#" id="navbarDropdownMenuLink-4" data-toggle="dropdown"
-					aria-haspopup="true" aria-expanded="false">
-					<i className="fas fa-user"></i> Profile </a>
+				<a
+					className="nav-link dropdown-toggle"
+					href="/#"
+					id="navbarDropdownMenuLink-4"
+					data-toggle="dropdown"
+					aria-haspopup="true"
+					aria-expanded="false"
+				>
+					<i className="fas fa-user"></i> Profile{' '}
+				</a>
 
-				<div className="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
-					<Link className="dropdown-item" to='/login'>Login</Link>
-					<Link className="dropdown-item" to='/login/doctor'>Employee Login</Link>
-					<Link className="dropdown-item" to='/register'>Register</Link>
+				<div
+					className="dropdown-menu dropdown-menu-right dropdown-info"
+					aria-labelledby="navbarDropdownMenuLink-4"
+				>
+					<Link className="dropdown-item" to="/login">
+						Login
+					</Link>
+					<Link className="dropdown-item" to="/login/doctor">
+						Employee Login
+					</Link>
+					<Link className="dropdown-item" to="/register">
+						Register
+					</Link>
 				</div>
-
 			</li>
 		</ul>
 	);
@@ -150,21 +167,19 @@ const NavbarComponent = () => {
 		if (isAuthenticated) {
 			if (user) {
 				if (user.role === 'patient') {
-					return authLinks
+					return authLinks;
 				} else if (user.role === 'doctor') {
-					return doctorLinks
+					return doctorLinks;
 				} else if (user.role === 'admin') {
 					return adminLinks;
 				}
 			}
 		}
-		return guestLinks
-	}
+		return guestLinks;
+	};
 	return (
-
 		<Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-
-			<Link to='/'>
+			<Link to="/">
 				<img src={logo} alt="logo" />
 			</Link>
 
@@ -173,8 +188,7 @@ const NavbarComponent = () => {
 				{!loading && navLinks()}
 			</Navbar.Collapse>
 		</Navbar>
-
-	)
-}
+	);
+};
 
 export default NavbarComponent;
