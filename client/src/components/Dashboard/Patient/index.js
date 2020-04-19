@@ -3,6 +3,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Button, Container, ListGroup, Modal, Table } from 'react-bootstrap';
 import Loading from '../../Loading';
+import { Link } from 'react-router-dom';
 import './Patient.css';
 
 const PatientDashboardComponent = () => {
@@ -15,6 +16,7 @@ const PatientDashboardComponent = () => {
     const getAppointmentDetails = useStoreActions(actions => actions.patient.getAppointmentDetails);
     const appointmentDetails = useStoreState(state => state.patient.appointmentDetails)
     const [show, setShow] = useState(false);
+    const isAuth = useStoreState(state => state.auth.isAuthenticated);
 
     const handleClose = () => setShow(false);
     const handleShow = (appointmentID) => {
@@ -113,7 +115,38 @@ const PatientDashboardComponent = () => {
             {
                 appointmentLoading ? <Loading /> :
                     (
-                        appointments.length <= 0 ? <h3>No Appointments</h3> :
+                        appointments.length <= 0 ? <div class="text-content">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-12 ">
+                                    <div class="text-text">
+                                        <h1 class="text">_</h1>
+                                        <div class="im-sheep">
+                                            <div class="top">
+                                                <div class="body"></div>
+                                                <div class="head">
+                                                    <div class="im-eye one"></div>
+                                                    <div class="im-eye two"></div>
+                                                    <div class="im-ear one"></div>
+                                                    <div class="im-ear two"></div>
+                                                </div>
+                                            </div>
+                                            <div class="im-legs">
+                                                <div class="im-leg"></div>
+                                                <div class="im-leg"></div>
+                                                <div class="im-leg"></div>
+                                                <div class="im-leg"></div>
+                                            </div>
+                                        </div>
+                                        <h1>No scheduled appointment</h1>
+                                        {<Link to={
+							isAuth ? '/patient/schedule' : '/login'
+						} className="btn btn-primary btn-round">Schedule Now</Link>}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>:
                             (
                                 <>
                                     <h2 className="mt-5 mb-4">Upcoming Appointment</h2>
