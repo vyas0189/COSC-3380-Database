@@ -19,7 +19,9 @@ const UpdateAvailability = () => {
     const cancelAvailability = useStoreActions(actions => actions.doctor.cancelAvailability);
     const [updateInfo, setUpdateInfo] = useState({
         officeID: '',
-        date: ''
+        date: '',
+        newDate: '',
+        newOffice: ''
     });
     const [show, setShow] = useState(false);
 
@@ -116,9 +118,9 @@ const UpdateAvailability = () => {
                                     })
                                 } </select> </div> <div className="form-group" >
                             <input type="date"
-                                placeholder="Date MM-DD-YYYY"
+                                placeholder="MM-DD-YYYY"
                                 name="availabilityDate"
-                                value={date}
+                                value={moment(date).format('YYYY-MM-DD')}
                                 onChange={
                                     (e) => onChange(e)}
                                 required />
