@@ -3,6 +3,8 @@ import React, { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import DoctorSchedule from '../components/Schedule/Doctor';
+import PatientSchedule from '../components/Schedule/Patient';
 import AboutUs from '../pages/AboutUs';
 //admin imports
 import AdminCancelAppointment from '../pages/Admin/AdminCancelAppointment';
@@ -23,6 +25,7 @@ import Login from '../pages/Login';
 import NotFoundPage from '../pages/NotFound';
 import Register from '../pages/Register';
 import setAuthToken from '../utils/setAuthToken';
+import PatientProfile from './Dashboard/Patient/Profile';
 import NavbarComponent from './Navbar';
 import PrivateRoute from './ProtectedRoute';
 import AdminRoute from './ProtectedRoute/AdminRoute';
@@ -35,7 +38,7 @@ const App = () => {
 	useEffect(() => {
 		setAuthToken(localStorage.token);
 		user();
-	}, [user]);
+	}, []);
 
 	return (
 		<>
@@ -55,6 +58,11 @@ const App = () => {
 					exact
 					path="/patient/schedule"
 					component={PatientScheduleComponent}
+				/>
+				<PrivateRoute
+					exact
+					path="/patient/profile"
+					component={PatientProfile}
 				/>
 				{/* admin pages */}
 

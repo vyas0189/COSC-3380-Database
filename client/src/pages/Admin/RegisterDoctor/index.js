@@ -9,7 +9,6 @@ const RegisterComponent = () => {
 	const admin = useStoreState((state) => state.auth.user);
 	const getOffices = useStoreActions((actions) => actions.admin.getOffices);
 
-	const adminToken = useStoreState((state) => state.auth.token);
 	const officeLoading = useStoreState((state) => state.admin.officeLoading);
 
 	const offices = useStoreState((state) => state.admin.offices);
@@ -17,8 +16,8 @@ const RegisterComponent = () => {
 	const loading = useStoreState((state) => state.auth.loading);
 
 	useEffect(() => {
-		getOffices(adminToken);
-	}, [offices]);
+		getOffices();
+	}, []);
 
 	const [formData, setFormData] = useState({
 		username: '',

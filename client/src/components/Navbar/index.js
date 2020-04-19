@@ -29,9 +29,7 @@ const NavbarComponent = () => {
 				</Link>
 			</li>
 			<li className="nav-item">
-				<Link className="nav-link" to="/profile">
-					Profile
-				</Link>
+				<Link className="nav-link" to='/patient/profile'>Profile</Link>
 			</li>
 			<li className="nav-item">
 				<i className="nav-link" onClick={logoutUser}>

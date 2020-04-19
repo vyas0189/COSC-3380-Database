@@ -3,32 +3,32 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Button, Container, ListGroup, Modal, Table } from 'react-bootstrap';
 import Loading from '../../Loading';
+import { Link } from 'react-router-dom';
 import './Patient.css';
 
 const PatientDashboardComponent = () => {
     const patient = useStoreState(state => state.auth.user);
     const getAppointment = useStoreActions(actions => actions.patient.getAppointments)
-    const patientToken = useStoreState(state => state.auth.token);
     const appointmentLoading = useStoreState(state => state.patient.appointmentLoading);
     const appointmentDetailsLoading = useStoreState(state => state.patient.appointmentDetailsLoading);
     const appointments = useStoreState(state => state.patient.appointments);
-    const token = useStoreState(state => state.auth.token);
     const cancelAppointment = useStoreActions(actions => actions.patient.cancelAppointment);
     const getAppointmentDetails = useStoreActions(actions => actions.patient.getAppointmentDetails);
     const appointmentDetails = useStoreState(state => state.patient.appointmentDetails)
     const [show, setShow] = useState(false);
+    const isAuth = useStoreState(state => state.auth.isAuthenticated);
 
     const handleClose = () => setShow(false);
-    const handleShow = (token, appointmentID) => {
+    const handleShow = (appointmentID) => {
         setShow(true);
-        getAppointmentDetails({ token, appointmentID })
+        getAppointmentDetails({ appointmentID })
     };
 
     useEffect(() => {
 
-        getAppointment(patientToken)
+        getAppointment()
 
-    }, [getAppointment, patientToken]);
+    }, []);
 
     const UpcomingAppointment = () => {
 
@@ -39,6 +39,7 @@ const PatientDashboardComponent = () => {
                     <th>Date</th>
                     <th>Time</th>
                     <th>Doctor</th>
+                    <th>Specialty</th>
                     <th>Office</th>
                     <th>Cancel</th>
                 </tr>
@@ -52,11 +53,12 @@ const PatientDashboardComponent = () => {
                                 <td>{moment(appointment.availability_date).format('MM/DD/YYYY')}</td>
                                 <td>{moment(appointment.availability_from_time, 'hh:mm:ss').format('hh:mm A')}</td>
                                 <td>{`${appointment.doctor_first_name} ${appointment.doctor_last_name}`}</td>
+                                <td>{appointment.doctor_specialty}</td>
                                 <td>{`${appointment.address_name} ${appointment.address2_name ? appointment.address2_name : ''}, ${appointment.city} ${appointment.state} ${appointment.zip}`}</td>
                                 <td>
                                     <p className="cancelApp badge badge-danger" onClick={(e) => {
                                         e.preventDefault()
-                                        cancelAppointment({ token, appointmentID: appointment.appointment_id })
+                                        cancelAppointment({ appointmentID: appointment.appointment_id })
                                     }}>Cancel</p>
                                 </td>
                             </tr>
@@ -78,6 +80,7 @@ const PatientDashboardComponent = () => {
                     <th>Date</th>
                     <th>Time</th>
                     <th>Doctor</th>
+                    <th>Specialty</th>
                     <th>Office</th>
                     <th>Appointment Details</th>
                 </tr>
@@ -91,9 +94,10 @@ const PatientDashboardComponent = () => {
                                 <td>{moment(appointment.availability_date).format('MM/DD/YYYY')}</td>
                                 <td>{moment(appointment.availability_from_time, 'hh:mm:ss').format('hh:mm A')}</td>
                                 <td>{`${appointment.doctor_first_name} ${appointment.doctor_last_name}`}</td>
+                                <th>{appointment.doctor_specialty}</th>
                                 <td>{`${appointment.address_name} ${appointment.address2_name ? appointment.address2_name : ''}, ${appointment.city} ${appointment.state} ${appointment.zip}`}</td>
                                 <td>
-                                    <p className="cancelApp badge badge-info" onClick={() => handleShow(token, appointment.appointment_id)}>View</p>
+                                    <p className="cancelApp badge badge-info" onClick={() => handleShow(appointment.appointment_id)}>View</p>
                                 </td>
                             </tr>
                         ) : null
@@ -111,7 +115,38 @@ const PatientDashboardComponent = () => {
             {
                 appointmentLoading ? <Loading /> :
                     (
-                        appointments.length <= 0 ? <h3>No Appointments</h3> :
+                        appointments.length <= 0 ? <div class="text-content">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-12 ">
+                                    <div class="text-text">
+                                        <h1 class="text">_</h1>
+                                        <div class="im-sheep">
+                                            <div class="top">
+                                                <div class="body"></div>
+                                                <div class="head">
+                                                    <div class="im-eye one"></div>
+                                                    <div class="im-eye two"></div>
+                                                    <div class="im-ear one"></div>
+                                                    <div class="im-ear two"></div>
+                                                </div>
+                                            </div>
+                                            <div class="im-legs">
+                                                <div class="im-leg"></div>
+                                                <div class="im-leg"></div>
+                                                <div class="im-leg"></div>
+                                                <div class="im-leg"></div>
+                                            </div>
+                                        </div>
+                                        <h1>No scheduled appointment</h1>
+                                        {<Link to={
+							isAuth ? '/patient/schedule' : '/login'
+						} className="btn btn-primary btn-round">Schedule Now</Link>}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>:
                             (
                                 <>
                                     <h2 className="mt-5 mb-4">Upcoming Appointment</h2>

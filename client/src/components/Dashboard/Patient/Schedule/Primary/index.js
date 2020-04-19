@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Form, ListGroup, Modal, Table } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import Loading from '../../../../Loading';
+
 const PatientPrimaryScheduleComponent = () => {
 	const formatPhoneNumber = (phoneNumberString) => {
 		const cleaned = ('' + phoneNumberString).replace(/\D/g, '');
