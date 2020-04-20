@@ -126,8 +126,7 @@ const UpdateDiagnosis = () => {
 													</option>
 													<option value="Physical">
 														Physical
-													</option>
-													<option value="None">None</option>
+													</option>													
 												</select>
 											</div>
 
