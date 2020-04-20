@@ -2,6 +2,7 @@ import { useStoreActions, useStoreState } from 'easy-peasy';
 import React, { Fragment, useEffect, useState } from 'react';
 import Loading from '../../../components/Loading';
 // import { Link } from 'react-router-dom';
+// import Loading from '../../Loading';
 import './AddAvailability.css';
 
 const AddComponent = () => {
@@ -46,7 +47,7 @@ const AddComponent = () => {
             <Fragment >
                 <div className="container-fluid" >
                     <div className="row no-gutter" >
-                        <div className="d-none d-md-flex col-md-4 col-lg-6 bg-doctor-add" ></div>
+                        <div className="d-none d-md-flex col-md-4 col-lg-6 bg-doctor-dashboard" ></div>
                         <div className="col-md-8 col-lg-6" >
                             <div className="login d-flex align-items-center py-5" >
                                 <div className="container" >
@@ -59,6 +60,7 @@ const AddComponent = () => {
                                                     <select name="officeID"
                                                         value={officeID}
                                                         key={officeID}
+                                                        className="form-control"
                                                         onChange={(e) => onChange(e)} >
                                                         <option value="Office" > Office </option> {
                                                             offices.map((office) => {
@@ -81,6 +83,7 @@ const AddComponent = () => {
                                                         type="date"
                                                         placeholder="Date MM-DD-YYYY"
                                                         name="availabilityDate"
+                                                        className="form-control"
                                                         value={availabilityDate}
                                                         onChange={(e) => onChange(e)}
                                                         required
