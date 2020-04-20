@@ -400,4 +400,13 @@ router.delete('/cancelAvailability', async (req, res) => {
 	}
 });
 
+router.get('/listOfSpecialty', async (req, res) => {
+	try {
+		const specialties = await db.query("SELECT doctor_specialty FROM doctor WHERE doctor_specialty NOT ILIKE '%Primary%' GROUP BY doctor_specialty ORDER BY doctor_specialty;");
+
+		res.status(200).json({ message: 'OK', specialties: specialties.rows });
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error });
+	}
+});
 module.exports = router;

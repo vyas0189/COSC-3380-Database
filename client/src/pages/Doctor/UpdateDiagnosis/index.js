@@ -1,8 +1,7 @@
 import { useStoreActions, useStoreState } from 'easy-peasy';
-import React, { Fragment, useEffect, useState } from 'react';
-import Loading from '../../../components/Loading';
-import './UpdateDiagnosis.css';
 import moment from 'moment';
+import React, { Fragment, useEffect, useState } from 'react';
+import './UpdateDiagnosis.css';
 
 const UpdateDiagnosis = () => {
 	const updateDiagnosis = useStoreActions(
@@ -71,11 +70,11 @@ const UpdateDiagnosis = () => {
 															<option value={patient.patient_id}>
 																{`${
 																	patient.patient_first_name
-																} ${
+																	} ${
 																	patient.patient_last_name
-																} - ${moment(
-																	patient.patient_dob
-																).format('MM/DD/YYYY')}
+																	} - ${moment(
+																		patient.patient_dob
+																	).format('MM/DD/YYYY')}
 																	`}
 															</option>
 														);
@@ -91,6 +90,7 @@ const UpdateDiagnosis = () => {
 													className="form-control"
 													autoFocus
 													onChange={(e) => onChange(e)}
+													required
 												>
 													<option value="Diagnosis">
 														Diagnosis
@@ -119,6 +119,7 @@ const UpdateDiagnosis = () => {
 													<option value="State">
 														Refer to Specialist
 													</option>
+													<option value="None">None</option>
 													<option value="Cardiac">Cardiac</option>
 													<option value="Pulmonary">
 														Pulmonary
