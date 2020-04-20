@@ -6,6 +6,8 @@ import React, { useEffect, useState } from 'react';
 import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import Loading from '../../../../Loading';
+import './Primary.css'; 
+
 const PatientPrimaryScheduleComponent = () => {
     const formatPhoneNumber = (phoneNumberString) => {
         const cleaned = ('' + phoneNumberString).replace(/\D/g, '');
@@ -176,7 +178,11 @@ const PatientPrimaryScheduleComponent = () => {
     return (
         <div>
 
-            {loading ? <Loading /> : currentPrimary ? <h3>You have already booked an Primary Appointment.</h3> : (
+            {loading ? <Loading /> : currentPrimary ?  <div className="text-text">
+                                            <h1 className="text">_</h1>
+                                            <i class="fas fa-check-circle icon-success fa-8x"></i>
+                                            <h3>You have already booked a Primary Appointment</h3> 
+                                        </div> : (
 
                 <div style={{ marginTop: '1.2rem' }}>
                     {setDataTable()}
