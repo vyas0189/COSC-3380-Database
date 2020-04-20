@@ -37,7 +37,6 @@ const PatientProfile = () => {
         details.patientID = patientID.patient_id
         updatePatient(details);
         setShow(false)
-
     }
     const [details, setDetails] = useState({
         firstName: '',
