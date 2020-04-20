@@ -166,11 +166,15 @@ const PatientPrimaryScheduleComponent = () => {
                 {
                     label: 'Schedule',
                     field: 'schedule',
+                    sort: 'asc',
                     width: 150,
                 }
             ],
-            rows: rows[0].reverse(),
+            rows: rows[0].filter(function (el) {
+                return el != null;
+            }).reverse(),
         };
+
         return <MDBDataTable striped bordered data={data} />
     }
 

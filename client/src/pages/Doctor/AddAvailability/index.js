@@ -7,8 +7,6 @@ import './AddAvailability.css';
 
 const AddComponent = () => {
     const register = useStoreActions((actions) => actions.doctor.addAvailability);
-
-    const doctor = useStoreState((state) => state.auth.user);
     const getOffices = useStoreActions((actions) => actions.doctor.getOffices);
     const offices = useStoreState((state) => state.doctor.offices);
 

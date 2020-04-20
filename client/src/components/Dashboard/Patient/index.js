@@ -10,7 +10,6 @@ const PatientDashboardComponent = () => {
     const patient = useStoreState(state => state.auth.user);
     const getAppointment = useStoreActions(actions => actions.patient.getAppointments)
     const appointmentLoading = useStoreState(state => state.patient.appointmentLoading);
-    const appointmentDetailsLoading = useStoreState(state => state.patient.appointmentDetailsLoading);
     const appointments = useStoreState(state => state.patient.appointments);
     const cancelAppointment = useStoreActions(actions => actions.patient.cancelAppointment);
     const getAppointmentDetails = useStoreActions(actions => actions.patient.getAppointmentDetails);

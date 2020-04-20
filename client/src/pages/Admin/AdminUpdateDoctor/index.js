@@ -8,17 +8,13 @@ const RegisterComponent = () => {
 	const register = useStoreActions(
 		(actions) => actions.auth.adminUpdateDoctor
 	);
-	const admin = useStoreState((state) => state.auth.user);
-	const loading = useStoreState((state) => state.auth.loading);
 
 	//offices
 	const getOffices = useStoreActions((actions) => actions.admin.getOffices);
-	const officeLoading = useStoreState((state) => state.admin.officeLoading);
 	const offices = useStoreState((state) => state.admin.offices);
 
 	//doctors
 	const getDoctors = useStoreActions((actions) => actions.admin.getDoctors);
-	const doctorLoading = useStoreState((state) => state.admin.doctorLoading);
 	const doctors = useStoreState((state) => state.admin.doctors);
 
 	useEffect(() => {

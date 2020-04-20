@@ -9,9 +9,7 @@ const doctorModel = {
 	officeErr: null,
 	//schedule
 	availability: [],
-	availabilityErr: null,
 	allAvailability: [],
-	allAvailabilityErr: null,
 
 	//patients
 	patients: [],
@@ -256,10 +254,6 @@ const doctorModel = {
 
 	setDiagnosesError: action((state, error) => {
 		state.diagnosesErr = error;
-	}),
-
-	setAvailabilityError: action((state, error) => {
-		state.availabilityErr = error;
 	}),
 
 	setTestError: action((state, error) => {
