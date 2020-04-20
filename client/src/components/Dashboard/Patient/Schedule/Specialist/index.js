@@ -22,6 +22,9 @@ const PatientSpecialistScheduleComponent = () => {
     const loading = useStoreState(state => state.patient.appointmentLoading);
     const specialistAvailability = useStoreState(state => state.patient.specialistAppointmentAvailability)
     const scheduleSpecialist = useStoreActions(actions => actions.patient.scheduleSpecialistAppointment);
+    const getCurrentPrimaryCount = useStoreActions(actions => actions.patient.getCurrentPrimaryCount)
+    const patientID = useStoreState(state => state.auth.user);
+    const currentPrimary = useStoreState(state => state.patient.currentPrimary);
     const [show, setShow] = useState(false);
     const [specialDetails, setDetails] = useState({
         availability_id: '',
@@ -80,6 +83,7 @@ const PatientSpecialistScheduleComponent = () => {
     };
 
     useEffect(() => {
+        getCurrentPrimaryCount(patientID.patient_id);
         getSpecialistAppointments();
     }, [])
 
@@ -179,11 +183,16 @@ const PatientSpecialistScheduleComponent = () => {
     }
     return (
         <div>
-            {loading ? <Loading /> : (
-                <div style={{ marginTop: '1.2rem' }}>
-                    {setDataTable()}
-                </div>
-            )}
+            {loading ? <Loading /> : currentPrimary ? <div className="text-text">
+                <h1 className="text">_</h1>
+                <i class="fas fa-check-circle icon-success fa-8x"></i>
+                <h3>You have already booked an Appointment</h3>
+            </div> : (
+
+                    <div style={{ marginTop: '1.2rem' }}>
+                        {setDataTable()}
+                    </div>
+                )}
 
 
             <Modal show={show} onHide={handleClose}>

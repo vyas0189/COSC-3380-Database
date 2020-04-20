@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import Loading from '../../../../Loading';
-import './Primary.css'; 
+import './Primary.css';
 
 const PatientPrimaryScheduleComponent = () => {
     const formatPhoneNumber = (phoneNumberString) => {
@@ -85,7 +85,7 @@ const PatientPrimaryScheduleComponent = () => {
     };
 
     useEffect(() => {
-        getCurrentPrimaryCount(patientID.patient_id)
+        getCurrentPrimaryCount(patientID.patient_id);
         getPrimaryAppointments();
     }, []);
     const setDataTable = () => {
@@ -178,16 +178,16 @@ const PatientPrimaryScheduleComponent = () => {
     return (
         <div>
 
-            {loading ? <Loading /> : currentPrimary ?  <div className="text-text">
-                                            <h1 className="text">_</h1>
-                                            <i class="fas fa-check-circle icon-success fa-8x"></i>
-                                            <h3>You have already booked a Primary Appointment</h3> 
-                                        </div> : (
+            {loading ? <Loading /> : currentPrimary ? <div className="text-text">
+                <h1 className="text">_</h1>
+                <i class="fas fa-check-circle icon-success fa-8x"></i>
+                <h3>You have already booked an Appointment</h3>
+            </div> : (
 
-                <div style={{ marginTop: '1.2rem' }}>
-                    {setDataTable()}
-                </div>
-            )}
+                    <div style={{ marginTop: '1.2rem' }}>
+                        {setDataTable()}
+                    </div>
+                )}
 
 
             <Modal show={show} onHide={handleClose}>
