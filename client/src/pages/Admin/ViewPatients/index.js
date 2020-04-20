@@ -1,10 +1,9 @@
 import { useStoreActions, useStoreState } from 'easy-peasy';
-import React, { Fragment, useEffect, useState } from 'react';
-import { Button, Form, ListGroup, Modal, Table } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';
-import Loading from '../../../components/Loading';
-import './ViewPatients.css';
 import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { ListGroup, Table } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
+import './ViewPatients.css';
 
 const ViewPatients = () => {
 	const formatPhoneNumber = (phoneNumberString) => {
@@ -125,7 +124,7 @@ const ViewPatients = () => {
 				class="modal fade right"
 				id="patientModal"
 				tabindex="1"
-				role="dialog"				
+				role="dialog"
 			>
 				<div
 					class="modal-dialog-full-width modal-dialog momodel modal-fluid"

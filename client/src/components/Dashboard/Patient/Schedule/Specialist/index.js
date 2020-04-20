@@ -83,8 +83,11 @@ const PatientSpecialistScheduleComponent = () => {
         getSpecialistAppointments();
     }, [])
 
+
+
     const setDataTable = () => {
         let rows = []
+
         rows.push(specialistAvailability.map((appointment) => {
             const {
                 availability_id,
@@ -173,7 +176,9 @@ const PatientSpecialistScheduleComponent = () => {
                     width: 150,
                 }
             ],
-            rows: rows[0],
+            rows: rows[0].filter(function (el) {
+                return el != null;
+            }),
         };
         return <MDBDataTable striped bordered data={data} />
     }

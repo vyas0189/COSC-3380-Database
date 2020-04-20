@@ -1,13 +1,15 @@
 import axios from 'axios';
-import { toast } from 'react-toastify';
 import { action, thunk } from 'easy-peasy';
-
+import { toast } from 'react-toastify';
 const doctorModel = {
 	loading: true,
 
 	//offices
 	offices: [],
 	officeErr: null,
+	//schedule
+	availability: [],
+	allAvailability: [],
 
 	//patients
 	patients: [],
@@ -35,6 +37,93 @@ const doctorModel = {
 		action.setLoading(false);
 	}),
 
+	addAvailability: thunk(
+		async (
+			action, {
+				officeID,
+				availabilityDate,
+			}
+		) => {
+			action.setAvailabilityError(null);
+			action.setLoading(true);
+			try {
+				const res = await axios.post('/api/doctor/add/availability', {
+					officeID,
+					availabilityDate,
+				});
+
+				if (res.status === 200) {
+					toast.success('Schedule Added!');
+				}
+
+			} catch (err) {
+				const errArr = []
+				if (err.response.status === 401) {
+					toast.error(err.response.data.message)
+				} else {
+					err.response.data.error.details.map(err => {
+						return errArr.push(err.context.label);
+					})
+					action.setAvailabilityError(errArr.join('\n'))
+					toast.error(errArr.join('\n'))
+				}
+			}
+			action.setLoading(false);
+		}
+	),
+
+	getAllAvailability: thunk(async (action, payload) => {
+		action.setAllAvailabilityErr(null)
+		action.setLoading(true)
+		const doctorID = payload;
+
+		try {
+			const res = await axios.get(`/api/doctor/allAvailability/${doctorID}`);
+			if (res.status === 200) {
+				action.setAllAvailability(res.data.availabilities)
+				action.getAvailability(res.data.availability)
+			}
+		} catch (error) {
+			action.setAllAvailabilityErr(error.response.message)
+		}
+		action.setLoading(false)
+	}),
+
+	updateAvailability: thunk(async (action, { newDate, officeID, doctorID, date, }) => {
+		action.setAvailabilityError(null)
+		action.setLoading(true)
+
+		try {
+			const res = await axios.put('/api/doctor/updateAvailability', {
+				newDate, officeID, doctorID, date,
+			});
+			if (res.status === 200) {
+				toast.success('Availability Updated');
+				action.getAllAvailability(doctorID)
+			}
+		} catch (error) {
+			// action.setAvailabilityError(errArr.join('\n'))
+			toast.error('Unable to Update Availability');
+		}
+		action.setLoading(false)
+	}),
+	cancelAvailability: thunk(async (action, { doctorID, date }) => {
+		action.setLoading(true);
+
+		try {
+			const res = await axios.delete('/api/doctor/cancelAvailability', {
+				data: { doctorID, date }
+			})
+
+			if (res.status === 200) {
+				toast.success('Availability Cancelled');
+				action.getAllAvailability(doctorID)
+			}
+		} catch (error) {
+			toast.error(error.response.message);
+		}
+		action.setLoading(false);
+	}),
 	getPatients: thunk(async (action) => {
 		action.setPatientsError(null);
 		action.setLoading(true);
@@ -70,7 +159,7 @@ const doctorModel = {
 	}),
 
 	updateDiagnosis: thunk(
-		async (action, { patientID, diagnosisID }, { getState }) => {
+		async (action, { patientID, diagnosisID, specialty }, { getState }) => {
 			action.setDiagnosesError(null);
 			action.isLoading(true);
 
@@ -78,6 +167,7 @@ const doctorModel = {
 				const res = await axios.put('/api/doctor/update/diagnosis', {
 					patientID,
 					diagnosisID,
+					specialty,
 				});
 
 				if (res.status === 200) {
@@ -85,34 +175,6 @@ const doctorModel = {
 				}
 			} catch (error) {
 				action.setDiagnosesError(error.response.data.message);
-				toast.error(error.response.data.message);
-			}
-			action.isLoading(false);
-		}
-	),
-
-	//doesn't work
-	addAvailability: thunk(
-		async (action, { officeID, availabilityDate }, { getState }) => {
-			action.setAvailabilityError(null);
-			action.isLoading(true);
-
-			try {
-				const res = await axios.put(
-					'/api/doctor/add/availability',
-					{ officeID, availabilityDate },
-					{
-						headers: {
-							jwt_token: getState().token,
-						},
-					}
-				);
-
-				if (res.status === 200) {
-					toast.success('Availability added!');
-				}
-			} catch (error) {
-				action.setAvailabilityError(error.response.data.message);
 				toast.error(error.response.data.message);
 			}
 			action.isLoading(false);
@@ -159,6 +221,26 @@ const doctorModel = {
 		state.officeErr = error;
 	}),
 
+	setAvailability: action((state, availability) => {
+		state.availability = availability;
+	}),
+
+	setAvailabilityError: action((state, error) => {
+		state.availabilityErr = error;
+	}),
+
+	getAvailability: action((state, availability) => {
+		state.availability = availability
+	}),
+
+	setAllAvailability: action((state, availability) => {
+		state.allAvailability = availability;
+	}),
+
+	setAllAvailabilityErr: action((state, error) => {
+		state.allAvailabilityErr = error;
+	}),
+
 	setPatients: action((state, patients) => {
 		state.patients = patients;
 	}),
@@ -173,10 +255,6 @@ const doctorModel = {
 
 	setDiagnosesError: action((state, error) => {
 		state.diagnosesErr = error;
-	}),
-
-	setAvailabilityError: action((state, error) => {
-		state.availabilityErr = error;
 	}),
 
 	setTestError: action((state, error) => {

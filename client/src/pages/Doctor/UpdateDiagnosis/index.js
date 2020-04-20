@@ -25,9 +25,10 @@ const UpdateDiagnosis = () => {
 	const [formData, setFormData] = useState({
 		patientID: '',
 		diagnosisID: '',
+		specialty: '',
 	});
 
-	const { patientID, diagnosisID } = formData;
+	const { patientID, diagnosisID, specialty } = formData;
 
 	const onChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -35,7 +36,7 @@ const UpdateDiagnosis = () => {
 
 	const onSubmit = async (e) => {
 		e.preventDefault();
-		updateDiagnosis({ patientID, diagnosisID });
+		updateDiagnosis({ patientID, diagnosisID, specialty });
 	};
 
 	return (
@@ -103,6 +104,28 @@ const UpdateDiagnosis = () => {
 															</option>
 														);
 													})}
+												</select>
+											</div>
+
+											<div className="form-group">
+												<select
+													name="specialty"
+													value={specialty}
+													key={specialty}
+													className="form-control"
+													autoFocus
+													onChange={(e) => onChange(e)}
+												>
+													<option value="State">
+														Refer to Specialist
+													</option>
+													<option value="Cardiac">Cardiac</option>
+													<option value="Pulmonary">
+														Pulmonary
+													</option>
+													<option value="Physical">
+														Physical
+													</option>
 												</select>
 											</div>
 
