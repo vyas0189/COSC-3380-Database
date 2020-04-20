@@ -15,10 +15,8 @@ const RegisterComponent = () => {
 	const adminToken = useStoreState((state) => state.auth.token);
 
 	//offices
-	const getOffices = useStoreActions((actions) => actions.doctor.getOffices);	
+	const getOffices = useStoreActions((actions) => actions.doctor.getOffices);
 	const offices = useStoreState((state) => state.doctor.offices);
-
-	
 
 	useEffect(() => {
 		getOffices(adminToken);
@@ -73,7 +71,7 @@ const RegisterComponent = () => {
 		<Fragment>
 			<div className="container-fluid">
 				<div className="row no-gutter">
-					<div className="d-none d-md-flex col-md-4 col-lg-6 bg-admin-dashboard"></div>
+					<div className="d-none d-md-flex col-md-4 col-lg-6 bg-doctor-dashboard"></div>
 					<div className="col-md-8 col-lg-6">
 						<div className="login d-flex align-items-center py-5">
 							<div className="container">

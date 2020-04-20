@@ -116,7 +116,7 @@ router.post('/order/test', doc, async (req, res) => {
 router.put('/update/diagnosis', doc, async (req, res) => {
 	try {
 		await updateDiagnosis.validateAsync(req.body, { abortEarly: false });
-		const { patientID, diagnosisID } = req.body;
+		const { patientID, diagnosisID, specialty } = req.body;
 
 		const patient = await db.query(
 			'SELECT * FROM patient WHERE patient_id = $1',
@@ -130,8 +130,8 @@ router.put('/update/diagnosis', doc, async (req, res) => {
 		}
 
 		const update = await db.query(
-			'UPDATE patient SET patient_diagnosis = $1 WHERE patient_id = $2 RETURNING *',
-			[diagnosisID, patientID],
+			'UPDATE patient SET patient_diagnosis = $1, patient_doctor_specialty = $2 WHERE patient_id = $3 RETURNING *',
+			[diagnosisID, specialty, patientID],
 		);
 
 		if (update.rows.length === 0) {
@@ -400,4 +400,13 @@ router.delete('/cancelAvailability', async (req, res) => {
 	}
 });
 
+router.get('/listOfSpecialty', async (req, res) => {
+	try {
+		const specialties = await db.query("SELECT doctor_specialty FROM doctor WHERE doctor_specialty NOT ILIKE '%Primary%' GROUP BY doctor_specialty ORDER BY doctor_specialty;");
+
+		res.status(200).json({ message: 'OK', specialties: specialties.rows });
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error });
+	}
+});
 module.exports = router;

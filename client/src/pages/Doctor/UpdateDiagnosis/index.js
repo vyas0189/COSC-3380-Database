@@ -1,8 +1,7 @@
 import { useStoreActions, useStoreState } from 'easy-peasy';
-import React, { Fragment, useEffect, useState } from 'react';
-import Loading from '../../../components/Loading';
-import './UpdateDiagnosis.css';
 import moment from 'moment';
+import React, { Fragment, useEffect, useState } from 'react';
+import './UpdateDiagnosis.css';
 
 const UpdateDiagnosis = () => {
 	const updateDiagnosis = useStoreActions(
@@ -25,9 +24,10 @@ const UpdateDiagnosis = () => {
 	const [formData, setFormData] = useState({
 		patientID: '',
 		diagnosisID: '',
+		specialty: '',
 	});
 
-	const { patientID, diagnosisID } = formData;
+	const { patientID, diagnosisID, specialty } = formData;
 
 	const onChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -35,14 +35,14 @@ const UpdateDiagnosis = () => {
 
 	const onSubmit = async (e) => {
 		e.preventDefault();
-		updateDiagnosis({ patientID, diagnosisID });
+		updateDiagnosis({ patientID, diagnosisID, specialty });
 	};
 
 	return (
 		<Fragment>
 			<div className="container-fluid">
 				<div className="row no-gutter">
-					<div className="d-none d-md-flex col-md-4 col-lg-6 bg-admin-dashboard"></div>
+					<div className="d-none d-md-flex col-md-4 col-lg-6 bg-doctor-dashboard"></div>
 					<div className="col-md-8 col-lg-6">
 						<div className="login d-flex align-items-center py-5">
 							<div className="container">
@@ -70,11 +70,11 @@ const UpdateDiagnosis = () => {
 															<option value={patient.patient_id}>
 																{`${
 																	patient.patient_first_name
-																} ${
+																	} ${
 																	patient.patient_last_name
-																} - ${moment(
-																	patient.patient_dob
-																).format('MM/DD/YYYY')}
+																	} - ${moment(
+																		patient.patient_dob
+																	).format('MM/DD/YYYY')}
 																	`}
 															</option>
 														);
@@ -90,6 +90,7 @@ const UpdateDiagnosis = () => {
 													className="form-control"
 													autoFocus
 													onChange={(e) => onChange(e)}
+													required
 												>
 													<option value="Diagnosis">
 														Diagnosis
@@ -103,6 +104,29 @@ const UpdateDiagnosis = () => {
 															</option>
 														);
 													})}
+												</select>
+											</div>
+
+											<div className="form-group">
+												<select
+													name="specialty"
+													value={specialty}
+													key={specialty}
+													className="form-control"
+													autoFocus
+													onChange={(e) => onChange(e)}
+												>
+													<option value="State">
+														Refer to Specialist
+													</option>
+													<option value="None">None</option>
+													<option value="Cardiac">Cardiac</option>
+													<option value="Pulmonary">
+														Pulmonary
+													</option>
+													<option value="Physical">
+														Physical
+													</option>													
 												</select>
 											</div>
 

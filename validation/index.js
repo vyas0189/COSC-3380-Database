@@ -245,6 +245,7 @@ module.exports = {
 	updateDiagnosis: Joi.object().keys({
 		patientID,
 		diagnosisID,
+		specialty,
 	}),
 	orderTest: Joi.object().keys({
 		patientID,

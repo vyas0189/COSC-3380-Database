@@ -22,6 +22,8 @@ const doctorModel = {
 	availabilityErr: null,
 	testErr: null,
 
+	specialty: null,
+
 	getOffices: thunk(async (action, payload) => {
 		action.setOfficesError(null);
 		action.setLoading(true);
@@ -159,7 +161,7 @@ const doctorModel = {
 	}),
 
 	updateDiagnosis: thunk(
-		async (action, { patientID, diagnosisID }, { getState }) => {
+		async (action, { patientID, diagnosisID, specialty }, { getState }) => {
 			action.setDiagnosesError(null);
 			action.isLoading(true);
 
@@ -167,6 +169,7 @@ const doctorModel = {
 				const res = await axios.put('/api/doctor/update/diagnosis', {
 					patientID,
 					diagnosisID,
+					specialty,
 				});
 
 				if (res.status === 200) {
@@ -203,6 +206,21 @@ const doctorModel = {
 			action.isLoading(false);
 		}
 	),
+
+	getSpecialty: thunk(async action => {
+		action.isLoading(true);
+
+		try {
+			const res = await axios.get('/api/doctor/listOfSpecialty');
+
+			if (res.status === 200) {
+				action.setSpecialty(res.data.specialties);
+			}
+		} catch (error) {
+			toast.error(error.response.data.message)
+		}
+		action.isLoading(false);
+	}),
 
 	isLoading: action((state, loading) => {
 		state.loading = loading;
@@ -259,5 +277,8 @@ const doctorModel = {
 	setTestError: action((state, error) => {
 		state.testErr = error;
 	}),
+	setSpecialty: action((state, specialties) => {
+		state.specialty = specialties;
+	})
 };
 export default doctorModel;
