@@ -1,7 +1,7 @@
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import moment from 'moment';
-import React, { useEffect, useState, Fragment } from 'react';
-import { Form, Modal, Table } from 'react-bootstrap';
+import React, { Fragment, useEffect, useState } from 'react';
+import { Container, Form, Modal, Table } from 'react-bootstrap';
 import Loading from '../../../components/Loading';
 import './UpdateAvailability.css';
 
@@ -64,7 +64,7 @@ const UpdateAvailability = () => {
     const { officeID, date, newDate } = updateInfo;
 
     return (
-        <>
+        <Container>
             {
                 loading ? <Loading /> : (
                     <Fragment>
@@ -157,7 +157,7 @@ const UpdateAvailability = () => {
                     </Form>
                 </Modal.Body>
             </Modal>
-        </>
+        </Container>
     )
 };
 
