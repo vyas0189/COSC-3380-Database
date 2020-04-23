@@ -11,7 +11,7 @@ const password = Joi.string()
 	.regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/)
 	.required()
 	.label(
-		'Password must have minimum 6 characters, Minimum 1 special characters, Minimum 1 uppercase letter.'
+		'Password must have minimum 6 characters, Minimum 1 special characters, Minimum 1 uppercase letter.',
 	);
 const email = Joi.string()
 	.email()
@@ -240,7 +240,6 @@ module.exports = {
 		state,
 		zip,
 		phoneNumber,
-		office,
 	}),
 	updateDiagnosis: Joi.object().keys({
 		patientID,

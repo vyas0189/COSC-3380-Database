@@ -23,44 +23,42 @@ router.put('/update', doc, async (req, res) => {
 			state,
 			zip,
 			phoneNumber,
-			office,
 		} = req.body;
 
 		let { address2 } = req.body;
 		const { userID } = req.user;
-		const user = await db.query(
-			'SELECT user_id FROM db_user WHERE user_id = $1',
-			[userID],
-		);
-
-		if (!user.rows.length) {
-			return res.status(401).json({ message: 'User not found.' });
-		}
-
 		if (address2 === 'n/a' || address2 === 'N/A') {
 			address2 = null;
 		}
 
-		const doctorAddressID = await db.query(
-			'SELECT doctor_address FROM doctor WHERE doctor_user = $1',
+		console.log(req.body);
+		console.log(userID);
+
+		const user = await db.query(
+			'SELECT doctor_address FROM doctor d JOIN db_user du on d.doctor_user = du.user_id WHERE du.user_id = $1',
 			[userID],
 		);
+		console.log('USER: ', user);
+		if (!user.rows.length) {
+			return res.status(401).json({ message: 'User not found.' });
+		}
 
-		await db.query(
-			'UPDATE address SET address_name = $1, address2_name = $2, city = $3, state = $4, zip = $5 WHERE address_id = $6',
+		const updatedAddress = await db.query(
+			'UPDATE address SET address_name = $1, address2_name = $2, city = $3, state = $4, zip = $5 WHERE address_id = $6 RETURNING *',
 			[
 				address,
 				address2,
 				city,
 				state,
 				zip,
-				doctorAddressID.rows[0].doctor_address,
+				user.rows[0].doctor_address,
 			],
 		);
+		console.log(updatedAddress);
 
 		await db.query(
-			'UPDATE doctor SET doctor_first_name = $1, doctor_last_name = $2, doctor_email = $3, doctor_phone_number = $4, doctor_office = $5 WHERE doctor_user = $6',
-			[firstName, lastName, email, phoneNumber, office, userID],
+			'UPDATE doctor SET doctor_first_name = $1, doctor_last_name = $2, doctor_email = $3, doctor_phone_number = $4 WHERE doctor_user = $5',
+			[firstName, lastName, email, phoneNumber, userID],
 		);
 
 		res.status(200).json({ message: 'OK' });
@@ -69,6 +67,15 @@ router.put('/update', doc, async (req, res) => {
 	}
 });
 
+router.get('/info/:doctorID', doc, async (req, res) => {
+	try {
+		const { doctorID } = req.params;
+		const doctorInfo = await db.query('SELECT * FROM doctor d INNER JOIN address a on d.doctor_address = a.address_id WHERE d.doctor_id = $1', [doctorID]);
+		res.status(200).json({ message: 'OK', doctorInfo: doctorInfo.rows[0] });
+	} catch (error) {
+		res.status(500).json({ message: 'Server Error', error });
+	}
+});
 router.post('/order/test', doc, async (req, res) => {
 	try {
 		await orderTest.validateAsync(req.body, { abortEarly: false });

@@ -3,7 +3,7 @@ import { action, thunk } from 'easy-peasy';
 import { toast } from 'react-toastify';
 const doctorModel = {
 	loading: true,
-
+	doctorDetails: null,
 	//offices
 	offices: [],
 	officeErr: null,
@@ -89,6 +89,52 @@ const doctorModel = {
 			action.setAllAvailabilityErr(error.response.message)
 		}
 		action.setLoading(false)
+	}),
+	getDoctorDetails: thunk(async (action, doctorID) => {
+		action.setAllAvailabilityErr(null)
+		action.setLoading(true);
+		try {
+			console.log('UPDATED: ', doctorID);
+
+			const res = await axios.get(`/api/doctor/info/${doctorID}`);
+
+			if (res.status === 200) {
+				console.log(res.data.doctorInfo);
+
+				action.setInfo(res.data.doctorInfo);
+			}
+		} catch (error) {
+			action.setAllAvailabilityErr(error.response.data.message)
+		}
+		action.setLoading(false)
+	}),
+
+	updateDoctor: thunk(async (action, { doctorID, firstName, lastName, email, address, city, state, zip, phoneNumber, address2 }) => {
+		action.setAllAvailabilityErr(null)
+		action.setLoading(true);
+		try {
+			if (!address2.length) {
+				address2 = 'n/a'
+			}
+
+			console.log({ doctorID, firstName, lastName, email, address, city, state, zip, phoneNumber, address2 })
+			const res = await axios.put('/api/doctor/update', { firstName, lastName, email, address, city, state, zip, phoneNumber, address2 })
+
+			if (res.status === 200) {
+				console.log(doctorID);
+
+				action.getDoctorDetails(doctorID)
+				toast.success('Profile Updated!')
+			}
+		} catch (error) {
+			console.log(error)
+			const errArr = []
+			error.response.data.error.details.map(err => {
+				return errArr.push(err.context.label);
+			})
+			toast.error(errArr.join('\n'))
+		}
+		action.isLoading(false)
 	}),
 
 	updateAvailability: thunk(async (action, { newDate, officeID, doctorID, date, }) => {
@@ -279,6 +325,9 @@ const doctorModel = {
 	}),
 	setSpecialty: action((state, specialties) => {
 		state.specialty = specialties;
+	}),
+	setInfo: action((state, info) => {
+		state.doctorDetails = info;
 	})
 };
 export default doctorModel;
