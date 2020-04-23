@@ -30,20 +30,14 @@ router.put('/update', doc, async (req, res) => {
 		if (address2 === 'n/a' || address2 === 'N/A') {
 			address2 = null;
 		}
-
-		console.log(req.body);
-		console.log(userID);
-
 		const user = await db.query(
 			'SELECT doctor_address FROM doctor d JOIN db_user du on d.doctor_user = du.user_id WHERE du.user_id = $1',
 			[userID],
 		);
-		console.log('USER: ', user);
 		if (!user.rows.length) {
 			return res.status(401).json({ message: 'User not found.' });
 		}
-
-		const updatedAddress = await db.query(
+		await db.query(
 			'UPDATE address SET address_name = $1, address2_name = $2, city = $3, state = $4, zip = $5 WHERE address_id = $6 RETURNING *',
 			[
 				address,
@@ -54,7 +48,6 @@ router.put('/update', doc, async (req, res) => {
 				user.rows[0].doctor_address,
 			],
 		);
-		console.log(updatedAddress);
 
 		await db.query(
 			'UPDATE doctor SET doctor_first_name = $1, doctor_last_name = $2, doctor_email = $3, doctor_phone_number = $4 WHERE doctor_user = $5',

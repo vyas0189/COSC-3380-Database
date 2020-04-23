@@ -24,7 +24,7 @@ const UpdateDoctor = () => {
 	);
 	const getDoctorDetails = useStoreActions(actions => actions.doctor.getDoctorDetails);
 	const doctorID = useStoreState(state => state.auth.user);
-	const loading = useStoreState((state) => state.doctor.loading);
+	const loading = useStoreState((state) => state.doctor.detailsLoading);
 	const doctorDetails = useStoreState(state => state.doctor.doctorDetails)
 	const [formData, setFormData] = useState({
 		firstName: '',

@@ -170,11 +170,9 @@ const adminModel = {
 		action.setLoading(true);
 
 		try {
-			console.log(startDate, endDate);
 			const res = await axios.get(
 				`/api/admin/get/patients/${startDate}/${endDate}`
 			);
-			console.log(res.data);
 
 			if (res.status === 200) {
 				action.setAvgAge(res.data.avgAge);
@@ -197,12 +195,9 @@ const adminModel = {
 		action.setLoading(true);
 
 		try {
-			console.log(startDate, endDate);
 			const res = await axios.get(
 				`/api/admin/get/appointments/${startDate}/${endDate}`
 			);
-			console.log(res.data);
-
 			if (res.status === 200) {
 				action.setDoctors(res.data.doctors);
 				action.setDoctorAppts(res.data.doctorAppts);

@@ -304,8 +304,6 @@ router.delete('/cancel', admin, async (req, res) => {
 
 router.get('/get/patients/:startDate/:endDate', admin, async (req, res) => {
 	try {
-		// console.log(req.params);
-
 		await generateReport.validateAsync(req.params, { abortEarly: false });
 		const { startDate, endDate } = req.params;
 
@@ -337,8 +335,6 @@ router.get('/get/patients/:startDate/:endDate', admin, async (req, res) => {
 
 router.get('/get/appointments/:startDate/:endDate', admin, async (req, res) => {
 	try {
-		// console.log(req.params);
-
 		await generateReport.validateAsync(req.params, { abortEarly: false });
 		const { startDate, endDate } = req.params;
 

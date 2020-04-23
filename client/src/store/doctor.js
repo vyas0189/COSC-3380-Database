@@ -21,7 +21,7 @@ const doctorModel = {
 
 	availabilityErr: null,
 	testErr: null,
-
+	detailsLoading: true,
 	specialty: null,
 
 	getOffices: thunk(async (action, payload) => {
@@ -90,23 +90,20 @@ const doctorModel = {
 		}
 		action.setLoading(false)
 	}),
+
 	getDoctorDetails: thunk(async (action, doctorID) => {
 		action.setAllAvailabilityErr(null)
-		action.setLoading(true);
+		action.setDetailsLoading(true);
 		try {
-			console.log('UPDATED: ', doctorID);
-
 			const res = await axios.get(`/api/doctor/info/${doctorID}`);
 
 			if (res.status === 200) {
-				console.log(res.data.doctorInfo);
-
 				action.setInfo(res.data.doctorInfo);
 			}
 		} catch (error) {
 			action.setAllAvailabilityErr(error.response.data.message)
 		}
-		action.setLoading(false)
+		action.setDetailsLoading(false)
 	}),
 
 	updateDoctor: thunk(async (action, { doctorID, firstName, lastName, email, address, city, state, zip, phoneNumber, address2 }) => {
@@ -116,18 +113,14 @@ const doctorModel = {
 			if (!address2.length) {
 				address2 = 'n/a'
 			}
-
-			console.log({ doctorID, firstName, lastName, email, address, city, state, zip, phoneNumber, address2 })
 			const res = await axios.put('/api/doctor/update', { firstName, lastName, email, address, city, state, zip, phoneNumber, address2 })
 
 			if (res.status === 200) {
-				console.log(doctorID);
 
 				action.getDoctorDetails(doctorID)
 				toast.success('Profile Updated!')
 			}
 		} catch (error) {
-			console.log(error)
 			const errArr = []
 			error.response.data.error.details.map(err => {
 				return errArr.push(err.context.label);
@@ -178,8 +171,6 @@ const doctorModel = {
 
 		try {
 			const res = await axios.get(`/api/doctor/get/patients`);
-			console.log(res.data);
-
 			if (res.status === 200) {
 				action.setPatients(res.data.patients);
 			}
@@ -195,8 +186,6 @@ const doctorModel = {
 
 		try {
 			const res = await axios.get(`/api/doctor/get/diagnoses`);
-			console.log(res.data);
-
 			if (res.status === 200) {
 				action.setDiagnoses(res.data.diagnoses);
 			}
@@ -328,6 +317,9 @@ const doctorModel = {
 	}),
 	setInfo: action((state, info) => {
 		state.doctorDetails = info;
+	}),
+	setDetailsLoading: action((state, loading) => {
+		state.detailsLoading = loading;
 	})
 };
 export default doctorModel;
