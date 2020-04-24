@@ -1,8 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import React, { Fragment, useEffect, useState } from 'react';
 import Loading from '../../../components/Loading';
-// import { Link } from 'react-router-dom';
-// import Loading from '../../Loading';
 import './AddAvailability.css';
 
 const AddComponent = () => {
@@ -14,7 +13,7 @@ const AddComponent = () => {
 
     useEffect(() => {
         getOffices();
-    }, [getOffices]);
+    }, []);
 
     const [formData, setFormData] = useState({
         officeID: '',

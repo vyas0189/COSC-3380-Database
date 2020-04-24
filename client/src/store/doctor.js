@@ -110,7 +110,7 @@ const doctorModel = {
 		action.setAllAvailabilityErr(null)
 		action.setLoading(true);
 		try {
-			if (!address2.length) {
+			if (address2 === null || address2.length === 0) {
 				address2 = 'n/a'
 			}
 			const res = await axios.put('/api/doctor/update', { firstName, lastName, email, address, city, state, zip, phoneNumber, address2 })

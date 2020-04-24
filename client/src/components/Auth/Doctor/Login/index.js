@@ -2,7 +2,6 @@ import { useStoreActions } from 'easy-peasy';
 import React, { Fragment, useState } from 'react';
 import './Login.css';
 
-
 const DoctorLoginComponent = () => {
 
 	const [formData, setFormData] = useState({

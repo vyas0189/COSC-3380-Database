@@ -1,8 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { ListGroup, Table } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';
 import './ViewAppointments.css';
 
 const ViewAppointments = () => {
@@ -39,14 +39,6 @@ const ViewAppointments = () => {
 		startDate: '',
 		endDate: '',
 	});
-
-	const history = useHistory();
-
-	const handleClose = (e) => {
-		// e.preventDefault();
-		setShow(false);
-		history.push('/viewAppointments');
-	};
 
 	const handleShow = () => {
 		setShow(true);

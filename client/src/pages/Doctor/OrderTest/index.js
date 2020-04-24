@@ -1,8 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useStoreActions, useStoreState } from 'easy-peasy';
-import React, { Fragment, useEffect, useState } from 'react';
-import Loading from '../../../components/Loading';
-import './OrderTest.css';
 import moment from 'moment';
+import React, { Fragment, useEffect, useState } from 'react';
+import './OrderTest.css';
 
 const OrderTest = () => {
 	const orderTest = useStoreActions((actions) => actions.doctor.orderTest);
@@ -61,11 +61,11 @@ const OrderTest = () => {
 															<option value={patient.patient_id}>
 																{`${
 																	patient.patient_first_name
-																} ${
+																	} ${
 																	patient.patient_last_name
-																} - ${moment(
-																	patient.patient_dob
-																).format('MM/DD/YYYY')}
+																	} - ${moment(
+																		patient.patient_dob
+																	).format('MM/DD/YYYY')}
 																	`}
 															</option>
 														);
