@@ -20,25 +20,32 @@ A health provider company has multiple offices in many different states. Many do
 
 * [Help Guide](https://docs.google.com/document/d/1eZ2r1eRtG109pFLE8rKsNM4CFUtbYfSStVRLpPnTkdY/edit)
 
-## To-do
-
-Refer to the Projects tab of the master branch
-
 ## Endpoints
 
-* [Endpoints](https://docs.google.com/spreadsheets/d/1HIb7BuNchcjxNITPpUxLYYIe9IP078B49JRIjNX52ZM/edit#gid=0)
-  
+* [Endpoints](https://docs.google.com/document/d/1IZt0xx74_QdcJU11Wx9hEhIFpjrjFrUtU-dv9GSCMFs/edit?usp=sharing)
+
 ## Installations
-* Install the node dependencies for the server:
-  - In the root folder:
-    - `npm install`
-  - Install the dependencies in the client folder:
-    - `cd client && npm install`
+  * [NodeJS](https://nodejs.org/en/download/)
+  * [PostgreSQL](https://www.postgresql.org/download/)
+
+## Running the App
+* Install yarn: `npm i -g yarn`
+* Create Database:
+  - Open terminal and run `createdb -h localhost -p 5432 -U postgres hospital`
+  - Create Schema (Make sure your in the project root): `psql -U postgres -d hospital -a -f ./db/hospital.sql`
 * Configure .env file:
   - Rename the file `.env.local` to `.env`
-  - Fill in the required information in the `.env` 
-
-
+  - Fill in the required information in the `.env`
+    * `PGUSER=postgres`
+    * `PGPASSWORD=<your postgres password>`
+    * `PGHOST=<loacalhost>`
+    * `PGPORT=5432`
+    * `PGDATABASE=hospital`
+    * `JWT_SECRET=<your secret>`
+    * `SESSION_EXPIRES=1h`
+* Install dependencies(In the project root folder): `yarn && cd client && yarn`
+* To run the server: `yarn server`
+* To Run the app `yarn dev`
 
 ## Authors
 
