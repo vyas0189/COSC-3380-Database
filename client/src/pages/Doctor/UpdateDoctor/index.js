@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Form, ListGroup, Modal } from 'react-bootstrap';
@@ -37,7 +38,7 @@ const UpdateDoctor = () => {
 	const [show, setShow] = useState(false);
 	useEffect(() => {
 		getDoctorDetails(doctorID.doctor_id)
-	}, [doctorID.doctor_id, getDoctorDetails]);
+	}, []);
 	const handleClose = () => setShow(false);
 
 

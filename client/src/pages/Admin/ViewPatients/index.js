@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -29,7 +30,7 @@ const ViewPatients = () => {
 			startDate: '1999-01-01',
 			endDate: moment().format('YYYY-MM-DD'),
 		});
-	}, [getPatients]);
+	}, []);
 
 	const [formData, setFormData] = useState({
 		startDate: '',

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import moment from 'moment';
@@ -30,7 +31,7 @@ const UpdateAvailability = () => {
     useEffect(() => {
         getAllAvailability(doctorID.doctor_id)
         getOffices();
-    }, [doctorID.doctor_id, getAllAvailability, getOffices]);
+    }, []);
 
     const onChange = (e) => {
         setUpdateInfo({ ...updateInfo, [e.target.name]: e.target.value });

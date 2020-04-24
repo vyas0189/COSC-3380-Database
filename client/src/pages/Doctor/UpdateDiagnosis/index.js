@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
@@ -19,7 +20,7 @@ const UpdateDiagnosis = () => {
 	useEffect(() => {
 		getPatients();
 		getDiagnoses();
-	}, [getDiagnoses, getPatients]);
+	}, []);
 
 	const [formData, setFormData] = useState({
 		patientID: '',
