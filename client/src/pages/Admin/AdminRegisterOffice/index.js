@@ -1,8 +1,8 @@
 import { useStoreActions } from 'easy-peasy';
 import React, { Fragment, useState } from 'react';
-import './RegisterOffice.css';
+import './AdminRegisterOffice.css';
 
-const RegisterComponent = () => {
+const AdminRegisterOffice = () => {
 	const [formData, setFormData] = useState({
 		capacity: '',
 		address: '',
@@ -222,4 +222,4 @@ const RegisterComponent = () => {
 	);
 };
 
-export default RegisterComponent;
+export default AdminRegisterOffice;

@@ -123,7 +123,7 @@ const PatientProfile = () => {
                                         <>
                                             <Modal show={show} onHide={handleClose}>
                                                 <Modal.Header closeButton>
-                                                    <Modal.Title>Update Profile</Modal.Title>
+                                                    <Modal.Title>Edit Profile</Modal.Title>
                                                 </Modal.Header>
                                                 <Modal.Body>
                                                     <Form
