@@ -1,3 +1,4 @@
+
 import axios from "axios";
 import { action, thunk } from "easy-peasy";
 import { toast } from 'react-toastify';
@@ -19,9 +20,11 @@ const patientModel = {
         action.setAppointmentError(null);
         action.setDetailsLoading(true);
         try {
-            if (!address2.length) {
+            if (address2 === null || address2.length === 0) {
                 address2 = 'n/a'
             }
+            console.log(address2);
+
             const res = await axios.put('/api/patient/update', { firstName, lastName, email, address, city, state, zip, phoneNumber, dob, gender, address2 })
 
             if (res.status === 200) {
