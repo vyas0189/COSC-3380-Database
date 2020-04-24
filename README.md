@@ -8,7 +8,7 @@ A health provider company has multiple offices in many different states. Many do
 
 Welcome to the MW Team 9 Medical Clinic Database Project.
 
-For our project, we used PostGreSQL to build our database, Node.js for our backend, and React for our frontend.
+For our project, we used PostgreSQL to build our database, NodeJS for our backend, and React for our frontend.
 
 Database in PostgreSQL:
 
@@ -27,15 +27,21 @@ All of our frontend files are located within './client'.
 
 -  Our function definitions for each role (admin, patient, doctor) are located in './client/src/store': this is where we defined the functions that would execute upon a frontend / user action, such as a button press. These functions would be called from our state management system whenever an add, modify, or delete action was initiated by the user on our project's website.
 -  All of the pictures & images used on our site are located in './client/src/assets'.
--  The general user interface (Home, Dashboard, etc.), along with our patient scheduling implementation are located in './client/src/components': components contains login authentication requests(components/Auth), our designed user dashboards which act as the home page for each user (components/Dashboard), our loading animation (components/Loading), our navigation bar which sits at the top of each page (components/Navbar), and patient scheduling (components/Schedule).
+-  The general user interface (Home, Dashboard, etc.), along with our patient scheduling implementation, is located in './client/src/components': components contains login authentication requests(components/Auth), our designed user dashboards which act as the home page for each user (components/Dashboard), our loading animation (components/Loading), our navigation bar which sits at the top of each page (components/Navbar), and patient scheduling (components/Schedule).
    /components also contains our main frontend file for linking all of the pages of the website in './client/src/App.js'.
 -  Finally, all of the design & functionality of any buttons, forms, or frontend requests are defined in './client/src/pages'.
 
-## Login Roles
+## User Roles
 
-Patient, Doctor, & Admin
+Please refer to ‘login_credentials’ for sample login credentials.
 
-Please refer to login information for sample login credentials.
+Three Roles: patient, doctor, admin
+
+Patient Functionalities: Login, Schedule Primary Appointment, Cancel Primary Appointment, Schedule Specialist Appointment (1st trigger), Cancel Specialist Appointment, View Upcoming Appointments, View Appointment History, Edit Patient Profile, Logout
+
+Doctor Functionalities: Login, Add Availability for Date, Update / Cancel Availability for Date, Edit Patient Profile, Update Patient Diagnosis (2nd trigger), Order Test, Logout
+
+Admin Functionalities: Login, Register Office Information, Register New Doctor, Update Doctor Credentials, View Currently Enrolled Patients (1st Report), View Currently Scheduled Appointments (2nd Report), Logout
 
 ## Triggers
 
@@ -47,35 +53,37 @@ Please refer to login information for sample login credentials.
 
 Both accessed via the admin role:
 
-1. View Patients:
+1. View Patients: Lists patient user information & calculates age from their DOB. Aggregate functions: average patient age calculated; patient location by state counts calculated.
 
-Lists patient user information & calculates age from their DOB. Aggregate functions: average patient age calculated; patient location by state counts calculated.
+2. View Appointments: Lists doctor user information including their specialty. Aggregate functions: total appointments calculated; total appointments per doctor calculated; total appointments per specialty calculated.
 
 ## Endpoints
 
-* [Endpoints](https://docs.google.com/document/d/1IZt0xx74_QdcJU11Wx9hEhIFpjrjFrUtU-dv9GSCMFs/edit?usp=sharing)
+-  [Endpoints](https://docs.google.com/document/d/1IZt0xx74_QdcJU11Wx9hEhIFpjrjFrUtU-dv9GSCMFs/edit?usp=sharing)
 
 ## Installations
-  * [NodeJS](https://nodejs.org/en/download/)
-  * [PostgreSQL](https://www.postgresql.org/download/)
+
+-  [NodeJS](https://nodejs.org/en/download/)
+-  [PostgreSQL](https://www.postgresql.org/download/)
 
 ## Running the App
-* Install yarn: `npm i -g yarn`
-* Create Database:
-  - Open terminal and run `createdb -h localhost -p 5432 -U postgres hospital`
-  - Create Schema (Make sure your in the project root): `psql -U postgres -d hospital -a -f ./db/hospital.sql`
-* Configure .env file:
-  - Rename the file `.env.local` to `.env`
-  - Fill in the required information in the `.env`
-    * `PGUSER=postgres`
-    * `PGPASSWORD=<your postgres password>`
-    * `PGHOST=<loacalhost>`
-    * `PGPORT=5432`
-    * `PGDATABASE=hospital`
-    * `JWT_SECRET=<your secret>`
-    * `SESSION_EXPIRES=1h`
-* Install dependencies(In the project root folder): `yarn && cd client && yarn`
-* To Run the app `yarn dev`
+
+-  Install yarn: `npm i -g yarn`
+-  Create Database:
+   -  Open terminal and run `createdb -h localhost -p 5432 -U postgres hospital`
+   -  Create Schema (Make sure your in the project root): `psql -U postgres -d hospital -a -f ./db/hospital.sql`
+-  Configure .env file:
+   -  Rename the file `.env.local` to `.env`
+   -  Fill in the required information in the `.env`
+      -  `PGUSER=postgres`
+      -  `PGPASSWORD=<your postgres password>`
+      -  `PGHOST=<loacalhost>`
+      -  `PGPORT=5432`
+      -  `PGDATABASE=hospital`
+      -  `JWT_SECRET=<your secret>`
+      -  `SESSION_EXPIRES=1h`
+-  Install dependencies(In the project root folder): `yarn && cd client && yarn`
+-  To Run the app `yarn dev`
 
 ## Authors
 
