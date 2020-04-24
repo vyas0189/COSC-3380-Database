@@ -100,9 +100,9 @@ const RegisterComponent = () => {
 																	office.address2_name
 																		? office.address2_name
 																		: ''
-																	}, ${office.city} ${
+																}, ${office.city} ${
 																	office.state
-																	} ${office.zip}`}
+																} ${office.zip}`}
 															</option>
 														);
 													})}
