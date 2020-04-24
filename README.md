@@ -44,7 +44,6 @@ A health provider company has multiple offices in many different states. Many do
     * `JWT_SECRET=<your secret>`
     * `SESSION_EXPIRES=1h`
 * Install dependencies(In the project root folder): `yarn && cd client && yarn`
-* To run the server: `yarn server`
 * To Run the app `yarn dev`
 
 ## Authors
