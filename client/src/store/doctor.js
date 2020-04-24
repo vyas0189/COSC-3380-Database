@@ -110,8 +110,6 @@ const doctorModel = {
 		action.setAllAvailabilityErr(null)
 		action.setLoading(true);
 		try {
-			console.log(address2);
-
 			if (address2 === null || address2.length === 0) {
 				address2 = 'n/a'
 			}
@@ -123,7 +121,6 @@ const doctorModel = {
 				toast.success('Profile Updated!')
 			}
 		} catch (error) {
-			console.log(error)
 			const errArr = []
 			error.response.data.error.details.map(err => {
 				return errArr.push(err.context.label);
