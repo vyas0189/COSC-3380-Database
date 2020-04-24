@@ -1,3 +1,5 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE db_user
 (
     user_id    UUID PRIMARY KEY NOT NULL                                                DEFAULT uuid_generate_v4(),
@@ -7,6 +9,7 @@ CREATE TABLE db_user
     created_at TIMESTAMP        NOT NULL                                                DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP        NOT NULL                                                DEFAULT CURRENT_TIMESTAMP
 );
+
 CREATE TABLE IF NOT EXISTS address
 (
     address_id    UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
