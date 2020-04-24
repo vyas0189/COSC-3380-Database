@@ -57,7 +57,7 @@ const adminModel = {
 			action.isLoading(true);
 			zip = parseInt(zip);
 			try {
-				if (!address2.length) {
+				if (address2 === null || address2.length === 0) {
 					address2 = 'n/a';
 				}
 				role = 'doctor';
@@ -103,7 +103,7 @@ const adminModel = {
 			action.isLoading(true);
 			zip = parseInt(zip);
 			try {
-				if (!address2.length) {
+				if (address2 === null || address2.length === 0) {
 					address2 = 'n/a';
 				}
 

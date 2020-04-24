@@ -115,7 +115,6 @@ const doctorModel = {
 			if (address2 === null || address2.length === 0) {
 				address2 = 'n/a'
 			}
-			console.log(address2);
 			const res = await axios.put('/api/doctor/update', { firstName, lastName, email, address, city, state, zip, phoneNumber, address2 })
 
 			if (res.status === 200) {
