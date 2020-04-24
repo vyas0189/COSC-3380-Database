@@ -1,10 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useStoreActions, useStoreState } from 'easy-peasy';
-import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Form, ListGroup, Modal } from 'react-bootstrap';
 import Loading from '../../../components/Loading';
-// import { Link } from 'react-router-dom';
-// import Loading from '../../Loading';
 import './UpdateDoctor.css';
 
 const UpdateDoctor = () => {
@@ -31,13 +29,11 @@ const UpdateDoctor = () => {
 		lastName: '',
 		email: '',
 		address: '',
-		dob: '',
 		address2: '',
 		city: '',
 		state: '',
 		zip: '',
 		phoneNumber: '',
-		office: '',
 	});
 	const [show, setShow] = useState(false);
 	useEffect(() => {
@@ -52,12 +48,10 @@ const UpdateDoctor = () => {
 		email,
 		address,
 		address2,
-		dob,
 		city,
 		state,
 		zip,
 		phoneNumber,
-		office,
 	} = formData;
 
 	const onChange = (e) => {
@@ -92,7 +86,6 @@ const UpdateDoctor = () => {
 													<ListGroup.Item><strong>Last Name: </strong> {doctorDetails.doctor_last_name}</ListGroup.Item>
 													<ListGroup.Item><strong>Email: </strong> {doctorDetails.doctor_email}</ListGroup.Item>
 													<ListGroup.Item><strong>Phone: </strong> {formatPhoneNumber(doctorDetails.doctor_phone_number)}</ListGroup.Item>
-													<ListGroup.Item><strong>Date of Birth: </strong> {moment(doctorDetails.doctor_dob).format('MMMM Do YYYY')}</ListGroup.Item>
 													<ListGroup.Item><strong>Primary Address: </strong> {doctorDetails.address_name}</ListGroup.Item>
 													{doctorDetails.address2_name && (
 														<ListGroup.Item>
@@ -110,7 +103,6 @@ const UpdateDoctor = () => {
 															lastName: doctorDetails.doctor_last_name,
 															email: doctorDetails.doctor_email,
 															phone_number: doctorDetails.doctor_phone_number,
-															dob: doctorDetails.doctor_dob,
 															address: doctorDetails.address_name,
 															address2: doctorDetails.address2_name,
 															city: doctorDetails.city,
@@ -133,7 +125,7 @@ const UpdateDoctor = () => {
 			<>
 				<Modal show={show} onHide={handleClose}>
 					<Modal.Header closeButton>
-						<Modal.Title>Edit Profile</Modal.Title>
+						<Modal.Title>Update Profile</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
 						<Form
@@ -172,17 +164,7 @@ const UpdateDoctor = () => {
 									required
 								/>
 							</Form.Group>
-							<Form.Group>
-								<Form.Label>DOB</Form.Label>
-								<Form.Control
-									type="date"
-									placeholder="DOB"
-									name="dob"
-									value={moment(dob).format('YYYY-MM-DD')}
-									onChange={(e) => onChange(e)}
-									required
-								/>
-							</Form.Group>
+
 							<Form.Group>
 								<Form.Label>Primary Address</Form.Label>
 								<Form.Control
@@ -200,7 +182,7 @@ const UpdateDoctor = () => {
 									type="text"
 									placeholder="Secondary Address (APT#)"
 									name="address2"
-									value={address2}
+									value={address2 === null || address2.length === 0 ? '' : address2}
 									onChange={(e) => onChange(e)}
 								/>
 							</Form.Group>

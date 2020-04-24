@@ -36,7 +36,7 @@ const authModel = {
 		action.setLoading(true)
 
 		try {
-			if (!address2.length) {
+			if (address2 === null || address2.length === 0) {
 				address2 = 'n/a'
 			}
 			const res = await axios.put('/api/patient/update', { firstName, lastName, email, address, city, state, zip, phoneNumber, dob, gender })
@@ -93,7 +93,7 @@ const authModel = {
 		action.isLoading(true);
 		zip = parseInt(zip)
 		try {
-			if (!address2.length) {
+			if (address2 === null || address2.length === 0) {
 				address2 = 'n/a'
 			}
 			role = 'patient';
@@ -220,7 +220,7 @@ const authModel = {
 	setRegisterError: action((state, error) => {
 		state.registerErr = error;
 	}),
-	
+
 	setAdmin: action((state, admin) => {
 		state.isAdmin = admin;
 	}),

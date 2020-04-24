@@ -33,6 +33,7 @@ module.exports = {
     "no-use-before-define": "off",
     "import/prefer-default-export": "off",
     "max-len": "off",
-    "no-tabs": "off"
+    "no-tabs": "off",
+    "react-hooks/exhaustive-deps": "off"
   },
 };

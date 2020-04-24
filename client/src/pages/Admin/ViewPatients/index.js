@@ -1,8 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { ListGroup, Table } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';
 import './ViewPatients.css';
 
 const ViewPatients = () => {
@@ -36,14 +36,6 @@ const ViewPatients = () => {
 		startDate: '',
 		endDate: '',
 	});
-
-	const history = useHistory();
-
-	const handleClose = (e) => {
-		// e.preventDefault();
-		setShow(false);
-		history.push('/viewPatients');
-	};
 
 	const handleShow = () => {
 		setShow(true);
