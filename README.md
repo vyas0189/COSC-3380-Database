@@ -31,12 +31,12 @@ All of our frontend files are located within `./client`.
 
 ## User Roles
 
-Patient, Doctor, & Admin 
+Patient, Doctor, & Admin
 [Login Information](login_credentials.txt)
 
-* Patient Functionalities: Login, Schedule Primary Appointment, Cancel Primary Appointment, Schedule Specialist Appointment (1st trigger), Cancel Specialist Appointment, View Upcoming Appointments, View Appointment History, Edit Patient Profile, Logout
-* Doctor Functionalities: Login, Add Availability for Date, Update / Cancel Availability for Date, Edit Patient Profile, Update Patient Diagnosis (2nd trigger), Order Test, Logout
-* Admin Functionalities: Login, Register Office Information, Register New Doctor, Update Doctor Credentials, View Currently Enrolled Patients (1st Report), View Currently Scheduled Appointments (2nd Report), Logout
+-  Patient Functionalities: Login, Schedule Primary Appointment, Cancel Primary Appointment, Schedule Specialist Appointment (1st trigger), Cancel Specialist Appointment, View Upcoming Appointments, View Appointment History, Edit Patient Profile, Logout
+-  Doctor Functionalities: Login, Add Availability for Date, Update / Cancel Availability for Date, Edit Patient Profile, Update Patient Diagnosis (2nd trigger), Order Test, Logout
+-  Admin Functionalities: Login, Register Office Information, Register New Doctor, Update Doctor Credentials, View Currently Enrolled Patients (1st Report), View Currently Scheduled Appointments (2nd Report), Logout
 
 ## Triggers
 
@@ -48,35 +48,37 @@ Patient, Doctor, & Admin
 
 Both accessed via the admin role:
 
-1. View Patients:
+1. View Patients: Lists patient user information & calculates age from their DOB. Aggregate functions: average patient age calculated; patient location by state counts calculated.
 
-Lists patient user information & calculates age from their DOB. Aggregate functions: average patient age calculated; patient location by state counts calculated.
+2. View Appointments: Lists doctor user information including their specialty. Aggregate functions: total appointments calculated; total appointments per doctor calculated; total appointments per specialty calculated.
 
 ## Endpoints
 
-* [Endpoints](https://docs.google.com/document/d/1IZt0xx74_QdcJU11Wx9hEhIFpjrjFrUtU-dv9GSCMFs/edit?usp=sharing)
+-  [Endpoints](https://docs.google.com/document/d/1IZt0xx74_QdcJU11Wx9hEhIFpjrjFrUtU-dv9GSCMFs/edit?usp=sharing)
 
 ## Installations
-  * [NodeJS](https://nodejs.org/en/download/)
-  * [PostgreSQL](https://www.postgresql.org/download/)
+
+-  [NodeJS](https://nodejs.org/en/download/)
+-  [PostgreSQL](https://www.postgresql.org/download/)
 
 ## Running the App
-* Install yarn: `npm i -g yarn`
-* Create Database:
-  - Open terminal and run `createdb -h localhost -p 5432 -U postgres hospital`
-  - Create Schema (Make sure your in the project root): `psql -U postgres -d hospital -a -f ./db/hospital.sql`
-* Configure .env file:
-  - Rename the file `.env.local` to `.env`
-  - Fill in the required information in the `.env`
-    * `PGUSER=postgres`
-    * `PGPASSWORD=<your postgres password>`
-    * `PGHOST=<loacalhost>`
-    * `PGPORT=5432`
-    * `PGDATABASE=hospital`
-    * `JWT_SECRET=<your secret>`
-    * `SESSION_EXPIRES=1h`
-* Install dependencies(In the project root folder): `yarn && cd client && yarn`
-* To Run the app `yarn dev`
+
+-  Install yarn: `npm i -g yarn`
+-  Create Database:
+   -  Open terminal and run `createdb -h localhost -p 5432 -U postgres hospital`
+   -  Create Schema (Make sure your in the project root): `psql -U postgres -d hospital -a -f ./db/hospital.sql`
+-  Configure .env file:
+   -  Rename the file `.env.local` to `.env`
+   -  Fill in the required information in the `.env`
+      -  `PGUSER=postgres`
+      -  `PGPASSWORD=<your postgres password>`
+      -  `PGHOST=<loacalhost>`
+      -  `PGPORT=5432`
+      -  `PGDATABASE=hospital`
+      -  `JWT_SECRET=<your secret>`
+      -  `SESSION_EXPIRES=1h`
+-  Install dependencies(In the project root folder): `yarn && cd client && yarn`
+-  To Run the app `yarn dev`
 
 ## Authors
 
