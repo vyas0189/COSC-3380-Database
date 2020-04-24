@@ -3,7 +3,7 @@ import { action, thunk } from 'easy-peasy';
 import { toast } from 'react-toastify';
 const doctorModel = {
 	loading: true,
-
+	doctorDetails: null,
 	//offices
 	offices: [],
 	officeErr: null,
@@ -21,7 +21,7 @@ const doctorModel = {
 
 	availabilityErr: null,
 	testErr: null,
-
+	detailsLoading: true,
 	specialty: null,
 
 	getOffices: thunk(async (action, payload) => {
@@ -91,6 +91,45 @@ const doctorModel = {
 		action.setLoading(false)
 	}),
 
+	getDoctorDetails: thunk(async (action, doctorID) => {
+		action.setAllAvailabilityErr(null)
+		action.setDetailsLoading(true);
+		try {
+			const res = await axios.get(`/api/doctor/info/${doctorID}`);
+
+			if (res.status === 200) {
+				action.setInfo(res.data.doctorInfo);
+			}
+		} catch (error) {
+			action.setAllAvailabilityErr(error.response.data.message)
+		}
+		action.setDetailsLoading(false)
+	}),
+
+	updateDoctor: thunk(async (action, { doctorID, firstName, lastName, email, address, city, state, zip, phoneNumber, address2 }) => {
+		action.setAllAvailabilityErr(null)
+		action.setLoading(true);
+		try {
+			if (!address2.length) {
+				address2 = 'n/a'
+			}
+			const res = await axios.put('/api/doctor/update', { firstName, lastName, email, address, city, state, zip, phoneNumber, address2 })
+
+			if (res.status === 200) {
+
+				action.getDoctorDetails(doctorID)
+				toast.success('Profile Updated!')
+			}
+		} catch (error) {
+			const errArr = []
+			error.response.data.error.details.map(err => {
+				return errArr.push(err.context.label);
+			})
+			toast.error(errArr.join('\n'))
+		}
+		action.isLoading(false)
+	}),
+
 	updateAvailability: thunk(async (action, { newDate, officeID, doctorID, date, }) => {
 		action.setAvailabilityError(null)
 		action.setLoading(true)
@@ -132,8 +171,6 @@ const doctorModel = {
 
 		try {
 			const res = await axios.get(`/api/doctor/get/patients`);
-			console.log(res.data);
-
 			if (res.status === 200) {
 				action.setPatients(res.data.patients);
 			}
@@ -149,8 +186,6 @@ const doctorModel = {
 
 		try {
 			const res = await axios.get(`/api/doctor/get/diagnoses`);
-			console.log(res.data);
-
 			if (res.status === 200) {
 				action.setDiagnoses(res.data.diagnoses);
 			}
@@ -279,6 +314,12 @@ const doctorModel = {
 	}),
 	setSpecialty: action((state, specialties) => {
 		state.specialty = specialties;
+	}),
+	setInfo: action((state, info) => {
+		state.doctorDetails = info;
+	}),
+	setDetailsLoading: action((state, loading) => {
+		state.detailsLoading = loading;
 	})
 };
 export default doctorModel;

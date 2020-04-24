@@ -59,7 +59,7 @@ const NavbarComponent = () => {
 			</li>
 			<li className="nav-item">
 				<Link className="nav-link" to="/updateDoctor">
-					Update Doctor
+					Update Profile
 				</Link>
 			</li>
 			<li className="nav-item">
@@ -110,11 +110,6 @@ const NavbarComponent = () => {
 			<li className="nav-item">
 				<Link className="nav-link" to="/viewAppointments">
 					View Appointments
-				</Link>
-			</li>
-			<li className="nav-item">
-				<Link className="nav-link" to="/cancelAppointment">
-					Cancel Appointment
 				</Link>
 			</li>
 			<li className="nav-item">
