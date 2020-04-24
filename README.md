@@ -31,12 +31,12 @@ All of our frontend files are located within `./client`.
 
 ## User Roles
 
-Patient, Doctor, & Admin 
+Patient, Doctor, & Admin
 [Login Information](login_credentials.txt)
 
-* Patient Functionalities: Login, Schedule Primary Appointment, Cancel Primary Appointment, Schedule Specialist Appointment (1st trigger), Cancel Specialist Appointment, View Upcoming Appointments, View Appointment History, Edit Patient Profile, Logout
-* Doctor Functionalities: Login, Add Availability for Date, Update / Cancel Availability for Date, Edit Patient Profile, Update Patient Diagnosis (2nd trigger), Order Test, Logout
-* Admin Functionalities: Login, Register Office Information, Register New Doctor, Update Doctor Credentials, View Currently Enrolled Patients (1st Report), View Currently Scheduled Appointments (2nd Report), Logout
+-  Patient Functionalities: Login, Schedule Primary Appointment, Cancel Primary Appointment, Schedule Specialist Appointment (1st trigger), Cancel Specialist Appointment, View Upcoming Appointments, View Appointment History, Edit Patient Profile, Logout
+-  Doctor Functionalities: Login, Add Availability for Date, Update / Cancel Availability for Date, Edit Patient Profile, Update Patient Diagnosis (2nd trigger), Order Test, Logout
+-  Admin Functionalities: Login, Register Office Information, Register New Doctor, Update Doctor Credentials, View Currently Enrolled Patients (1st Report), View Currently Scheduled Appointments (2nd Report), Logout
 
 ## Triggers
 
