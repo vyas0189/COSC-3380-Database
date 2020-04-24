@@ -2,8 +2,6 @@ import { useStoreActions, useStoreState } from 'easy-peasy';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Form, ListGroup, Modal } from 'react-bootstrap';
 import Loading from '../../../components/Loading';
-// import { Link } from 'react-router-dom';
-// import Loading from '../../Loading';
 import './UpdateDoctor.css';
 
 const UpdateDoctor = () => {
@@ -39,7 +37,7 @@ const UpdateDoctor = () => {
 	const [show, setShow] = useState(false);
 	useEffect(() => {
 		getDoctorDetails(doctorID.doctor_id)
-	}, []);
+	}, [doctorID.doctor_id, getDoctorDetails]);
 	const handleClose = () => setShow(false);
 
 

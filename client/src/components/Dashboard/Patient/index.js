@@ -25,7 +25,7 @@ const PatientDashboardComponent = () => {
 
     useEffect(() => {
         getAppointment();
-    }, []);
+    }, [getAppointment]);
 
     const UpcomingAppointment = () => {
 

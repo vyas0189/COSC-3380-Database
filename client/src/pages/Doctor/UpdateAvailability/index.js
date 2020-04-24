@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';

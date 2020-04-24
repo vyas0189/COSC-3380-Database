@@ -6,7 +6,6 @@
     left: 50%;
     transform: translate(-50%, -50%);
     background:transparent;
-    /* filter: blur(10px) contrast(20); */
 }
 
 .blob-1,

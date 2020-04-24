@@ -19,7 +19,7 @@ const UpdateDiagnosis = () => {
 	useEffect(() => {
 		getPatients();
 		getDiagnoses();
-	}, []);
+	}, [getDiagnoses, getPatients]);
 
 	const [formData, setFormData] = useState({
 		patientID: '',

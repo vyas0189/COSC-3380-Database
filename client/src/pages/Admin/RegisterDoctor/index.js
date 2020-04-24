@@ -12,7 +12,7 @@ const RegisterComponent = () => {
 
 	useEffect(() => {
 		getOffices();
-	}, []);
+	}, [getOffices]);
 
 	const [formData, setFormData] = useState({
 		username: '',

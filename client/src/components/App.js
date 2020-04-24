@@ -3,16 +3,14 @@ import React, { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import DoctorSchedule from '../components/Schedule/Doctor';
-import PatientSchedule from '../components/Schedule/Patient';
 import AboutUs from '../pages/AboutUs';
 //admin imports
 import AdminCancelAppointment from '../pages/Admin/AdminCancelAppointment';
 import AdminUpdateDoctor from '../pages/Admin/AdminUpdateDoctor';
 import RegisterDoctor from '../pages/Admin/RegisterDoctor';
 import RegisterOffice from '../pages/Admin/RegisterOffice';
-import ViewPatients from '../pages/Admin/ViewPatients';
 import ViewAppointments from '../pages/Admin/ViewAppointments';
+import ViewPatients from '../pages/Admin/ViewPatients';
 import Dashboard from '../pages/Dashboard';
 //doctor imports
 import AddAvailability from '../pages/Doctor/AddAvailability';
@@ -38,7 +36,7 @@ const App = () => {
 	useEffect(() => {
 		setAuthToken(localStorage.token);
 		user();
-	}, []);
+	}, [user]);
 
 	return (
 		<>

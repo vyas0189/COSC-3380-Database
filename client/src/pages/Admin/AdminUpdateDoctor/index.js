@@ -20,7 +20,7 @@ const RegisterComponent = () => {
 	useEffect(() => {
 		getOffices();
 		getDoctors();
-	}, []);
+	}, [getDoctors, getOffices]);
 
 	const [formData, setFormData] = useState({
 		doctorID: '',

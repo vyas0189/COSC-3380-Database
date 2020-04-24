@@ -5,7 +5,6 @@ import { Button, Card, Form, ListGroup, Modal } from 'react-bootstrap';
 import Loading from '../../../Loading';
 import './Profile.css';
 
-
 const PatientProfile = () => {
     const formatPhoneNumber = (phoneNumberString) => {
         const cleaned = ('' + phoneNumberString).replace(/\D/g, '')
@@ -26,7 +25,7 @@ const PatientProfile = () => {
     const handleClose = () => setShow(false);
     useEffect(() => {
         getPatientDetails(patientID.patient_id)
-    }, []);
+    }, [getPatientDetails, patientID.patient_id]);
 
     const onChange = (e) => {
         setDetails({ ...details, [e.target.name]: e.target.value });

@@ -34,13 +34,14 @@
     "dev": "cross-env NODE_ENV=development concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "prod": "cross-env NODE_ENV=production concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "eslint": "eslint ./config/ && eslint ./middleware/ && eslint ./routes/ && eslint ./validation/ && eslint server.js",
-    "eslint-fix": "eslint ./config/ --fix && eslint ./middleware/ --fix && eslint ./routes/ --fix && eslint ./validation/ --fix && eslint server.js --fix",
+    "eslint-fix": "eslint ./config/ --fix && eslint ./middleware/ --fix && eslint ./routes/ --fix && eslint ./validation/ --fix && eslint server.js --fix && eslint ./client/src/ --fix",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false yarn --prefix client && yarn build --prefix client"
   },
   "devDependencies": {
     "cross-env": "^7.0.2",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
+    "eslint-plugin-flowtype": "^4.7.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.19.0",

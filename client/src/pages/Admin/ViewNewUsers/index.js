@@ -3,15 +3,12 @@ import React, { Fragment, useEffect, useState } from 'react';
 import './ViewNewUsers.css';
 
 const RegisterComponent = () => {
-	const admin = useStoreState((state) => state.auth.user);
-
 	const getNewUsers = useStoreActions((actions) => actions.admin.getNewUsers);
-	
 	const newUsers = useStoreState((state) => state.admin.newUsers);
 
 	useEffect(() => {
 		getNewUsers();
-	}, []);
+	}, [getNewUsers]);
 
 	const [formData, setFormData] = useState({
 		startDate: '',

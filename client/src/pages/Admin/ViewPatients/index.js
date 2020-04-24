@@ -2,7 +2,6 @@ import { useStoreActions, useStoreState } from 'easy-peasy';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { ListGroup, Table } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';
 import './ViewPatients.css';
 
 const ViewPatients = () => {
@@ -30,20 +29,12 @@ const ViewPatients = () => {
 			startDate: '1999-01-01',
 			endDate: moment().format('YYYY-MM-DD'),
 		});
-	}, []);
+	}, [getPatients]);
 
 	const [formData, setFormData] = useState({
 		startDate: '',
 		endDate: '',
 	});
-
-	const history = useHistory();
-
-	const handleClose = (e) => {
-		// e.preventDefault();
-		setShow(false);
-		history.push('/viewPatients');
-	};
 
 	const handleShow = () => {
 		setShow(true);
