@@ -53,29 +53,31 @@ Both accessed via the admin role:
 
 Lists patient user information & calculates age from their DOB. Aggregate functions: average patient age calculated; patient location by state counts calculated.
 
-2. View Appointments:
+## Endpoints
 
-Lists doctor user information including their specialty. Aggregate functions: total appointments calculated; total appointments per doctor calculated; total appointments per specialty calculated.
+* [Endpoints](https://docs.google.com/document/d/1IZt0xx74_QdcJU11Wx9hEhIFpjrjFrUtU-dv9GSCMFs/edit?usp=sharing)
 
-## Team
+## Installations
+  * [NodeJS](https://nodejs.org/en/download/)
+  * [PostgreSQL](https://www.postgresql.org/download/)
 
--  Database Development: Vyas, Michael, Justin, Tony, & Alex
--  Frontend Development: Justin, Tony, & Vyas
--  Backend Development: Alex, Michael, & Vyas
-
-## Installation
-
--  Install [PostGreSQL](https://www.postgresql.org/download/)
--  Install [Node.js](https://nodejs.org/en/download/)
-
--  Install the node dependencies for the server:
-   -  In the root folder:
-      -  `npm install`
-   -  Install the dependencies in the client folder:
-      -  `cd client && npm install`
--  Configure .env file:
-   -  Rename the file `.env.local` to `.env`
-   -  Fill in the required information in the `.env`
+## Running the App
+* Install yarn: `npm i -g yarn`
+* Create Database:
+  - Open terminal and run `createdb -h localhost -p 5432 -U postgres hospital`
+  - Create Schema (Make sure your in the project root): `psql -U postgres -d hospital -a -f ./db/hospital.sql`
+* Configure .env file:
+  - Rename the file `.env.local` to `.env`
+  - Fill in the required information in the `.env`
+    * `PGUSER=postgres`
+    * `PGPASSWORD=<your postgres password>`
+    * `PGHOST=<loacalhost>`
+    * `PGPORT=5432`
+    * `PGDATABASE=hospital`
+    * `JWT_SECRET=<your secret>`
+    * `SESSION_EXPIRES=1h`
+* Install dependencies(In the project root folder): `yarn && cd client && yarn`
+* To Run the app `yarn dev`
 
 ## Authors
 
