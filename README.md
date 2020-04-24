@@ -4,38 +4,39 @@
 
 A health provider company has multiple offices in many different states. Many doctors work for the company, and each doctor takes care of multiple patients. Some doctors just work in one office, and others work in different offices on different days. The database keeps information about each doctor, such as name, address, contact phones, area of specialization, and so on. Each patient can be assigned to one or more doctors. Specific patient information is also kept in the database (name, address, phones, health record number, date of birth, history of appointments, prescriptions, blood tests, diagnoses, etc.). Customers can schedule and cancel appointments either over the phone or using the company Web site. Some restrictions apply — for example, to see a specialist, the patient needs an approval from his/her primary physician.
 
-# File Description
+## File Description
 
-Welcome to the MW Team 9 Medical Clinic Database Project.
-
-For our project, we used PostGreSQL to build our database, Node.js for our backend, and React for our frontend.
+For our project, we used PostgreSQL to build our database, NodeJS for our backend, and React for our frontend.
 
 Database in PostgreSQL:
 
--  Our .sql file can be accessed via 'db/hospital.sql'
+-  Our .sql file can be accessed via `db/hospital.sql`
 
 Backend in NodeJS:
 
--  Our primary server file is located in our project's root folder and called 'server.js': this is how we hosted our project via a localhost URL.
--  Our login authentication files are located in './middleware/auth.js': we authenticated users via jwt_tokens.
--  All of our data validation schemas are located in './validation/index.js': this is where we plotted out the formats in which data requests should be made between the backend & DB.
--  All of our backend routes are located in '/routes': these routes are for defining all of the add, modify, and delete requests made from the frontend, to the backend, and, finally, to the DB.
+-  Our primary server file is located in our project's root folder and called `server.js`: this is how we hosted our project via a localhost URL.
+-  Our login authentication files are located in `./middleware/auth.js`: we authenticated users via jwt_tokens.
+-  All of our data validation schemas are located in `./validation/index.js`: this is where we plotted out the formats in which data requests should be made between the backend & DB.
+-  All of our backend routes are located in `/routes`: these routes are for defining all of the add, modify, and delete requests made from the frontend, to the backend, and, finally, to the DB.
 
 Frontend in React:
 
-All of our frontend files are located within './client'.
+All of our frontend files are located within `./client`.
 
--  Our function definitions for each role (admin, patient, doctor) are located in './client/src/store': this is where we defined the functions that would execute upon a frontend / user action, such as a button press. These functions would be called from our state management system whenever an add, modify, or delete action was initiated by the user on our project's website.
--  All of the pictures & images used on our site are located in './client/src/assets'.
--  The general user interface (Home, Dashboard, etc.), along with our patient scheduling implementation are located in './client/src/components': components contains login authentication requests(components/Auth), our designed user dashboards which act as the home page for each user (components/Dashboard), our loading animation (components/Loading), our navigation bar which sits at the top of each page (components/Navbar), and patient scheduling (components/Schedule).
-   /components also contains our main frontend file for linking all of the pages of the website in './client/src/App.js'.
--  Finally, all of the design & functionality of any buttons, forms, or frontend requests are defined in './client/src/pages'.
+-  Our function definitions for each role (admin, patient, doctor) are located in `./client/src/store`: this is where we defined the functions that would execute upon a frontend / user action, such as a button press. These functions would be called from our state management system whenever an add, modify, or delete action was initiated by the user on our project's website.
+-  All of the pictures & images used on our site are located in `./client/src/assets`.
+-  The general user interface (Home, Dashboard, etc.), along with our patient scheduling implementation are located in `./client/src/components`: components contains login authentication requests(components/Auth), our designed user dashboards which act as the home page for each user (components/Dashboard), our loading animation (components/Loading), our navigation bar which sits at the top of each page (components/Navbar), and patient scheduling (components/Schedule).
+   /components also contains our main frontend file for linking all of the pages of the website in `./client/src/App.js`.
+-  Finally, all of the design & functionality of any buttons, forms, or frontend requests are defined in `./client/src/pages`.
 
-## Login Roles
+## User Roles
 
-Patient, Doctor, & Admin
+Patient, Doctor, & Admin 
+[Login Information](login_credentials.txt)
 
-Please refer to login information for sample login credentials.
+* Patient Functionalities: Login, Schedule Primary Appointment, Cancel Primary Appointment, Schedule Specialist Appointment (1st trigger), Cancel Specialist Appointment, View Upcoming Appointments, View Appointment History, Edit Patient Profile, Logout
+* Doctor Functionalities: Login, Add Availability for Date, Update / Cancel Availability for Date, Edit Patient Profile, Update Patient Diagnosis (2nd trigger), Order Test, Logout
+* Admin Functionalities: Login, Register Office Information, Register New Doctor, Update Doctor Credentials, View Currently Enrolled Patients (1st Report), View Currently Scheduled Appointments (2nd Report), Logout
 
 ## Triggers
 

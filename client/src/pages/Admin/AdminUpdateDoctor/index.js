@@ -1,7 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 // eslint-disable react-hooks/exhaustive-deps
-import React, { Fragment, useEffect, useState } from 'react';
 import { useStoreActions, useStoreState } from 'easy-peasy';
-import Loading from '../../../components/Loading';
+import React, { Fragment, useEffect, useState } from 'react';
 import './AdminUpdateDoctor.css';
 
 const AdminUpdateDoctor = () => {
@@ -100,9 +100,9 @@ const AdminUpdateDoctor = () => {
 																	office.address2_name
 																		? office.address2_name
 																		: ''
-																}, ${office.city} ${
+																	}, ${office.city} ${
 																	office.state
-																} ${office.zip}`}
+																	} ${office.zip}`}
 															</option>
 														);
 													})}
