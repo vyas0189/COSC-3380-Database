@@ -1,16 +1,20 @@
-# File Description
+## Project Description
 
-Dear Dr. Ramamurthy & Database TAs,
+![Action](https://img.shields.io/github/workflow/status/vyas0189/COSC-3380-Database/server?style=for-the-badge)
+
+A health provider company has multiple offices in many different states. Many doctors work for the company, and each doctor takes care of multiple patients. Some doctors just work in one office, and others work in different offices on different days. The database keeps information about each doctor, such as name, address, contact phones, area of specialization, and so on. Each patient can be assigned to one or more doctors. Specific patient information is also kept in the database (name, address, phones, health record number, date of birth, history of appointments, prescriptions, blood tests, diagnoses, etc.). Customers can schedule and cancel appointments either over the phone or using the company Web site. Some restrictions apply — for example, to see a specialist, the patient needs an approval from his/her primary physician.
+
+# File Description
 
 Welcome to the MW Team 9 Medical Clinic Database Project.
 
 For our project, we used PostGreSQL to build our database, Node.js for our backend, and React for our frontend.
 
-Database in PostGreSQL:
+Database in PostgreSQL:
 
 -  Our .sql file can be accessed via 'db/hospital.sql'
 
-Backend in Node.js:
+Backend in NodeJS:
 
 -  Our primary server file is located in our project's root folder and called 'server.js': this is how we hosted our project via a localhost URL.
 -  Our login authentication files are located in './middleware/auth.js': we authenticated users via jwt_tokens.
@@ -26,12 +30,6 @@ All of our frontend files are located within './client'.
 -  The general user interface (Home, Dashboard, etc.), along with our patient scheduling implementation are located in './client/src/components': components contains login authentication requests(components/Auth), our designed user dashboards which act as the home page for each user (components/Dashboard), our loading animation (components/Loading), our navigation bar which sits at the top of each page (components/Navbar), and patient scheduling (components/Schedule).
    /components also contains our main frontend file for linking all of the pages of the website in './client/src/App.js'.
 -  Finally, all of the design & functionality of any buttons, forms, or frontend requests are defined in './client/src/pages'.
-
-## Project Description
-
-![Action](https://img.shields.io/github/workflow/status/vyas0189/COSC-3380-Database/server?style=for-the-badge)
-
-A health provider company has multiple offices in many different states. Many doctors work for the company, and each doctor takes care of multiple patients. Some doctors just work in one office, and others work in different offices on different days. The database keeps information about each doctor, such as name, address, contact phones, area of specialization, and so on. Each patient can be assigned to one or more doctors. Specific patient information is also kept in the database (name, address, phones, health record number, date of birth, history of appointments, prescriptions, blood tests, diagnoses, etc.). Customers can schedule and cancel appointments either over the phone or using the company Web site. Some restrictions apply — for example, to see a specialist, the patient needs an approval from his/her primary physician.
 
 ## Login Roles
 
