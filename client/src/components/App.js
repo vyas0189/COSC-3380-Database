@@ -8,10 +8,10 @@ import AboutUs from '../pages/AboutUs';
 //admin imports
 import AdminCancelAppointment from '../pages/Admin/AdminCancelAppointment';
 import AdminUpdateDoctor from '../pages/Admin/AdminUpdateDoctor';
-import RegisterDoctor from '../pages/Admin/RegisterDoctor';
-import RegisterOffice from '../pages/Admin/RegisterOffice';
-import ViewAppointments from '../pages/Admin/ViewAppointments';
-import ViewPatients from '../pages/Admin/ViewPatients';
+import AdminRegisterDoctor from '../pages/Admin/AdminRegisterDoctor';
+import AdminRegisterOffice from '../pages/Admin/AdminRegisterOffice';
+import AdminViewAppointments from '../pages/Admin/AdminViewAppointments';
+import AdminViewPatients from '../pages/Admin/AdminViewPatients';
 import Dashboard from '../pages/Dashboard';
 //doctor imports
 import AddAvailability from '../pages/Doctor/AddAvailability';
@@ -73,23 +73,27 @@ const App = () => {
 				<AdminRoute
 					exact
 					path="/registerDoctor"
-					component={RegisterDoctor}
+					component={AdminRegisterDoctor}
 				/>
 				<AdminRoute
 					exact
 					path="/registerOffice"
-					component={RegisterOffice}
+					component={AdminRegisterOffice}
 				/>
 				<AdminRoute
 					exact
 					path="/adminUpdateDoctor"
 					component={AdminUpdateDoctor}
 				/>
-				<AdminRoute exact path="/viewPatients" component={ViewPatients} />
+				<AdminRoute
+					exact
+					path="/viewPatients"
+					component={AdminViewPatients}
+				/>
 				<AdminRoute
 					exact
 					path="/viewAppointments"
-					component={ViewAppointments}
+					component={AdminViewAppointments}
 				/>
 
 				{/* doctor pages */}

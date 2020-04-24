@@ -1,13 +1,12 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useStoreActions, useStoreState } from 'easy-peasy';
+// eslint-disable react-hooks/exhaustive-deps
 import React, { Fragment, useEffect, useState } from 'react';
-// import { Link } from 'react-router-dom';
-// import Loading from '../../Loading';
+import { useStoreActions, useStoreState } from 'easy-peasy';
+import Loading from '../../../components/Loading';
 import './AdminUpdateDoctor.css';
 
-const RegisterComponent = () => {
-	const register = useStoreActions(
-		(actions) => actions.auth.adminUpdateDoctor
+const AdminUpdateDoctor = () => {
+	const updateDoctorProfile = useStoreActions(
+		(actions) => actions.admin.updateDoctorProfile
 	);
 
 	//offices
@@ -37,15 +36,15 @@ const RegisterComponent = () => {
 	};
 
 	//doesn't work here - register not a function???
-	const onSubmit = async (e) => {
+	const onSubmit = (e) => {
 		e.preventDefault();
-		const userRegister = {
+		const updateInfo = {
 			doctorID,
 			primary,
 			specialty,
 			office,
 		};
-		register(userRegister);
+		updateDoctorProfile(updateInfo);
 	};
 
 	return (
@@ -121,8 +120,8 @@ const RegisterComponent = () => {
 													<option value="primary">
 														Primary Doctor
 													</option>
-													<option value="Yes">Yes</option>
-													<option value="No">No</option>
+													<option value="true">Yes</option>
+													<option value="false">No</option>
 												</select>
 											</div>
 											<div className="form-group">
@@ -165,4 +164,4 @@ const RegisterComponent = () => {
 	);
 };
 
-export default RegisterComponent;
+export default AdminUpdateDoctor;

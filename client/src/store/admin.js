@@ -214,22 +214,19 @@ const adminModel = {
 	}),
 
 	updateDoctorProfile: thunk(
-		async (
-			action,
-			{ doctorID, primary, specialty, office },
-			{ getState }
-		) => {
-			action.setError(null);
+		async (action, { doctorID, primary, specialty, office }) => {
+			action.setDoctorsError(null);
 			action.isLoading(true);
-
 			try {
-				const res = await axios.put(
-					'/api/admin/update/doctor',
-					{ doctorID, primary, specialty, office }
-				);
+				const res = await axios.put('/api/admin/update/doctor', {
+					doctorID,
+					primary,
+					specialty,
+					office,
+				});
 
 				if (res.status === 200) {
-					action.setUser(res.data.doctor);
+					action.getDoctors();
 					toast.success('Profile Updated!');
 				}
 			} catch (error) {

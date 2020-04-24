@@ -3,9 +3,9 @@ import { useStoreActions, useStoreState } from 'easy-peasy';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { ListGroup, Table } from 'react-bootstrap';
-import './ViewAppointments.css';
+import './AdminViewAppointments.css';
 
-const ViewAppointments = () => {
+const AdminViewAppointments = () => {
 	const formatPhoneNumber = (phoneNumberString) => {
 		const cleaned = ('' + phoneNumberString).replace(/\D/g, '');
 		const match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
@@ -229,4 +229,4 @@ const ViewAppointments = () => {
 	);
 };
 
-export default ViewAppointments;
+export default AdminViewAppointments;
