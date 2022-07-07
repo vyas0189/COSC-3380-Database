@@ -18,7 +18,7 @@
     "express-session": "^1.17.0",
     "helmet": "^3.22.0",
     "jsonwebtoken": "^8.5.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "morgan": "^1.10.0",
     "pg": "^7.18.2",
     "yarm": "^0.4.0",
